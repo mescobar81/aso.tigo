@@ -1,0 +1,29 @@
+
+.contentheader{
+    width: 100%;
+    height: 250px;
+    margin: 0 auto;
+    background-color: #040b8f;
+    color: white;
+}
+.contentgrid{
+    width: 90%;
+    margin: 0 auto;
+    border: 2px solid white;
+    border-radius: 8px;
+    background-color: #e9e7e7;
+    position: relative;
+    top: -87px;
+}
+
+.contentheader__col{
+    text-align: center;
+    margin-top: 10px;
+}
+.contentheader__col--asotigo{
+    font-size: 40px;
+}
+
+.contentheader__col--asociados{
+    font-size: 20px;
+}
