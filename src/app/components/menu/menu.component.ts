@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuItem, Usuario } from 'src/app/interfaces/interface';
+import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
   selector: 'app-menu',
@@ -7,8 +9,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuComponent implements OnInit {
 
-  constructor() { }
+  menuOpc!:MenuItem;
+  constructor(private menuSvr:MenuService) { }
 
-  ngOnInit() {}
+  async ngOnInit() {
+
+    (await this.menuSvr.getMenuOpcion()).subscribe(menuOpc =>{
+      this.menuOpc = menuOpc;
+    });
+
+    /**
+     * establece los datos del usuario
+     * ver:lee del session storage
+     */
+    this.menuSvr.setDataUsuario();
+  }
+
+  get getUsuario(){
+    return this.menuSvr.getUsuario;
+  }
 
 }

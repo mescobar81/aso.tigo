@@ -1,0 +1,41 @@
+{
+    "rol": "tesorero",
+    "menus": [
+        {
+            "title": "Extracto mes abierto",
+            "icon": "",
+            "ruta": ""
+        },
+        {
+            "title": "Extracto mes cerrado",
+            "icon": "",
+            "ruta": ""
+        },
+        {
+            "title": "Movimiento BR",
+            "icon": "",
+            "ruta": ""
+        },
+        {
+            "title": "Solicitud de órdenes",
+            "icon": "",
+            "ruta": ""
+        },
+        {
+            "title":"Otras opciones",
+            "icon":"",
+            "submenus":[
+                {
+                    "title": "Medios de pagos",
+                    "icon": "",
+                    "ruta": ""
+                },
+                {
+                    "title": "Ordenes pendientes",
+                    "icon": "",
+                    "ruta": ""
+                }
+            ]
+        }
+    ]
+}

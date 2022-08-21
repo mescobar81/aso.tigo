@@ -1,0 +1,31 @@
+.container{
+    box-shadow: 0px 0px 20px #525151;
+    border-radius: 10px;
+    width: 90%;
+    height: 150px;
+    margin: 0 auto;
+    margin-top:40px;
+    margin-bottom: 50px;
+}
+.container__footer{
+    position: relative;
+    background-color: #001F5F;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius:10px;
+    color:white;
+    bottom: 0px;
+}
+
+.container__logo{
+    background-image: url("././../../../assets/imgs/ic_account_white_48dp.png");
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    background-color: #001F5F;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    top: -35px;
+    border-radius: 50%;
+}

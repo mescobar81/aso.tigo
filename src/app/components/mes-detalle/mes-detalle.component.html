@@ -1,0 +1,25 @@
+<ion-grid class="contentgrid" *ngFor="let d of extractoMes?.detalle">
+  <ion-row class="contentgrid__comentario">
+      <ion-col size="12"x>{{d.comentario}}</ion-col>
+  </ion-row>
+  <ion-row>
+      <ion-col size="6" class="contentgrid--cell">Nro. Documento:</ion-col>
+      <ion-col size="6" class="contentgrid--cell">{{d.nroDocumento}}</ion-col>
+  </ion-row>
+  <ion-row>
+      <ion-col size="6" class="contentgrid--cell">Monto:</ion-col>
+      <ion-col size="6" class="contentgrid--cell">{{d.monto}}</ion-col>
+  </ion-row>
+  <ion-row>
+      <ion-col size="6" class="contentgrid--cell">Cuota</ion-col>
+      <ion-col size="6" class="contentgrid--cell">{{d.cuota}}</ion-col>
+  </ion-row>
+  <ion-row>
+      <ion-col size="6" class="contentgrid--cell">Saldo</ion-col>
+      <ion-col size="6" class="contentgrid--cell">{{d.saldo}}</ion-col>
+  </ion-row>
+  <ion-row>
+      <ion-col size="6" class="contentgrid--cell">Interes</ion-col>
+      <ion-col size="6" class="contentgrid--cell">{{d.interes}}</ion-col>
+  </ion-row>
+</ion-grid>

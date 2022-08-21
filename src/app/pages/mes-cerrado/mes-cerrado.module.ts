@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { InicioPageRoutingModule } from './inicio-routing.module';
+import { MesCerradoPageRoutingModule } from './mes-cerrado-routing.module';
 
-import { InicioPage } from './inicio.page';
+import { MesCerradoPage } from './mes-cerrado.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { ComponentsModule } from 'src/app/components/components.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    InicioPageRoutingModule,
+    MesCerradoPageRoutingModule,
     ComponentsModule
   ],
-  declarations: [InicioPage]
+  declarations: [MesCerradoPage]
 })
-export class InicioPageModule {}
+export class MesCerradoPageModule {}

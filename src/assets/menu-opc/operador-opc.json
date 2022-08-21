@@ -1,0 +1,30 @@
+{
+    "rol": "operador",
+    "menus": [
+        {
+            "title": "Extracto mes abierto",
+            "icon": "",
+            "ruta": ""
+        },
+        {
+            "title": "Extracto mes cerrado",
+            "icon": "",
+            "ruta": ""
+        },
+        {
+            "title": "Movimiento BR",
+            "icon": "",
+            "ruta": ""
+        },
+        {
+            "title": "Solicitud de órdenes",
+            "icon": "",
+            "ruta": ""
+        },
+        {
+            "title": "Solicitud de préstamos",
+            "icon": "",
+            "ruta": ""
+        }
+    ]
+}

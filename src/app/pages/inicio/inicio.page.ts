@@ -12,7 +12,7 @@ export class InicioPage implements OnInit {
 
   ngOnInit() {
     this.menuCtrl.enable(true, 'first');
-    this.menuCtrl.open('first');
+    this.mostrarMenu();
   }
 
   mostrarMenu(){

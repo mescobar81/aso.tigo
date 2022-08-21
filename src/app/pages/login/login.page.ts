@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
-import { NavController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import CryptoJS from 'crypto-js';
-import { UsuarioRequest } from 'src/app/interfaces/interface';
 
-import { LoginService } from 'src/app/services/login.service';
+import { UsuarioRequest } from 'src/app/interfaces/interface';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -24,27 +24,45 @@ export class LoginPage implements OnInit {
       ip: ''
     }
   };
-  constructor(private loginSvr: LoginService,
+  constructor(private loginSvr: AuthService,
+              private menuCtrl:MenuController,
               private navCtrl:NavController,
               private device: Device) { }
 
   ngOnInit() {
+    this.menuCtrl.enable(false);
   }
 
+  /**
+   * se encarga de llamar al servicio para dar ingreso al usuario
+   * @param fLogin valores del formulario
+   * @returns 
+   */
   async login(fLogin:NgForm) {
 
     if(fLogin.invalid){
       return;
     }
-    console.log(fLogin.value);
-    
-    this.usuario.documento = fLogin.value.documento;
-    this.usuario.clave =  CryptoJS.SHA256(fLogin.value.clave).toString(CryptoJS.enc.Hex);
-    
-    console.log(this.usuario);
-    
-    const {usuario} = await this.loginSvr.login(this.usuario);
 
+    /**
+     * crea un nuevo usuario en una constante para evitar modificaciones
+     * en el template detalles visuales para el usuario
+     */
+    const nuevoUsuario:UsuarioRequest ={
+      documento:this.usuario.documento,
+      clave: CryptoJS.SHA256(fLogin.value.clave).toString(CryptoJS.enc.Hex),
+      device: {
+        os: this.device.platform,
+        version: this.device.version,
+        model: this.device.model,
+        ip: ""
+      }
+    }
+    
+    
+    const {usuario} = await this.loginSvr.login(nuevoUsuario);
+    console.log(usuario);
+    
     if(usuario.valido){
       this.navCtrl.navigateRoot('inicio');
     }else{

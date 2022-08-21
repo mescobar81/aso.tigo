@@ -1,7 +1,7 @@
 import {  Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ResponseUsuario, UsuarioRequest } from '../interfaces/interface';
+import { ResponseUsuario, Usuario, UsuarioRequest } from '../interfaces/interface';
 import { Storage } from '@ionic/storage-angular';
 
 
@@ -10,7 +10,7 @@ const urlBase = environment.urlBase;
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
+export class AuthService {
 
   private _storage:Storage | null = null;
   constructor(private http:HttpClient,
@@ -22,6 +22,7 @@ export class LoginService {
   async init(){
     this._storage = await this.storage.create();
   }
+
   login(usuario:UsuarioRequest):Promise<ResponseUsuario> {
 
     const headers = new HttpHeaders()
@@ -31,7 +32,7 @@ export class LoginService {
     return new Promise((resolve) => {
        this.http.post<ResponseUsuario>(`${urlBase}/loginPost/`, usuario, {headers}).subscribe(resp =>{
         if(resp.usuario.valido){
-          this._storage.set('usuario', resp);
+          this._storage.set('usuario', resp.usuario);
           resolve(resp);
         }else{
           resolve(resp);
@@ -45,7 +46,12 @@ export class LoginService {
    * @returns 
    */
   async validarUsuario():Promise<boolean> {
-    const data:ResponseUsuario = await this.storage.get('usuario');
-    return data.usuario.valido;
+    const usuario:Usuario = await this.storage.get('usuario');
+
+    if(usuario == null){
+      console.log("Usuario vacio en sessionStorge");
+      return;
+    }
+    return usuario.valido;
   }
 }

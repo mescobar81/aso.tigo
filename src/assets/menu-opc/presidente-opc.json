@@ -1,0 +1,80 @@
+{
+    "rol": "presidente",
+    "menus": [
+        {
+            "title": "Extracto mes abierto",
+            "icon": "create",
+            "ruta": "df",
+            "activo":true
+        },
+        {
+            "title": "Extracto mes cerrado",
+            "icon": "calendar",
+            "ruta": "ssd",
+            "activo":true
+        },
+        {
+            "title": "Movimiento BR",
+            "icon": "custom-gasoline",
+            "ruta": "dds",
+            "activo":true
+        },
+        {
+            "title": "Solicitud de órdenes",
+            "icon": "cart",
+            "ruta": "dds",
+            "activo":true
+        },
+        {
+            "title": "Mis órdenes rechazadas",
+            "icon": "document-lock",
+            "ruta": "dds",
+            "activo":true
+        },
+        {
+            "title": "Crear Tickets",
+            "icon": "create",
+            "ruta": "dds",
+            "activo":true
+        },
+        {
+            "title": "Mis tickets abiertos",
+            "icon": "bookmarks",
+            "ruta": "dds",
+            "activo":true
+        },
+        {
+            "title":"Otras opciones",
+            "ruta":"",
+            "icon":"",
+            "activo":false,
+            "open":false,
+            "submenus":[
+                {
+                    "title": "Medios de pagos",
+                    "icon": "",
+                    "ruta": ""
+                },
+                {
+                    "title": "Ordenes pendientes",
+                    "icon": "",
+                    "ruta": ""
+                }
+            ]
+        },
+        {
+            "title":"Notificaciones",
+            "ruta":"",
+            "icon":"",
+            "activo":false,
+            "open":false,
+            "submenus":[
+                {
+                    "title": "Promociones",
+                    "icon": "",
+                    "ruta": ""
+                }
+            ]
+        }
+    ]
+}
