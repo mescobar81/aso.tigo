@@ -21,6 +21,7 @@ import { Device } from '@awesome-cordova-plugins/device/ngx';
   declarations: [
     LoginPage
   ],
+  exports: [LoginPage],
   providers:[Device]
 })
 export class LoginPageModule {}

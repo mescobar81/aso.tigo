@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ResponseMesAbierto } from 'src/app/interfaces/interface';
+import { Detalle } from 'src/app/interfaces/interface';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { ResponseMesAbierto } from 'src/app/interfaces/interface';
 export class MesDetalleComponent implements OnInit {
 
   @Input() 
-  extractoMes:ResponseMesAbierto;
+  detalle:Detalle[] = [];
   constructor() { }
 
   ngOnInit() {

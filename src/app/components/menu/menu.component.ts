@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem, Usuario } from 'src/app/interfaces/interface';
+import { Storage } from '@ionic/storage';
+import { MenuItem, ResponseUsuario, Usuario } from 'src/app/interfaces/interface';
 import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
@@ -10,23 +11,39 @@ import { MenuService } from 'src/app/services/menu.service';
 export class MenuComponent implements OnInit {
 
   menuOpc!:MenuItem;
-  constructor(private menuSvr:MenuService) { }
-
-  async ngOnInit() {
-
-    (await this.menuSvr.getMenuOpcion()).subscribe(menuOpc =>{
-      this.menuOpc = menuOpc;
-    });
+  usuario: ResponseUsuario;
+  constructor(private menuSvr:MenuService,
+              private storage: Storage) {
+                this.init();
+               }
 
     /**
-     * establece los datos del usuario
-     * ver:lee del session storage
-     */
-    this.menuSvr.setDataUsuario();
+   * crea la bd local en el dispositivo
+   * ver: almacenamiento temporal en el session storage
+   */
+  async init() {
+    await this.storage.create();
   }
+  
+  async ngOnInit() {
 
+    const data = await this.storage.get('usuario') || null;
+
+    if (!data) {
+      console.log("ERROR: en lectura usuario sessionStorage", data);
+      return;
+    }
+    const rol: string = data.usuario.rol.roles[0].toLowerCase();
+    //espera a obtener las opciones del menu
+    this.menuOpc = await this.menuSvr.getMenuOpcion(rol);
+
+  }
+  
   get getUsuario(){
-    return this.menuSvr.getUsuario;
+    this.menuSvr.event.subscribe(usuario =>{
+      this.usuario= usuario;
+    });
+    return this.usuario;
   }
 
 }

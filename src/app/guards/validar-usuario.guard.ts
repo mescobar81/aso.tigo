@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, CanLoad} from '@angular/router';
-import { Observable } from 'rxjs';
+import { NavController } from '@ionic/angular';
 
 import { AuthService } from '../services/auth.service';
 
@@ -8,14 +8,17 @@ import { AuthService } from '../services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ValidarUsuarioGuard implements CanActivate, CanLoad {
+export class ValidarUsuarioGuard implements CanLoad {
 
-  constructor(private authSvr:AuthService){}
+  constructor(private authSvr:AuthService,
+              private navCtrl:NavController){}
 
-  canActivate(): Promise<boolean> {
-    return this.authSvr.validarUsuario();
-  }
-  canLoad(): Promise<boolean>  {
-    return this.authSvr.validarUsuario();
+  canLoad(): Promise<boolean> | boolean {
+     this.authSvr.validarUsuario().then(valid =>{
+      if(!valid) {
+        this.navCtrl.navigateRoot('login');
+      }
+    });
+    return true;
   }
 }

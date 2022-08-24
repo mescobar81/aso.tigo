@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ResponseMesAbierto } from 'src/app/interfaces/interface';
+
+import { Detalle, ResponseMesAbierto } from 'src/app/interfaces/interface';
 import { ExtractoMesService } from 'src/app/services/extracto-mes.service';
 
 @Component({
@@ -10,10 +10,9 @@ import { ExtractoMesService } from 'src/app/services/extracto-mes.service';
 })
 export class MesAbiertoPage implements OnInit {
 
-
-  extractoMes!:ResponseMesAbierto;
-  constructor(private extractoMesSvr:ExtractoMesService,
-              private activatedRoute: ActivatedRoute) {
+  extratoMesAbierto!:ResponseMesAbierto;
+  detalle:Detalle[] = [];
+  constructor(private extractoMesSvr:ExtractoMesService) {
    }
 
   ngOnInit() {
@@ -21,7 +20,9 @@ export class MesAbiertoPage implements OnInit {
   }
 
   async listarExtractoMes(){
-    const paramNroSocio = this.activatedRoute.snapshot.paramMap.get('nroSocio');
-    this.extractoMes = await this.extractoMesSvr.getMesAbierto(parseInt(paramNroSocio));
+    await this.extractoMesSvr.getMesAbierto().then(resp =>{
+      this.extratoMesAbierto = resp;
+      this.detalle = this.extratoMesAbierto.detalle;
+    });
   }
 }

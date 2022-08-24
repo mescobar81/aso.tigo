@@ -7,12 +7,12 @@
           <ion-col size="12">Asociados</ion-col>
         </ion-row>
         <ion-row>
-          <ion-col size="12">{{getUsuario?.nombre}}</ion-col>
+          <ion-col size="12">{{getUsuario?.usuario?.nombre}}</ion-col>
         </ion-row>
         <ion-row>
-          <ion-col size="12">{{getUsuario.rol?.roles[0]}}</ion-col>
+          <ion-col size="12">{{getUsuario?.usuario.rol?.roles[0]}}</ion-col>
           <ion-row>
-            <ion-col size="12">{{getUsuario.codaso}}</ion-col>
+            <ion-col size="12">{{getUsuario?.usuario?.codaso}}</ion-col>
           </ion-row>
         </ion-row>
       </ion-grid>
@@ -22,10 +22,12 @@
 
     <div *ngFor="let item of menuOpc?.menus">
       <ion-menu-toggle *ngIf="item.ruta && item.activo">
-        <ion-item [routerLink]="[item.ruta, getUsuario?.nroSocio]" detail="false">
+        <ion-item   [routerLink]="[item.ruta]"
+                    detail="false">
           <ion-icon slot="start" [name]="item.icon"></ion-icon>
           <ion-label>{{item.title}}</ion-label>
         </ion-item>
+        
       </ion-menu-toggle>
 
       <ion-item *ngIf="item.submenus?.length > 0"

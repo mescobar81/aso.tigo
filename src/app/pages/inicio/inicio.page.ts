@@ -8,10 +8,9 @@ import { MenuController } from '@ionic/angular';
 })
 export class InicioPage implements OnInit {
 
-  constructor(private menuCtrl:MenuController) { }
+  constructor(private menuCtrl: MenuController) { }
 
   ngOnInit() {
-    this.menuCtrl.enable(true, 'first');
     this.mostrarMenu();
   }
 

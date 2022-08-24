@@ -24,13 +24,12 @@ export class LoginPage implements OnInit {
       ip: ''
     }
   };
-  constructor(private loginSvr: AuthService,
+  constructor(private authSvr: AuthService,
               private menuCtrl:MenuController,
               private navCtrl:NavController,
               private device: Device) { }
 
   ngOnInit() {
-    this.menuCtrl.enable(false);
   }
 
   /**
@@ -52,22 +51,21 @@ export class LoginPage implements OnInit {
       documento:this.usuario.documento,
       clave: CryptoJS.SHA256(fLogin.value.clave).toString(CryptoJS.enc.Hex),
       device: {
-        os: this.device.platform,
-        version: this.device.version,
-        model: this.device.model,
+        os: "",
+        version: "",
+        model: "",
         ip: ""
       }
     }
-    
-    
-    const {usuario} = await this.loginSvr.login(nuevoUsuario);
-    console.log(usuario);
-    
-    if(usuario.valido){
+
+    const data = await this.authSvr.login(nuevoUsuario);
+
+    if(data.usuario.valido){
+      this.menuCtrl.enable(true, 'first');
+      this.menuCtrl.open('first');
       this.navCtrl.navigateRoot('inicio');
     }else{
-      console.log(usuario.mensaje);
-      
+      console.log(data.usuario.mensaje);
     }
   }
 

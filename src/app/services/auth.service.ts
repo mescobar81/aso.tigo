@@ -23,21 +23,23 @@ export class AuthService {
     this._storage = await this.storage.create();
   }
 
-  login(usuario:UsuarioRequest):Promise<ResponseUsuario> {
+   login(usuario:UsuarioRequest):Promise<ResponseUsuario> {
 
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json; charset=utf-8');
 
-
-    return new Promise((resolve) => {
+    return new Promise<ResponseUsuario>((resolve) => {
        this.http.post<ResponseUsuario>(`${urlBase}/loginPost/`, usuario, {headers}).subscribe(resp =>{
+        console.log("EN login ", resp);
+        
         if(resp.usuario.valido){
-          this._storage.set('usuario', resp.usuario);
+          this._storage.set('usuario', resp);
           resolve(resp);
         }else{
           resolve(resp);
         }
-      })
+      }, err => console.log(err)
+      )
     })
   }
 
@@ -45,13 +47,16 @@ export class AuthService {
    * valida en el sessionStorage que un usuario este activo
    * @returns 
    */
-  async validarUsuario():Promise<boolean> {
-    const usuario:Usuario = await this.storage.get('usuario');
+   async validarUsuario():Promise<boolean> {
 
-    if(usuario == null){
-      console.log("Usuario vacio en sessionStorge");
-      return;
+    //espera a cargar el usuario del sessionStorage
+    const data:ResponseUsuario = await this.storage.get('usuario') || null;
+
+    if(!data){
+      console.log("ERROR: en lectura usuario sessionStorage", data);
+      return Promise.resolve(false);
+    }else{
+      return Promise.resolve(true);
     }
-    return usuario.valido;
   }
 }

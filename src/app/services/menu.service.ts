@@ -1,15 +1,17 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
-import { Observable } from 'rxjs';
-import { MenuItem, Usuario } from '../interfaces/interface';
+
+import { MenuItem, ResponseUsuario } from '../interfaces/interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
 
-  usuario: Usuario;
+  @Output() event:EventEmitter<ResponseUsuario> = new EventEmitter();
+
+  usuario: ResponseUsuario;
   get getUsuario() {
     return { ...this.usuario };
   }
@@ -24,24 +26,28 @@ export class MenuService {
    */
   async init() {
     await this.storage.create();
-  }
-  async getMenuOpcion():Observable<MenuItem> {
-    const pathAssets = '/assets/menu-opc';
-    const usuario: Usuario = await this.storage.get('usuario');
-
-    
-    if (usuario != null) {
-      
-    }
-    const rol: string = usuario.rol.roles[0].toLowerCase();
-    if (rol === 'socio') {
-      return this.http.get<MenuItem>(`${pathAssets}/socio-opc.json`);
-    } else if (rol === 'tesorero') {
-      return this.http.get<MenuItem>(`${pathAssets}/tesorero-opc.json`);
-    }
-  }
-
-  async setDataUsuario() {
     this.usuario = await this.storage.get('usuario');
+    this.event.emit(this.usuario);
+  }
+
+
+  async getMenuOpcion(rol:string): Promise<MenuItem> {
+
+    const pathAssets = '/assets/menu-opc';
+
+    return new Promise(async (resolve) => {
+
+      if (rol === 'socio') {
+        this.http.get<MenuItem>(`${pathAssets}/socio-opc.json`).subscribe(resp => {
+          resolve(resp);
+        }, err => {
+          console.log("ERROR: en obtener opciones de menú", err);
+        });
+      } else if (rol === 'tesorero') {
+        this.http.get<MenuItem>(`${pathAssets}/tesorero-opc.json`);
+      }
+
+    });
+
   }
 }

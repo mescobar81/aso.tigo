@@ -76,13 +76,54 @@ export interface Cabecera {
     totalCuenta:    number;
 }
 
+export interface ParametrosGlobales {
+    appVersionActualPlayStore: number;
+    estado:                    boolean;
+    importeMinimoOrden:        number;
+    importeMinimoPrestamo:     number;
+    requiereUpdate:            boolean;
+}
+export interface ResponseCiclosCerrado {
+    ciclos:  Ciclo[];
+    mensaje: string;
+    status:  string;
+}
+
+export interface Ciclo {
+    anho: number;
+    mes:  number;
+}
+export interface ResponseMesCerrado {
+    mensaje?:            string;
+    cabecera?:           Cabecera;
+    parametrosGlobales?: ParametrosGlobales;
+    status?:             string;
+    detalle?:            Detalle[];
+}
+
+export interface Cabecera {
+    descripcion:     string;
+    saldoPendiente:  number;
+    aporteMes:       number;
+    descuento:       number;
+    titulo:          string;
+    programa:        string;
+    liquidacionAso:  number;
+    nombre:          string;
+    capitalAportado: number;
+    descuentoLetras: string;
+    nroSocio:        number;
+    empresa:         string;
+    totalMes:        number;
+}
+
 export interface Detalle {
-    cuota:        string;
-    monto:        number;
-    saldo:        number;
-    comentario:   string;
-    nroDocumento: null | string;
-    interes:      number;
+    nroDoc?:     string;
+    cuota?:      string;
+    monto?:      number;
+    saldo?:      number;
+    comentario?: string;
+    interes?:    number;
 }
 
 export interface ParametrosGlobales {
