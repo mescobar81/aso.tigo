@@ -17,63 +17,48 @@
             "title": "Movimiento BR",
             "icon": "custom-gasoline",
             "ruta": "dds",
-            "activo":true
+            "activo":false
         },
         {
             "title": "Solicitud de órdenes",
             "icon": "cart",
             "ruta": "dds",
-            "activo":true
+            "activo":false
         },
         {
             "title": "Mis órdenes rechazadas",
             "icon": "document-lock",
             "ruta": "dds",
-            "activo":true
+            "activo":false
         },
         {
             "title": "Crear Tickets",
             "icon": "create",
             "ruta": "dds",
-            "activo":true
+            "activo":false
         },
         {
             "title": "Mis tickets abiertos",
             "icon": "bookmarks",
             "ruta": "dds",
-            "activo":true
+            "activo":false
         },
         {
             "title":"Otras opciones",
             "ruta":"",
             "icon":"",
-            "activo":false,
+            "activo":true,
             "open":false,
             "submenus":[
-                {
-                    "title": "Medios de pagos",
-                    "icon": "",
-                    "ruta": ""
-                },
-                {
-                    "title": "Ordenes pendientes",
-                    "icon": "",
-                    "ruta": ""
-                }
             ]
         },
         {
             "title":"Notificaciones",
             "ruta":"",
             "icon":"",
-            "activo":false,
+            "activo":true,
             "open":false,
             "submenus":[
-                {
-                    "title": "Promociones",
-                    "icon": "",
-                    "ruta": ""
-                }
             ]
         }
     ]

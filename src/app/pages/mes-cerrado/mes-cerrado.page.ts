@@ -22,6 +22,7 @@ export class MesCerradoPage implements OnInit {
   }
 
   async seleccionarCiclo(event:any){
+    this.detalle = [];
     const params = {
       mes:event.detail.value.mes,
       anho:event.detail.value.anho
