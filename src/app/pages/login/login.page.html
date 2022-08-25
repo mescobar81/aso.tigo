@@ -1,7 +1,7 @@
-<ion-content>
+<ion-content class="contenedor" [fullscreen]="true">
   <ion-grid class="contentheader">
     <ion-row>
-      <ion-col class="ion-align-self-center" size="12"><img src="./../../../assets/imgs/ic_notification_asotigo.png"></ion-col>
+      <ion-col class="ion-text-center" size="12"><img src="./../../../assets/imgs/ic_notification_asotigo.png"></ion-col>
     </ion-row>
     <!-- <ion-row class="contentheader_row">
       <ion-col class="contentheader__col contentheader__col--asotigo">AsotiGo</ion-col>
@@ -10,7 +10,6 @@
       <ion-col class="contentheader__col contentheader__col--asociados">Asociados</ion-col>
     </ion-row> -->
   </ion-grid>
-
   <form (ngSubmit)="login(fLogin)" #fLogin="ngForm">
     <ion-grid class="contentgrid">
 
@@ -37,5 +36,4 @@
       </ion-row>
     </ion-grid>
   </form>
-
 </ion-content>

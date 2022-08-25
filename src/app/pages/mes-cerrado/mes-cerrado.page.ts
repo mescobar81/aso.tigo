@@ -32,9 +32,6 @@ export class MesCerradoPage implements OnInit {
       this.mesCerrado = mesCerrado;
       this.detalle = mesCerrado.detalle;
     });
-    console.log(this.detalle);
-    
-    
   }
 
   /**

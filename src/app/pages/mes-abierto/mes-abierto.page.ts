@@ -22,7 +22,10 @@ export class MesAbiertoPage implements OnInit {
   async listarExtractoMes(){
     await this.extractoMesSvr.getMesAbierto().then(resp =>{
       this.extratoMesAbierto = resp;
-      this.detalle = this.extratoMesAbierto.detalle;
+      this.detalle = resp?.detalle;
     });
+
+    console.log(this.detalle);
+    
   }
 }

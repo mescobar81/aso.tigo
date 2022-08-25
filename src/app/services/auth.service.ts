@@ -53,7 +53,6 @@ export class AuthService {
     const data:ResponseUsuario = await this.storage.get('usuario') || null;
 
     if(!data){
-      console.log("ERROR: en lectura usuario sessionStorage", data);
       return Promise.resolve(false);
     }else{
       return Promise.resolve(true);

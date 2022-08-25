@@ -16,19 +16,22 @@ const routes: Routes = [
   {
     path: 'inicio',
     loadChildren: () => import('./pages/inicio/inicio.module').then( m => m.InicioPageModule),
-    canLoad:[ValidarUsuarioGuard]
+    canLoad:[ValidarUsuarioGuard],
+    canActivate:[ValidarUsuarioGuard]
   },
   
   {
     path: 'inicio/mes-abierto',
     loadChildren: () => import('./pages/mes-abierto/mes-abierto.module').then( m => m.MesAbiertoPageModule),
-    canLoad:[ValidarUsuarioGuard]
+    canLoad:[ValidarUsuarioGuard],
+    canActivate:[ValidarUsuarioGuard]
   },
   
   {
     path: 'inicio/mes-cerrado',
     loadChildren: () => import('./pages/mes-cerrado/mes-cerrado.module').then( m => m.MesCerradoPageModule),
-    canLoad:[ValidarUsuarioGuard]
+    canLoad:[ValidarUsuarioGuard],
+    canActivate:[ValidarUsuarioGuard]
   }
 
 ];
