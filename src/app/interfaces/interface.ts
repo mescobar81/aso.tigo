@@ -76,13 +76,7 @@ export interface Cabecera {
     totalCuenta:    number;
 }
 
-export interface ParametrosGlobales {
-    appVersionActualPlayStore: number;
-    estado:                    boolean;
-    importeMinimoOrden:        number;
-    importeMinimoPrestamo:     number;
-    requiereUpdate:            boolean;
-}
+
 export interface ResponseCiclosCerrado {
     ciclos:  Ciclo[];
     mensaje: string;
@@ -126,10 +120,86 @@ export interface Detalle {
     interes?:    number;
 }
 
-export interface ParametrosGlobales {
+
+export interface ResponseMovimientoBR {
+    cabecera?:           CabeceraBR;
+    mensaje?:            string;
+    parametrosGlobales?: ParametrosGlobalesBR;
+    detalle?:            DetalleBR[];
+    status?:             string;
+}
+
+export interface CabeceraBR {
+    saldoDisponible?: number;
+    fechaSaldo?:      string;
+    nombre?:          string;
+}
+
+export interface DetalleBR {
+    nroTicket?:        string;
+    fecha_transaccion?: string;
+    total_consumo?:     number;
+    horaTransaccion?:  string;
+    ahorro_consumo?:    number;
+    nroAutorizacion?:  number;
+    direccion?:        string;
+    estacion?:         string;
+    cantidad?:         string;
+    producto?:         string;
+}
+
+export interface ParametrosGlobalesBR {
     appVersionActualPlayStore: number;
     estado:                    boolean;
     importeMinimoOrden:        number;
     importeMinimoPrestamo:     number;
     requiereUpdate:            boolean;
+}
+export interface ResponseCasaComercial {
+    comercios: Comercio[];
+    mensaje:   string;
+    status:    string;
+}
+
+export interface Comercio {
+    codigoComercio: number;
+    nombreComercio: string;
+    cantMaxCuotas:  number;
+}
+export interface ResponseFormaDePago {
+    FormasPago:         FormasPago[];
+    mensaje:            string;
+    parametrosGlobales: ParametrosGlobales;
+    status:             string;
+}
+
+export interface FormasPago {
+    formaPagoDesc: string;
+    formaPagoId:   number;
+}
+
+
+export interface SolicitudOrden{
+    usuario?:Usuario;
+    comercio?:Comercio;
+    montoSolicitado?:number;
+    cantidadCuotas?:number;
+    cuotaMes?:number;
+    rol?:Rol;
+    formaPago?:FormasPago;
+}
+
+export interface ResponseSolicitudOrden {
+    descripcionRespuesta: string;
+    parametrosGlobales:   ParametrosGlobales;
+    codigoRespuesta:      string;
+}
+export interface OrdenSolicitada{
+    nroSocio?:number;
+    codComercio?:number;
+    montoSolicitado?:number;
+    cantidadCuotas?:number;
+    cuotaMes?:number;
+    rol?:string;
+    formaPago?:number;
 }

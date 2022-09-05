@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Detalle } from 'src/app/interfaces/interface';
 
 
 @Component({
@@ -10,7 +9,7 @@ import { Detalle } from 'src/app/interfaces/interface';
 export class MesDetalleComponent implements OnInit {
 
   @Input() 
-  detalle:Detalle[] = [];
+  detalle:any[]  = [];
   constructor() { }
 
   ngOnInit() {

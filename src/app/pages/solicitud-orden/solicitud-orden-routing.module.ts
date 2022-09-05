@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from 'src/app/guards/auth.guard';
-import { MesAbiertoPage } from '../mes-abierto/mes-abierto.page';
 
-import { InicioPage } from './inicio.page';
+import { SolicitudOrdenPage } from './solicitud-orden.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: InicioPage,
+    component: SolicitudOrdenPage,
     canActivate:[AuthGuard]
   }
 ];
@@ -17,4 +16,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class InicioPageRoutingModule {}
+export class SolicitudOrdenPageRoutingModule {}

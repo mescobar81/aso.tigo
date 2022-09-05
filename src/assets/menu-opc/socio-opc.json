@@ -16,14 +16,14 @@
         {
             "title": "Movimiento BR",
             "icon": "custom-gasoline",
-            "ruta": "dds",
-            "activo":false
+            "ruta": "movimiento-br",
+            "activo":true
         },
         {
             "title": "Solicitud de órdenes",
             "icon": "cart",
-            "ruta": "dds",
-            "activo":false
+            "ruta": "solicitud-orden",
+            "activo":true
         },
         {
             "title": "Mis órdenes rechazadas",

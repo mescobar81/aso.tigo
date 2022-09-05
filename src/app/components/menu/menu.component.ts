@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { MenuItem, ResponseUsuario, Usuario } from 'src/app/interfaces/interface';
+import { MenuItem, ResponseUsuario } from 'src/app/interfaces/interface';
 import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { MenuService } from 'src/app/services/menu.service';
 export class MenuComponent implements OnInit {
 
   menuOpc!:MenuItem;
-  usuario: ResponseUsuario;
+  usuario!: ResponseUsuario;
   constructor(private menuSvr:MenuService,
               private storage: Storage) {
                 this.init();
@@ -30,19 +30,18 @@ export class MenuComponent implements OnInit {
     const data = await this.storage.get('usuario') || null;
 
     if (!data) {
-      console.log("ERROR: en lectura usuario sessionStorage", data);
       return;
     }
     const rol: string = data.usuario.rol.roles[0].toLowerCase();
+
     //espera a obtener las opciones del menu
     this.menuOpc = await this.menuSvr.getMenuOpcion(rol);
-
   }
   
   get getUsuario(){
     this.menuSvr.event.subscribe(usuario =>{
-      this.usuario= usuario;
-    });
+      this.usuario = {...usuario};
+    });  
     return this.usuario;
   }
 

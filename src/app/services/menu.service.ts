@@ -12,9 +12,6 @@ export class MenuService {
   @Output() event:EventEmitter<ResponseUsuario> = new EventEmitter();
 
   usuario: ResponseUsuario;
-  get getUsuario() {
-    return { ...this.usuario };
-  }
   constructor(private http: HttpClient,
     private storage: Storage) {
     this.init();
@@ -26,28 +23,27 @@ export class MenuService {
    */
   async init() {
     await this.storage.create();
-    this.usuario = await this.storage.get('usuario');
-    this.event.emit(this.usuario);
   }
-
 
   async getMenuOpcion(rol:string): Promise<MenuItem> {
 
     const pathAssets = '/assets/menu-opc';
 
-    return new Promise(async (resolve) => {
+    this.usuario = await this.storage.get('usuario');
+
+    this.event.emit(this.usuario);
+
+    return new Promise((resolve) => {
 
       if (rol === 'socio') {
         this.http.get<MenuItem>(`${pathAssets}/socio-opc.json`).subscribe(resp => {
           resolve(resp);
         }, err => {
-          console.log("ERROR: en obtener opciones de menú", err);
+          console.log("ERROR: en obtener opciones de menú", JSON.stringify(err));
         });
       } else if (rol === 'tesorero') {
         this.http.get<MenuItem>(`${pathAssets}/tesorero-opc.json`);
       }
-
     });
-
   }
 }

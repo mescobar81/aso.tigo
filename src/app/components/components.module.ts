@@ -6,6 +6,7 @@ import { MesAbiertoPageRoutingModule } from '../pages/mes-abierto/mes-abierto-ro
 import { HeaderComponent } from './header/header.component';
 import { MenuComponent } from './menu/menu.component';
 import { MesDetalleComponent } from './mes-detalle/mes-detalle.component';
+import { PopoverInfoComponent } from './popover-info/popover-info.component';
 
 
 
@@ -13,7 +14,8 @@ import { MesDetalleComponent } from './mes-detalle/mes-detalle.component';
   declarations: [
     HeaderComponent,
     MenuComponent,
-    MesDetalleComponent
+    MesDetalleComponent,
+    PopoverInfoComponent
   ],
   exports: [
     HeaderComponent,

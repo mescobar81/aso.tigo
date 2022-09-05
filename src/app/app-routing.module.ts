@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { ValidarUsuarioGuard } from './guards/validar-usuario.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -16,23 +16,31 @@ const routes: Routes = [
   {
     path: 'inicio',
     loadChildren: () => import('./pages/inicio/inicio.module').then( m => m.InicioPageModule),
-    canLoad:[ValidarUsuarioGuard],
-    canActivate:[ValidarUsuarioGuard]
+    canLoad:[AuthGuard]
   },
   
   {
     path: 'inicio/mes-abierto',
     loadChildren: () => import('./pages/mes-abierto/mes-abierto.module').then( m => m.MesAbiertoPageModule),
-    canLoad:[ValidarUsuarioGuard],
-    canActivate:[ValidarUsuarioGuard]
+   
   },
   
   {
     path: 'inicio/mes-cerrado',
     loadChildren: () => import('./pages/mes-cerrado/mes-cerrado.module').then( m => m.MesCerradoPageModule),
-    canLoad:[ValidarUsuarioGuard],
-    canActivate:[ValidarUsuarioGuard]
+  
+  },
+  {
+    path: 'inicio/movimiento-br',
+    loadChildren: () => import('./pages/movimiento-br/movimiento-br.module').then( m => m.MovimientoBrPageModule)
+  },
+  {
+    path: 'inicio/solicitud-orden',
+    loadChildren: () => import('./pages/solicitud-orden/solicitud-orden.module').then( m => m.SolicitudOrdenPageModule),
+    canLoad:[AuthGuard]
   }
+
+
 
 ];
 

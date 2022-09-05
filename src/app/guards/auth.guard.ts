@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanLoad, RouterStateSnapshot, UrlTree} from '@angular/router';
+import { CanActivate, CanLoad} from '@angular/router';
 import { NavController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+
 
 import { AuthService } from '../services/auth.service';
 
@@ -9,23 +9,26 @@ import { AuthService } from '../services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ValidarUsuarioGuard implements CanLoad, CanActivate {
+export class AuthGuard implements CanLoad, CanActivate {
 
   constructor(private authSvr:AuthService,
               private navCtrl:NavController){}
-  canActivate(): boolean | Promise<boolean> {
+  canActivate(): boolean {
     this.authSvr.validarUsuario().then(valid =>{
+     console.log('Valid canactivate: ' + valid);
+      
       if(!valid) {
-        this.navCtrl.navigateRoot('login');
+        this.navCtrl.navigateRoot('/login');
       }
     });
     return true;
   }
 
-  canLoad(): Promise<boolean> | boolean {
+  canLoad(): boolean {
      this.authSvr.validarUsuario().then(valid =>{
+      console.log('Valid canload: ' + valid);
       if(!valid) {
-        this.navCtrl.navigateRoot('login');
+        this.navCtrl.navigateRoot('/login');
       }
     });
     return true;

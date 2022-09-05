@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
 import { MenuController, NavController } from '@ionic/angular';
-import CryptoJS from 'crypto-js';
+import * as CryptoJS from 'crypto-js';
 
 import { UsuarioRequest } from 'src/app/interfaces/interface';
+import { AlertPresentService } from 'src/app/services/alert-present.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -12,7 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
 
   usuario: UsuarioRequest = {
     documento:"",
@@ -27,10 +28,8 @@ export class LoginPage implements OnInit {
   constructor(private authSvr: AuthService,
               private menuCtrl:MenuController,
               private navCtrl:NavController,
-              private device: Device) { }
-
-  ngOnInit() {
-  }
+              private device: Device,
+              private alertSvr:AlertPresentService) { }
 
   /**
    * se encarga de llamar al servicio para dar ingreso al usuario
@@ -49,24 +48,27 @@ export class LoginPage implements OnInit {
      */
     const nuevoUsuario:UsuarioRequest ={
       documento:this.usuario.documento,
-      clave: CryptoJS.SHA256(fLogin.value.clave).toString(CryptoJS.enc.Hex),
+      clave: CryptoJS.SHA256(this.usuario.clave).toString(CryptoJS.enc.Hex),
       device: {
-        os: "",
-        version: "",
-        model: "",
-        ip: ""
+        os: this.device.platform,
+        version: this.device.version,
+        model: this.device.model,
+        ip: this.device.uuid
       }
     }
 
-    const data = await this.authSvr.login(nuevoUsuario);
+    console.log(JSON.stringify(nuevoUsuario));
+    
 
+    await this.authSvr.login(nuevoUsuario).then(data =>{
     if(data.usuario.valido){
-      this.menuCtrl.enable(true, 'first');
+      console.log(data);
+      this.navCtrl.navigateRoot('/inicio');
       this.menuCtrl.open('first');
-      this.navCtrl.navigateRoot('inicio');
     }else{
-      console.log(data.usuario.mensaje);
+      this.alertSvr.presentAlert("Atención", "", data.usuario.mensaje, "Aceptar");
     }
+    });
   }
 
 }
