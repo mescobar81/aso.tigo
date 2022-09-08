@@ -1,0 +1,35 @@
+
+.container{
+    box-shadow: 0px 0px 20px #525151;
+    border-radius: 10px;
+    position: absolute;
+    left: 50px;
+    right:50px;
+    top:120px;
+}
+.container__img{
+    background-color: #2dd36f;
+    background-image: url('../../../assets/imgs/ic_check_all_white_48dp.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.container--img{
+    background-color: #eb445a;
+    background-image: url('../../../assets/imgs/ic_close_outline_white_48dp.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.container__title{
+    font-size: 20px !important;
+    font-weight:bold !important;
+}

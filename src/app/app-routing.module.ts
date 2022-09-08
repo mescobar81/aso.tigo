@@ -38,7 +38,12 @@ const routes: Routes = [
     path: 'inicio/solicitud-orden',
     loadChildren: () => import('./pages/solicitud-orden/solicitud-orden.module').then( m => m.SolicitudOrdenPageModule),
     canLoad:[AuthGuard]
+  },
+  {
+    path: 'inicio/ordenes-pendientes',
+    loadChildren: () => import('./pages/ordenes-pendientes/ordenes-pendientes.module').then( m => m.OrdenesPendientesPageModule)
   }
+
 
 
 

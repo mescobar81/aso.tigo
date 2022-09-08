@@ -28,7 +28,7 @@ export class AuthService {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json; charset=utf-8');
 
-    return new Promise<ResponseUsuario>((resolve) => {
+    return new Promise<ResponseUsuario>((resolve, reject) => {
        this.http.post<ResponseUsuario>(`${urlBase}/loginPost/`, usuario, {headers}).subscribe(resp =>{
         
         if(resp.usuario.valido){
@@ -37,7 +37,9 @@ export class AuthService {
         }else{
           resolve(resp);
         }
-      }, err => console.log(err)
+      }, err => {
+        reject(err);
+      }
       )
     })
   }
@@ -49,7 +51,7 @@ export class AuthService {
    async validarUsuario():Promise<boolean> {
 
     //espera a cargar el usuario del sessionStorage
-    const usuario = await this.storage.get('usuario') || "";
+    const usuario = await this.storage.get('usuario') || null;
     
     return new Promise<boolean>((resolve, reject) => {
       if(!usuario){

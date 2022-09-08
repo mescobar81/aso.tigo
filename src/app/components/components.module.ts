@@ -7,6 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { MenuComponent } from './menu/menu.component';
 import { MesDetalleComponent } from './mes-detalle/mes-detalle.component';
 import { PopoverInfoComponent } from './popover-info/popover-info.component';
+import { ModalInfoComponent } from './modal-info/modal-info.component';
 
 
 
@@ -15,12 +16,14 @@ import { PopoverInfoComponent } from './popover-info/popover-info.component';
     HeaderComponent,
     MenuComponent,
     MesDetalleComponent,
-    PopoverInfoComponent
+    PopoverInfoComponent,
+    ModalInfoComponent
   ],
   exports: [
     HeaderComponent,
     MenuComponent,
-    MesDetalleComponent
+    MesDetalleComponent,
+    ModalInfoComponent
   ],
   imports: [
     CommonModule,

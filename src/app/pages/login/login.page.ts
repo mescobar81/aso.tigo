@@ -28,7 +28,7 @@ export class LoginPage {
   constructor(private authSvr: AuthService,
               private menuCtrl:MenuController,
               private navCtrl:NavController,
-              private device: Device,
+              //private device: Device,
               private alertSvr:AlertPresentService) { }
 
   /**
@@ -38,7 +38,7 @@ export class LoginPage {
    */
   async login(fLogin:NgForm) {
 
-    if(fLogin.invalid){
+    if(!fLogin.valid){
       return;
     }
 
@@ -50,10 +50,10 @@ export class LoginPage {
       documento:this.usuario.documento,
       clave: CryptoJS.SHA256(this.usuario.clave).toString(CryptoJS.enc.Hex),
       device: {
-        os: this.device.platform,
-        version: this.device.version,
-        model: this.device.model,
-        ip: this.device.uuid
+        os: '',//this.device.platform,
+        version: '',//this.device.version,
+        model: '',//this.device.model,
+        ip: '',//this.device.uuid
       }
     }
 
@@ -68,6 +68,7 @@ export class LoginPage {
     }else{
       this.alertSvr.presentAlert("Atención", "", data.usuario.mensaje, "Aceptar");
     }
+    }).catch(err =>{console.log(JSON.stringify(err));
     });
   }
 

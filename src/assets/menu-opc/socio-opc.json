@@ -26,10 +26,22 @@
             "activo":true
         },
         {
+            "title": "Solicitud de préstamo",
+            "icon": "cart",
+            "ruta": "solicitud-prestamo",
+            "activo":false
+        },
+        {
+            "title": "Órdenes pendientes",
+            "icon": "cart",
+            "ruta": "ordenes-pendientes",
+            "activo":true
+        },
+        {
             "title": "Mis órdenes rechazadas",
             "icon": "document-lock",
-            "ruta": "dds",
-            "activo":false
+            "ruta": "",
+            "activo":true
         },
         {
             "title": "Crear Tickets",
