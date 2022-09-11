@@ -1,8 +1,9 @@
-import {  Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ResponseUsuario, Usuario, UsuarioRequest } from '../interfaces/interface';
-import { Storage } from '@ionic/storage-angular';
+
+import { ResponseUsuario, UsuarioRequest } from '../interfaces/interface';
+import { StorageService } from './storage.service';
 
 
 
@@ -12,29 +13,21 @@ const urlBase = environment.urlBase;
 })
 export class AuthService {
 
-  private _storage:Storage | null = null;
-  constructor(private http:HttpClient,
-              private storage:Storage) {
-               
-                this.init();
-               
-              }
-  async init(){
-    this._storage = await this.storage.create();
+  constructor(private http: HttpClient,
+             private storageSrv: StorageService) {
   }
 
-   async login(usuario:UsuarioRequest):Promise<ResponseUsuario> {
+  login(usuario: UsuarioRequest): Promise<ResponseUsuario> {
 
     const headers = new HttpHeaders()
-    .set('Content-Type', 'application/json; charset=utf-8');
+      .set('Content-Type', 'application/json; charset=utf-8');
 
-    return new Promise<ResponseUsuario>((resolve, reject) => {
-       this.http.post<ResponseUsuario>(`${urlBase}/loginPost/`, usuario, {headers}).subscribe(resp =>{
-        
-        if(resp.usuario.valido){
-          this._storage.set('usuario', resp);
+    return new Promise<ResponseUsuario>(async (resolve, reject) => {
+      this.http.post<ResponseUsuario>(`${urlBase}/loginPost/`, usuario, { headers }).subscribe(resp => {
+
+        if (resp.usuario.valido) {
           resolve(resp);
-        }else{
+        } else {
           resolve(resp);
         }
       }, err => {
@@ -48,18 +41,21 @@ export class AuthService {
    * valida en el sessionStorage que un usuario este activo
    * @returns 
    */
-   async validarUsuario():Promise<boolean> {
+  async validarUsuario(): Promise<boolean> {
 
-    //espera a cargar el usuario del sessionStorage
-    const usuario = await this.storage.get('usuario') || null;
+    /**
+     * crea el almacenamiento local
+     * ver: si no se coloca esta linea la primera vez el usuario es null
+     */
+    await this.storageSrv.init();
     
-    return new Promise<boolean>((resolve, reject) => {
-      if(!usuario){
-        resolve(false);
-      }else{
-        resolve(true);
-      }
-    })
+    const usuario = await this.storageSrv.getUsuario();
+    
+    if (!usuario) {
+       return Promise.resolve(false);
+    } else {
+      return Promise.resolve(true);
+    }
 
   }
 }

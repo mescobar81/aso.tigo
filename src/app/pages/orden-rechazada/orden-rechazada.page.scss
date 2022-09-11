@@ -1,0 +1,18 @@
+
+.contentgrid--cell {
+    border-color: #c4c4c4; 
+    border-width: 0.1px; 
+    border-style:solid;
+    margin-top: 1px;
+    background-color: #ffffff;
+  }
+
+  ion-grid{
+    box-shadow: 0px 0px 20px #5d5d5d;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  ion-content{
+    --background:#fcfcfc;
+  }

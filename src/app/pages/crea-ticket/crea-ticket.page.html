@@ -1,0 +1,42 @@
+<app-header title="crear tickets"></app-header>
+
+<ion-content class="ion-padding">
+  <form #fSolicitud="ngForm" (ngSubmit)="enviarSolicitud(fSolicitud)">
+    <ion-item>
+      <ion-label>Tipo de solicitud</ion-label>
+      <ion-select interface="popover"
+                  name="tiposSolicitud"
+                  (ionChange)="seleccionarTicket()"
+                  [ngModel]="nuevaSolicitud.tipoSolicitud"
+                  (ngModel)="$event">
+        <ion-select-option *ngFor="let t of tiposSolicitud" [value]="t.id" required>{{t.descripcion}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label>Asunto:</ion-label>
+      <ion-input type="text"
+                 name="asunto"
+                 [(ngModel)]="nuevaSolicitud.asunto"
+                 required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-textarea wrap="hard"
+                    autoGrow="true" 
+                    rows="15"
+                    name="comentario"
+                    [(ngModel)]="nuevaSolicitud.comentario"
+                    placeholder="Descripción:" 
+                    required></ion-textarea>
+    </ion-item>
+    <ion-button color="secondary" expand="block">
+      Adjuntar Archivo
+      <ion-icon slot="end" name="attach"></ion-icon>
+    </ion-button>
+    <ion-button [disabled]="fSolicitud.invalid" type="submit" expand="block">
+      Enviar Tickets
+      <ion-icon slot="end" name="chevron-forward"></ion-icon>
+    </ion-button>
+  </form>
+  <pre>Value: {{fSolicitud.value}}</pre>
+</ion-content>

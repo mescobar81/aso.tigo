@@ -1,0 +1,78 @@
+<app-header title="mis órdenes rechazadas"></app-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid *ngFor="let r of rechazadas">
+    <ion-row>
+      <ion-col size="6">
+        <ion-button color="danger">
+          Rechazada
+        </ion-button>
+      </ion-col>
+      <ion-col class="ion-text-right" size="6">#{{r.nro}}</ion-col>
+    </ion-row>
+
+    <ion-row class="contentgrid--cell">
+      <ion-col size="6">Nombre:</ion-col>
+      <ion-col size="6">{{r.nombre}}</ion-col>
+    </ion-row>
+
+    <ion-row class="contentgrid--cell">
+      <ion-col size="6">Proveedor:</ion-col>
+      <ion-col size="6">{{r.nombreEmpresa}}</ion-col>
+    </ion-row>
+
+    <ion-row class="contentgrid--cell">
+      <ion-col size="6">Monto:</ion-col>
+      <ion-col size="6">{{r.monto}}</ion-col>
+    </ion-row>
+
+    <ion-row class="contentgrid--cell">
+      <ion-col size="6">Cuota:</ion-col>
+      <ion-col size="6">{{r.cantidadCuotas}}</ion-col>
+    </ion-row>
+
+    <ion-row class="contentgrid--cell">
+      <ion-col size="6">Fecha solicitud:</ion-col>
+      <ion-col size="6">{{r.fechaSolicitud}}</ion-col>
+    </ion-row>
+
+    
+    <ion-row class="contentgrid--cell">
+      <ion-col size="6">Fecha procesada:</ion-col>
+      <ion-col size="6">{{r.fechaProceso}}</ion-col>
+    </ion-row>
+
+    
+    <ion-row class="contentgrid--cell">
+      <ion-col size="6">Aprobante:</ion-col>
+      <ion-col size="6"></ion-col>
+    </ion-row>
+
+        
+    <ion-row class="contentgrid--cell">
+      <ion-col size="6">Procesado por:</ion-col>
+      <ion-col size="6">{{r.usuarioProceso}}</ion-col>
+    </ion-row>
+
+        
+    <ion-row class="contentgrid--cell">
+      <ion-col size="6">Motivo de rechazo:</ion-col>
+      <ion-col color="danger" size="6">{{r.motivo}}</ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col class="ion-text-center" size="12">
+        <ion-button color="success"
+                    (click)="marcarOrdenLeido(r.nro)"
+        >
+          <ion-icon slot="start"
+                    name="checkmark-circle"
+                    >
+          </ion-icon>
+          Marcar como leído
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

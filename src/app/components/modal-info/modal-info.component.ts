@@ -11,6 +11,7 @@ export class ModalInfoComponent implements OnInit {
   @Input() descripcion:string;
   @Input() title:string;
   @Input() isCss:boolean = false;
+
   constructor(private modalCtrl:ModalController) { }
 
   ngOnInit() {}
@@ -23,6 +24,6 @@ export class ModalInfoComponent implements OnInit {
     return this.isCss == true ? 'success':'danger';
   }
   cerrarModal(){
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss(null, 'confirm');
   }
 }

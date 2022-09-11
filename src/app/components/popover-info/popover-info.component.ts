@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-popover-info',
@@ -10,18 +11,14 @@ import { Storage } from '@ionic/storage';
 export class PopoverInfoComponent implements OnInit {
 
   items:string[] = ['Cerrar Sesión', 'Cambiar Contraseña'];
-  constructor(private storage:Storage,
+  constructor(private storageSrv:StorageService,
               private navCtrl:NavController) {
-    this.init();
    }
 
-  async init(){
-    await this.storage.create();
-  }
   ngOnInit() {}
 
-  async logout(){
-    await this.storage.clear();
+   logout(){
+    this.storageSrv.clear();
     this.navCtrl.navigateRoot('/login');
   }
 }

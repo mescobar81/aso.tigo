@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { OrdenSolicitada, ResponseCasaComercial, ResponseFormaDePago, ResponseSolicitudOrden } from '../interfaces/interface';
+
+import { OrdenSolicitada, ResponseCasaComercial, ResponseFormaDePago, ResponseOrdenLeido, ResponseOrdenPendiente, ResponseOrdenRechazada, ResponseSolicitudOrden } from '../interfaces/interface';
 
 const urlBase = environment.urlBase;
 @Injectable({
@@ -27,6 +28,7 @@ export class SolicitudOrdenService {
           }
       },err => {
         console.log(JSON.stringify(err));
+        reject(err);
       })
     });
   }
@@ -60,6 +62,53 @@ export class SolicitudOrdenService {
       }, err => {
         console.log(JSON.stringify(err));
         reject(err);
+      });
+    });
+  }
+
+  listarOrdenesPendientes(nroSocio:string):Promise<ResponseOrdenPendiente>{
+    return new Promise<ResponseOrdenPendiente>((resolve, reject) =>{
+      this.http.get<ResponseOrdenPendiente>(`${urlBase}/misOrdenesPendientes?nroSocio=${nroSocio}`).subscribe(resp =>{
+        if(resp.status === 'success'){
+          resolve(resp);
+        }else{
+          console.log(JSON.stringify(resp));
+        }
+      },err =>{reject(JSON.stringify(err))});
+    })
+  }
+
+  listarOrdenesRechazadas(nroSocio:string):Promise<ResponseOrdenRechazada> {
+
+    return new Promise<ResponseOrdenRechazada>((resolve, reject) => {
+      this.http.get<ResponseOrdenRechazada>(`${urlBase}/misOrdenesCanceladas?nroSocio=${nroSocio}`).subscribe(resp =>{
+        if(resp.status === 'success'){
+          resolve(resp);
+        }else{
+          console.log(JSON.stringify(resp));
+          resolve(resp);
+        }
+      }, err => {
+        console.log(JSON.stringify(err));
+        
+        reject(err);})
+    })
+  }
+
+  marcarOrdenLeido(documento:string, nroRegistro:number): Promise<boolean>{
+
+    return new Promise<boolean>((resolve, reject) =>{
+      this.http.post<ResponseOrdenLeido>(`${urlBase}/leerRechazoOrden`, {documento, nroRegistro}).subscribe(resp =>{
+        if(resp.status === 'success'){
+          console.log('Orden Leída', resp);
+          
+          resolve(true);
+        }else{
+          console.log(JSON.stringify(resp));
+        }
+      }, err => {
+        console.log(JSON.stringify(err));
+        reject(false);
       });
     });
   }

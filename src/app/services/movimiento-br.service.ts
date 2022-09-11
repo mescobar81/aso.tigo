@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
+
 import { ResponseMovimientoBR } from '../interfaces/interface';
+import { StorageService } from './storage.service';
 
 const urlBase = environment.urlBase;
 @Injectable({
@@ -11,24 +12,20 @@ const urlBase = environment.urlBase;
 export class MovimientoBRService {
 
   constructor(private http: HttpClient,
-              private storage:Storage) { 
-                this.init();
+              private storageSrv:StorageService) { 
               }
-
-  async init(){
-    await this.storage.create();
-  }
 
 
   async listarMovimientoBR(mes:number, anho:number): Promise<ResponseMovimientoBR> {
-    const data = await this.storage.get('usuario') || null;
+    
+    const usuario = await this.storageSrv.getUsuario();
 
-    if(!data){
+    if(!usuario){
       return;
     }
     
     return new Promise(resolve => {
-      this.http.get<ResponseMovimientoBR>(`${urlBase}/movimientosBr?nroDocumento=${data.usuario.documento}&mes=${mes}&anho=${anho}`)
+      this.http.get<ResponseMovimientoBR>(`${urlBase}/movimientosBr?nroDocumento=${usuario.documento}&mes=${mes}&anho=${anho}`)
       .subscribe(resp =>{
         if(resp.status === 'success'){
            resolve(resp);

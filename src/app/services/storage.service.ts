@@ -8,20 +8,32 @@ import { Usuario } from '../interfaces/interface';
 })
 export class StorageService {
 
-  usuario:any;
+  usuario:Usuario;
   constructor(private storage:Storage) { 
     this.init();
   }
 
-  get getUsuario(){
-    return {...this.usuario};
+  async getUsuario(){
+    this.usuario = await this.storage.get('usuario') || null;
+    return this.usuario;
   }
 
-  async init(){
+  async init(){   
     await this.storage.create();
   }
 
-  async setUsuario() {
-    this.usuario = await this.storage.get('usuario') || null;
+  /**
+   * graba usuario en el local storage
+   * @param usuario 
+   */
+  async guardarUsuario(usuario:Usuario){
+    await this.storage.set('usuario', usuario);
+  }
+
+  /**
+   * limpia el local storage
+   */
+  clear(){
+    this.storage.clear();
   }
 }

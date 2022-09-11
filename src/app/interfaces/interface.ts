@@ -203,3 +203,63 @@ export interface OrdenSolicitada{
     rol?:string;
     formaPago?:number;
 }
+
+export interface ResponseOrdenPendiente {
+    mensaje:            string;
+    parametrosGlobales: ParametrosGlobales;
+    status:             string;
+    solicitudes:        SolicitudPendiente[];
+}
+
+export interface SolicitudPendiente {
+    aprobante:      string;
+    monto:          number;
+    fechaSolicitud: string;
+    fechaProceso:   string;
+    codEmpresa:     number;
+    nro:            number;
+    nombre:         string;
+    cantidadCuotas: number;
+    nombreEmpresa:  string;
+}
+
+
+export interface ResponseOrdenRechazada {
+    mensaje:            string;
+    parametrosGlobales: ParametrosGlobales;
+    status:             string;
+    solicitudes:        SolicitudRechazada[];
+}
+
+export interface SolicitudRechazada {
+    rol:            Rol;
+    usuarioProceso: string;
+    motivo:         string;
+    monto:          number;
+    fechaSolicitud: string;
+    fechaProceso:   string;
+    codEmpresa:     number;
+    nroSocio:       number;
+    nro:            number;
+    nombre:         string;
+    cantidadCuotas: number;
+    nombreEmpresa:  string;
+}
+
+export interface ResponseOrdenLeido {
+    documento: number;
+    mensaje:   string;
+    parametrosGlobales: ParametrosGlobales;
+    status:    string;
+}
+
+export interface ResponseSolicitudTicket {
+    tiposSolicitud: TiposSolicitud[];
+    mensaje:        string;
+    status:         string;
+}
+
+export interface TiposSolicitud {
+    descripcion: string;
+    id:          number;
+}

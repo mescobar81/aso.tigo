@@ -42,7 +42,17 @@ const routes: Routes = [
   {
     path: 'inicio/ordenes-pendientes',
     loadChildren: () => import('./pages/ordenes-pendientes/ordenes-pendientes.module').then( m => m.OrdenesPendientesPageModule)
+  },
+  {
+    path: 'inicio/orden-rechazada',
+    loadChildren: () => import('./pages/orden-rechazada/orden-rechazada.module').then( m => m.OrdenRechazadaPageModule)
+  },
+  {
+    path: 'inicio/crea-ticket',
+    loadChildren: () => import('./pages/crea-ticket/crea-ticket.module').then( m => m.CreaTicketPageModule)
   }
+
+
 
 
 

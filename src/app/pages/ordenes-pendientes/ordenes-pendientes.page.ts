@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Detalle } from 'src/app/interfaces/interface';
+
+import { SolicitudPendiente } from 'src/app/interfaces/interface';
+import { SolicitudOrdenService } from 'src/app/services/solicitud-orden.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-ordenes-pendientes',
@@ -8,10 +11,16 @@ import { Detalle } from 'src/app/interfaces/interface';
 })
 export class OrdenesPendientesPage implements OnInit {
 
-  detalle:Detalle[] = [];
-  constructor() { }
+  pendientes:SolicitudPendiente[] = [];
+  constructor(private solicitudOrden:SolicitudOrdenService,
+              private storageSvr:StorageService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const usuario = await this.storageSvr.getUsuario();
+    if(!usuario) {
+      return;
+    }
+    this.pendientes = (await this.solicitudOrden.listarOrdenesPendientes(usuario.nroSocio)).solicitudes;
   }
 
 }

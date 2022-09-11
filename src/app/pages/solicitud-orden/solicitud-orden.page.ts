@@ -53,12 +53,8 @@ export class SolicitudOrdenPage implements OnInit {
   async init(){
     this.comercios = (await this.solicitudOrdenSvr.listarCasasComerciales(0)).comercios;
     this.formasPagos = (await this.solicitudOrdenSvr.listarFormasDePagos()).FormasPago;
-
-    /**
-     * establece datos del usuario
-     * ver:obtiene del storage
-     */
-    this.storageSvr.setUsuario();
+    this.nuevaOrden = {};
+    this.solicitudOrden = {};
   }
 
   seleccionarComercio(){
@@ -92,13 +88,13 @@ export class SolicitudOrdenPage implements OnInit {
     /**
      * obtiene los datos del usuario
      */
-    const data =  this.storageSvr.getUsuario;
+    const usuario = await this.storageSvr.getUsuario();
 
     /**
      * establece los datos para la orden solicitada
      */
-    this.nuevaOrden.nroSocio = parseInt(data.usuario.nroSocio);
-    this.nuevaOrden.rol = data.usuario.rol.roles[0];
+    this.nuevaOrden.nroSocio = parseInt(usuario.nroSocio);
+    this.nuevaOrden.rol = usuario.rol.roles[0];
     this.nuevaOrden.montoSolicitado = this.solicitudOrden.montoSolicitado;
     this.nuevaOrden.cantidadCuotas = this.solicitudOrden.cantidadCuotas;
     this.nuevaOrden.cuotaMes = this.solicitudOrden.cuotaMes;
@@ -110,6 +106,7 @@ export class SolicitudOrdenPage implements OnInit {
     if(response.codigoRespuesta == '00'){
       //this.presentAlert('', response.descripcionRespuesta);
       this.presentarModal('',response.descripcionRespuesta, true);
+
     }else if(response.codigoRespuesta == '99'){
       //this.presentAlert('', response.descripcionRespuesta);
       this.presentarModal('Solicitud Órden', response.descripcionRespuesta, false);
@@ -134,11 +131,14 @@ export class SolicitudOrdenPage implements OnInit {
         descripcion,
         title,
         isCss
-      },
-      
+      }
     });
 
     modal.present();
 
+    const {role} = await modal.onWillDismiss();
+    if(role === 'confirm'){
+      this.init();//inicializa los valores en los campos
+    }
   }
 }

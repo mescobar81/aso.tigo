@@ -1,35 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
 
-import { MenuItem, ResponseUsuario } from '../interfaces/interface';
+import { MenuItem, Usuario } from '../interfaces/interface';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
 
-  @Output() event:EventEmitter<ResponseUsuario> = new EventEmitter();
+  @Output() event:EventEmitter<Usuario> = new EventEmitter();
 
-  usuario: ResponseUsuario;
+  usuario: Usuario;
   constructor(private http: HttpClient,
-    private storage: Storage) {
-    this.init();
-  }
-
-  /**
-   * crea la bd local en el dispositivo
-   * ver: almacenamiento temporal en el session storage
-   */
-  async init() {
-    await this.storage.create();
+    private storageSvr: StorageService) {
   }
 
   async getMenuOpcion(rol:string): Promise<MenuItem> {
 
     const pathAssets = '/assets/menu-opc';
 
-    this.usuario = await this.storage.get('usuario');
+    this.usuario = await this.storageSvr.getUsuario();
 
     this.event.emit(this.usuario);
 

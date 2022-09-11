@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
+
 import {map} from 'rxjs/operators'
 import { Observable } from 'rxjs';
 
 import { ResponseCiclosCerrado, ResponseMesAbierto, ResponseMesCerrado } from '../interfaces/interface';
+import { StorageService } from './storage.service';
 
 
 const urlBase = environment.urlBase;
@@ -15,24 +16,18 @@ const urlBase = environment.urlBase;
 export class ExtractoMesService {
 
   constructor(private http: HttpClient,
-              private storage:Storage) { 
-                this.init();
+              private storageSrv:StorageService) { 
+
               }
-
-
-  async init(){
-    await this.storage.create();
-  }
-
   async getMesAbierto(): Promise<ResponseMesAbierto> {
 
-    const data = await this.storage.get('usuario') || null;
-    if(!data){
+    const usuario = await this.storageSrv.getUsuario();
+    if(!usuario){
       return;
     }
 
     return new Promise((resolve, reject) => {
-      this.http.get<ResponseMesAbierto>(`${urlBase}/mesAbierto?nroSocio=${data.usuario.nroSocio}`).subscribe(resp =>{
+      this.http.get<ResponseMesAbierto>(`${urlBase}/mesAbierto?nroSocio=${usuario.nroSocio}`).subscribe(resp =>{
         if(resp.status === 'success'){
           resolve(resp);
         }
@@ -47,18 +42,21 @@ export class ExtractoMesService {
    * devuelve el historial del ciclo, mes cerrado
    */
   async getMesCerrado(params:any):Promise<ResponseMesCerrado> {
-    const data = await this.storage.get('usuario') || null;
-    if(!data){
+    const usuario = await this.storageSrv.getUsuario();
+    if(!usuario){
       return;
     }
     const {mes,anho} = params;
-    console.log(data.usuario.nroSocio);
+    console.log(usuario.nroSocio);
     
     return new Promise((resolve, reject) => {
-      this.http.get<ResponseMesCerrado>(`${urlBase}/mesCerrado?nroSocio=${data.usuario.nroSocio}&mes=${mes}&anho=${anho}`).subscribe(resp => {
+      this.http.get<ResponseMesCerrado>(`${urlBase}/mesCerrado?nroSocio=${usuario.nroSocio}&mes=${mes}&anho=${anho}`).subscribe(resp => {
         if (resp.status == 'success') {
           resolve(resp);
         }
+      }, err =>{
+        console.log(JSON.stringify(err));
+        reject(err);
       });
     });
   }

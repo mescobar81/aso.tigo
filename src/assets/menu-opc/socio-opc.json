@@ -33,21 +33,21 @@
         },
         {
             "title": "Órdenes pendientes",
-            "icon": "cart",
+            "icon": "document-text",
             "ruta": "ordenes-pendientes",
             "activo":true
         },
         {
             "title": "Mis órdenes rechazadas",
             "icon": "document-lock",
-            "ruta": "",
+            "ruta": "orden-rechazada",
             "activo":true
         },
         {
             "title": "Crear Tickets",
-            "icon": "create",
-            "ruta": "dds",
-            "activo":false
+            "icon": "bookmark",
+            "ruta": "crea-ticket",
+            "activo":true
         },
         {
             "title": "Mis tickets abiertos",

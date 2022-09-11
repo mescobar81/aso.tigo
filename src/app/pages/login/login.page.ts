@@ -7,6 +7,7 @@ import * as CryptoJS from 'crypto-js';
 import { UsuarioRequest } from 'src/app/interfaces/interface';
 import { AlertPresentService } from 'src/app/services/alert-present.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,7 @@ export class LoginPage {
   constructor(private authSvr: AuthService,
               private menuCtrl:MenuController,
               private navCtrl:NavController,
+              private storageSrv:StorageService,
               //private device: Device,
               private alertSvr:AlertPresentService) { }
 
@@ -36,7 +38,7 @@ export class LoginPage {
    * @param fLogin valores del formulario
    * @returns 
    */
-  async login(fLogin:NgForm) {
+    async login(fLogin:NgForm) {
 
     if(!fLogin.valid){
       return;
@@ -59,17 +61,15 @@ export class LoginPage {
 
     console.log(JSON.stringify(nuevoUsuario));
     
+    const usuarioResponse = await this.authSvr.login(nuevoUsuario);
 
-    await this.authSvr.login(nuevoUsuario).then(data =>{
-    if(data.usuario.valido){
-      console.log(data);
-      this.navCtrl.navigateRoot('/inicio');
-      this.menuCtrl.open('first');
+    if(!usuarioResponse.usuario.valido){
+      this.alertSvr.presentAlert("Atención", "", usuarioResponse.usuario.mensaje, "Aceptar");
     }else{
-      this.alertSvr.presentAlert("Atención", "", data.usuario.mensaje, "Aceptar");
+      this.storageSrv.guardarUsuario(usuarioResponse.usuario);
+      this.navCtrl.navigateRoot('inicio');
+      this.menuCtrl.open('first');
     }
-    }).catch(err =>{console.log(JSON.stringify(err));
-    });
   }
 
 }
