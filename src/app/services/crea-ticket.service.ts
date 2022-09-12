@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+
 import { ResponseSolicitudTicket } from '../interfaces/interface';
 
 const urlBase = environment.urlBase;
@@ -28,6 +29,7 @@ export class CreaTicketService {
   }
 
   enviarSolicitud():Promise<any>{
+
     return new Promise<any>((resolve, reject) => {
 
     });

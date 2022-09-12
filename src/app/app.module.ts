@@ -5,8 +5,9 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { ComponentsModule } from './components/components.module';
+import { File } from '@awesome-cordova-plugins/file/ngx';
 
+import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 
@@ -21,7 +22,12 @@ import { FormsModule } from '@angular/forms';
     ComponentsModule,
     FormsModule
     ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [
+    { provide: RouteReuseStrategy, 
+      useClass: IonicRouteStrategy
+     },
+     File
+    ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

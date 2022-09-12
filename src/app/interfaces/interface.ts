@@ -263,3 +263,10 @@ export interface TiposSolicitud {
     descripcion: string;
     id:          number;
 }
+
+export class PopoverItem{
+    id:     number;
+    title:  string;
+    route:  string;
+    icon:   string;
+}
