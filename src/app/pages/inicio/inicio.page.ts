@@ -15,13 +15,15 @@ export class InicioPage implements OnInit {
     id:1,
     title: 'Cerrar Sesión',
     route:'',
-    icon:'log-out'
+    icon:'log-out',
+    enabled:true
   },
   {
     id:2,
     title: 'Cambiar Contraseña',
     route:'',
-    icon:''
+    icon:'',
+    enabled:true
   }
 ];
   constructor(private menuCtrl: MenuController,

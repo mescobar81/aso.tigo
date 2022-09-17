@@ -264,9 +264,23 @@ export interface TiposSolicitud {
     id:          number;
 }
 
-export class PopoverItem{
+export interface PopoverItem{
     id:     number;
     title:  string;
     route:  string;
     icon:   string;
+    enabled: boolean;
+}
+
+export interface CrearTicket{
+    documento: string;
+    tipoSolicitud:number;
+    asunto: string;
+    rol:string;
+    codUsuario:string;
+    comentario:string;
+}
+export interface ResponseTicketSuccess {
+    mensaje: string;
+    status:  string;
 }

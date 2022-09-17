@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Camera, CameraResultType } from '@capacitor/camera';
-import { File } from '@awesome-cordova-plugins/file/ngx';
-import { PopoverController } from '@ionic/angular';
+import { Camera, CameraResultType, Photo } from '@capacitor/camera';
+import { File, FileEntry } from '@awesome-cordova-plugins/file/ngx';
+import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
+import { AlertController, ModalController, PopoverController } from '@ionic/angular';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 
 import { PopoverInfoComponent } from 'src/app/components/popover-info/popover-info.component';
-import { PopoverItem, TiposSolicitud } from 'src/app/interfaces/interface';
+import { CrearTicket, PopoverItem, TiposSolicitud } from 'src/app/interfaces/interface';
 import { CreaTicketService } from 'src/app/services/crea-ticket.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 
 
 declare var window: any;
@@ -20,25 +23,28 @@ declare var window: any;
 export class CreaTicketPage implements OnInit {
 
 
+
   tiposSolicitud: TiposSolicitud[] = [];
   fotos: string[] = [];
-  file: string = "";
+  image: Photo;
+
   items: PopoverItem[] = [{
     id: 1,
     title: 'Cámara',
     route: '',
-    icon: 'camera'
+    icon: 'camera',
+    enabled: true
   },
   {
     id: 2,
     title: 'Documento',
     route: '',
-    icon: 'document-attach'
+    icon: 'document-attach',
+    enabled: false
   }
   ];
-  nuevaSolicitud = {
-    file: '',
-    documento: 0,
+  nuevaSolicitud: CrearTicket = {
+    documento: '',
     tipoSolicitud: 0,
     asunto: '',
     rol: '',
@@ -46,9 +52,12 @@ export class CreaTicketPage implements OnInit {
     comentario: ''
   };
   constructor(private creaTicketSrv: CreaTicketService,
-             private archivo:File,
-             private popoverCtrl: PopoverController,
-             private storageSrv: StorageService) { }
+    private archivo: File,
+    private fileOpener: FileOpener,
+    private popoverCtrl: PopoverController,
+    private storageSrv: StorageService,
+    private alertController: AlertController,
+    private modalCtrl:ModalController) { }
 
   ngOnInit() {
     this.init();
@@ -61,71 +70,142 @@ export class CreaTicketPage implements OnInit {
       return;
     }
 
-    this.nuevaSolicitud = {
-      file: this.file,
-      documento: usuario.documento,
-      tipoSolicitud: fSolicitud.value.tiposSolicitud,
-      asunto: fSolicitud.value.asunto,
-      rol: usuario.rol.roles[0],
-      codUsuario: usuario.nroSocio,
-      comentario: fSolicitud.value.comentario
+    if(this.fotos.length === 0){
+      this.presentAlert('Atención', 'No hay archivos adjuntos. ¡Favor verifique!', '');
+      return;
     }
 
-    console.log(this.nuevaSolicitud);
+    this.archivo.resolveLocalFilesystemUrl(this.image.path).then((fileEntry: FileEntry) => {
+      fileEntry.file(file => {
+
+        const reader = new FileReader();
+        /**
+         * se crea un realReader para que se ejecute el onloadend
+         * ver: no funciona con plugins de capatictor/camera
+         */
+        const realReader = (reader as any)._realReader;
+        realReader.onloadend = (res:any) => {
+
+          const blob = new Blob([new Uint8Array(res.target.result)], { type: file.type });
+          const formData = new FormData();
+          formData.append('file', blob, file.name);
+          formData.append('documento', usuario.documento.toString());
+          formData.append('tipoSolicitud', fSolicitud.value.tipoSolicitud);
+          formData.append('asunto', fSolicitud.value.asunto);
+          formData.append('rol', usuario.rol.roles[0]);
+          formData.append('codUsuario', usuario.nroSocio);
+          formData.append('comentario', fSolicitud.value.comentario);
+          this.uploadFile(formData);//envia el form data al servidor
+        }
+        reader.readAsArrayBuffer(file);
+      })
+    });
+  }
+
+  /**
+   * envia los datos del archivo y el ticket al servidor
+   * @param formData valores de los datos
+   */
+  async uploadFile(formData: FormData) {
+    const {mensaje, status} = await this.creaTicketSrv.enviarSolicitud(formData);
+    if(status === 'success'){
+      this.presentarModal('Información', mensaje, true);
+    }else if(status === 'failure'){
+      this.presentarModal('Error', mensaje, false);
+    }else{
+      console.log('ERROR: ', JSON.stringify(mensaje));
+    }
+  }
+
+  limpiarCampos(){
+
+    this.nuevaSolicitud = {
+      documento: '',
+      tipoSolicitud: null,
+      asunto: '',
+      rol: '',
+      codUsuario: '',
+      comentario: ''
+    };
+    this.fotos = [];
+    this.tiposSolicitud = [];
 
   }
 
-  adjuntarDocumento(){
+  async presentarModal(title:string, descripcion:string, isCss:boolean){
+    const modal = await this.modalCtrl.create({
+      component:ModalInfoComponent,
+      componentProps:{
+        descripcion,
+        title,
+        isCss
+      }
+    });
+
+    await modal.present();
+
+    const {role} = await modal.onWillDismiss();
+    if(role === 'confirm'){
+      this.limpiarCampos();
+      this.init();//inicializa los valores en los campos
+    }
+  }
+
+  async presentAlert(header:string, mensaje: string, status: string) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: mensaje,
+      buttons: [{
+        text:'Aceptar',
+        role:'confirm',
+        handler:()=> {
+        },
+      }
+    ]
+    });
+
+     await alert.present();
+  }
+  
+  adjuntarDocumento() {
     /* this.archivo.checkDir(this.archivo.dataDirectory, 'files').then((dir) => {
       console.log('Directorio: ', dir);
       
     }); */
 
+
+    this.fileOpener.showOpenWithDialog('Documentos', 'application/pdf')
+      .then(() => console.log('File is opened'))
+      .catch(e => console.log('Error opening file', e));
+
   }
   async tomarFoto() {
-    /* const options: CameraOptions = {
-      quality: 50,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
-    }
+
+    const image = await Camera.getPhoto({
+      quality: 80,
+      allowEditing: true,
+      resultType: CameraResultType.Uri,
+      promptLabelHeader: 'Fotos:',
+      promptLabelPhoto: 'Galería de imágenes',
+      promptLabelPicture: 'Tomar Fotografía',
+      presentationStyle: 'fullscreen',
+
+    }).catch(err => {
+      console.log('Sin imagen seleccionada: ', JSON.stringify(err));
+    });
     
-    this.camera.getPicture(options).then((imageData) => {
+    // image.webPath will contain a path that can be set as an image src.
+    // You can access the original file using image.path, which can be
+    // passed to the Filesystem API to read the raw data of the image,
+    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
 
-     let base64Image = 'data:image/jpeg;base64,' + imageData;
-     console.log('base64Image', base64Image);
-     
-    }, (err) => {
+    if (!image) { return };
 
-    }); */
+    const img = window.Ionic.WebView.convertFileSrc(image.path);
+    this.image = image;//actualiza la referencia a image
 
-      const image = await Camera.getPhoto({
-        quality: 70,
-        allowEditing: true,
-        resultType: CameraResultType.Uri,
-        saveToGallery:true,
-        promptLabelHeader: 'Fotos:',
-        promptLabelPhoto: 'Galería de imágenes',
-        promptLabelPicture: 'Tomar Fotografía',
-        presentationStyle: 'fullscreen'
-      }).catch(err => {});
+    this.fotos.push(img);
 
-      // image.webPath will contain a path that can be set as an image src.
-      // You can access the original file using image.path, which can be
-      // passed to the Filesystem API to read the raw data of the image,
-      // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
-
-      if(!image)return;
-
-      const img = window.Ionic.WebView.convertFileSrc(image.path);
-      this.file = img;
-
-      console.log('IMAGE: ', image);
-
-      this.fotos.push(img);
-
-      // Can be set to the src of an image now
-      //imageElement.src = imageUrl;
   }
 
   async presentPopover(e: Event) {
@@ -140,21 +220,17 @@ export class CreaTicketPage implements OnInit {
     });
 
     await popover.present();
+
     const id = await (await popover.onWillDismiss()).data?.id;
     if (id === 1) {//opcion 1 selecciona camara
       this.tomarFoto();
     }
-    if(id === 2){//opcion 2 selecciona documento
+    if (id === 2) {//opcion 2 selecciona documento
       this.adjuntarDocumento();
     }
-  }
-
-  seleccionarTicket() {
-
   }
 
   async init() {
     this.tiposSolicitud = (await this.creaTicketSrv.listarTipoSolicitud()).tiposSolicitud;
   }
-
 }

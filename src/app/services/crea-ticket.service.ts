@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
-import { ResponseSolicitudTicket } from '../interfaces/interface';
+import { ResponseSolicitudTicket, ResponseTicketSuccess } from '../interfaces/interface';
 
 const urlBase = environment.urlBase;
 @Injectable({
@@ -28,10 +28,20 @@ export class CreaTicketService {
     });
   }
 
-  enviarSolicitud():Promise<any>{
-
-    return new Promise<any>((resolve, reject) => {
-
+  enviarSolicitud(formData:FormData):Promise<ResponseTicketSuccess>{
+    
+    return new Promise<ResponseTicketSuccess>((resolve, reject) => {
+      this.http.post<ResponseTicketSuccess>(`${urlBase}/nuevoTicket`, formData).subscribe(resp =>{
+        if(resp.status === 'success'){
+          resolve(resp);
+        }else{
+          console.log(JSON.stringify(resp));
+          resolve(resp);
+        }
+      }, (err) => {
+        console.log(JSON.stringify(err));
+        reject(err);
+      });
     });
   }
 }

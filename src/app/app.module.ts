@@ -5,14 +5,18 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { FileTransfer } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { File } from '@awesome-cordova-plugins/file/ngx';
-
+import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { ComponentsModule } from './components/components.module';
+
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent
+  ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -26,7 +30,9 @@ import { FormsModule } from '@angular/forms';
     { provide: RouteReuseStrategy, 
       useClass: IonicRouteStrategy
      },
-     File
+     File,
+     FileTransfer,
+     FileOpener
     ],
   bootstrap: [AppComponent],
 })
