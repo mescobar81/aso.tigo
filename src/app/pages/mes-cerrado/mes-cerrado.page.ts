@@ -27,7 +27,6 @@ export class MesCerradoPage implements OnInit {
       mes:event.detail.value.mes,
       anho:event.detail.value.anho
     };
-    console.log(params);
     
     await this.extractoSrv.getMesCerrado(params).then(mesCerrado =>{
       this.mesCerrado = mesCerrado;

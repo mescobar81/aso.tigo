@@ -46,18 +46,24 @@ export class SolicitudOrdenService {
         }
       }, err =>{
         console.log(JSON.stringify(err));
+        reject(err);
       });
     });
   }
 
   enviarSolicitudOrden(orden:OrdenSolicitada):Promise<ResponseSolicitudOrden>{
 
-    return new Promise<any>((resolve, reject) =>{
+    return new Promise<ResponseSolicitudOrden>((resolve, reject) =>{
       this.http.put<ResponseSolicitudOrden>(`${urlBase}/solicitudOrden`, orden).subscribe(resp =>{
         if(resp.codigoRespuesta === '00'){
           resolve(resp);
-        }else{
+        }else if(resp.codigoRespuesta == '99'){
           resolve(resp);
+        }else if(resp.status == 'failure'){
+          resolve(resp);
+        }else{
+          console.log(JSON.stringify(resp));
+            
         }
       }, err => {
         console.log(JSON.stringify(err));
@@ -100,8 +106,6 @@ export class SolicitudOrdenService {
     return new Promise<boolean>((resolve, reject) =>{
       this.http.post<ResponseOrdenLeido>(`${urlBase}/leerRechazoOrden`, {documento, nroRegistro}).subscribe(resp =>{
         if(resp.status === 'success'){
-          console.log('Orden Leída', resp);
-          
           resolve(true);
         }else{
           console.log(JSON.stringify(resp));

@@ -190,9 +190,11 @@ export interface SolicitudOrden{
 }
 
 export interface ResponseSolicitudOrden {
+    mensaje:              string;
     descripcionRespuesta: string;
     parametrosGlobales:   ParametrosGlobales;
     codigoRespuesta:      string;
+    status:               string;
 }
 export interface OrdenSolicitada{
     nroSocio?:number;

@@ -10,30 +10,32 @@
             </ion-text></ion-col>
         </ion-row>
 
-        <ion-row class="contentgrid--cell">
-            <ion-col size="6">
-                <ion-text>
-                    Total Descuento:
-                </ion-text>
-            </ion-col>
-            <ion-col size="6" class="ion-text-right">
-                <ion-text>
-                    {{extratoMesAbierto?.cabecera.totalDescuento}}
-                </ion-text>
-            </ion-col>
-        </ion-row>
-        <ion-row class="contentgrid--cell">
-            <ion-col size="6">
-                <ion-text>
-                    Capital aportado:
-                </ion-text>
-            </ion-col>
-            <ion-col size="6" class="ion-text-right">
-                <ion-text>
-                    {{extratoMesAbierto?.cabecera.integrado}}
-                </ion-text>
-            </ion-col>
-        </ion-row>
+        <div class="conatainer__cabecera">
+            <ion-row class="contentgrid--cell">
+                <ion-col size="6">
+                    <ion-text>
+                        Total Descuento:
+                    </ion-text>
+                </ion-col>
+                <ion-col size="6" class="ion-text-right">
+                    <ion-text>
+                        {{extratoMesAbierto?.cabecera.totalDescuento}}
+                    </ion-text>
+                </ion-col>
+            </ion-row>
+            <ion-row class="contentgrid--cell">
+                <ion-col size="6">
+                    <ion-text>
+                        Capital aportado:
+                    </ion-text>
+                </ion-col>
+                <ion-col size="6" class="ion-text-right">
+                    <ion-text>
+                        {{extratoMesAbierto?.cabecera.integrado}}
+                    </ion-text>
+                </ion-col>
+            </ion-row>
+        </div>
     </ion-grid>
     <app-mes-detalle [detalle]="detalle"></app-mes-detalle>
 </ion-content>

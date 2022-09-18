@@ -47,8 +47,7 @@ export class ExtractoMesService {
       return;
     }
     const {mes,anho} = params;
-    console.log(usuario.nroSocio);
-    
+
     return new Promise((resolve, reject) => {
       this.http.get<ResponseMesCerrado>(`${urlBase}/mesCerrado?nroSocio=${usuario.nroSocio}&mes=${mes}&anho=${anho}`).subscribe(resp => {
         if (resp.status == 'success') {

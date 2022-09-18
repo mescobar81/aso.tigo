@@ -99,8 +99,6 @@ export class SolicitudOrdenPage implements OnInit {
     this.nuevaOrden.cantidadCuotas = this.solicitudOrden.cantidadCuotas;
     this.nuevaOrden.cuotaMes = this.solicitudOrden.cuotaMes;
 
-    console.log(this.nuevaOrden);
-    
     const response:ResponseSolicitudOrden = await this.solicitudOrdenSvr.enviarSolicitudOrden(this.nuevaOrden);
     
     if(response.codigoRespuesta == '00'){
@@ -110,6 +108,8 @@ export class SolicitudOrdenPage implements OnInit {
     }else if(response.codigoRespuesta == '99'){
       //this.presentAlert('', response.descripcionRespuesta);
       this.presentarModal('Solicitud Órden', response.descripcionRespuesta, false);
+    }else{
+      this.presentarModal('Información', response.mensaje, false);
     }
   }
 

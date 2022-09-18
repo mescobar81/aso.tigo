@@ -24,8 +24,6 @@ export class MesAbiertoPage implements OnInit {
       this.extratoMesAbierto = resp;
       this.detalle = resp?.detalle;
     });
-
-    console.log(this.detalle);
     
   }
 }

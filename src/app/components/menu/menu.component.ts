@@ -18,7 +18,7 @@ export class MenuComponent implements OnInit {
                }
 
   async ngOnInit() {
-
+    
     const usuario = await this.storageSrv.getUsuario();
     
     if (!usuario) {

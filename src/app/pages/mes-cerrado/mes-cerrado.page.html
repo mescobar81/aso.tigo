@@ -17,7 +17,7 @@
   </ion-grid>
 </div>
 
-<ion-content fullscreen>
+<ion-content>
   <ion-grid class="container">
     <ion-row>
       <ion-col size="12">
@@ -33,30 +33,32 @@
     <ion-row>
       <ion-col class="ion-text-center container--titulo" size="12">{{mesCerrado?.cabecera.titulo}}</ion-col>
     </ion-row>
-    <ion-row class="contentgrid--cell">
-      <ion-col size="6">Capital Aportado:</ion-col>
-      <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.capitalAportado}}</ion-col>
-    </ion-row>
-    <ion-row class="contentgrid--cell">
-      <ion-col size="6">Aporte Mes:</ion-col>
-      <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.aporteMes}}</ion-col>
-    </ion-row>
-    <ion-row class="contentgrid--cell">
-      <ion-col size="6">Total Mes:</ion-col>
-      <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.totalMes}}</ion-col>
-    </ion-row>
-    <ion-row class="contentgrid--cell">
-      <ion-col size="6">Liquidación ASO:</ion-col>
-      <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.liquidacionAso}}</ion-col>
-    </ion-row>
-    <ion-row class="contentgrid--cell">
-      <ion-col size="6">Descuento RRHH:</ion-col>
-      <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.descuento}}</ion-col>
-    </ion-row>
-    <ion-row class="contentgrid--cell">
-      <ion-col size="6">Saldo Pendiente:</ion-col>
-      <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.saldoPendiente}}</ion-col>
-    </ion-row>
+    <div class="container__row">
+      <ion-row class="contentgrid--cell">
+        <ion-col size="6">Capital Aportado:</ion-col>
+        <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.capitalAportado}}</ion-col>
+      </ion-row>
+      <ion-row class="contentgrid--cell">
+        <ion-col size="6">Aporte Mes:</ion-col>
+        <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.aporteMes}}</ion-col>
+      </ion-row>
+      <ion-row class="contentgrid--cell">
+        <ion-col size="6">Total Mes:</ion-col>
+        <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.totalMes}}</ion-col>
+      </ion-row>
+      <ion-row class="contentgrid--cell">
+        <ion-col size="6">Liquidación ASO:</ion-col>
+        <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.liquidacionAso}}</ion-col>
+      </ion-row>
+      <ion-row class="contentgrid--cell">
+        <ion-col size="6">Descuento RRHH:</ion-col>
+        <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.descuento}}</ion-col>
+      </ion-row>
+      <ion-row class="contentgrid--cell">
+        <ion-col size="6">Saldo Pendiente:</ion-col>
+        <ion-col class="ion-text-right" size="6">{{mesCerrado?.cabecera.saldoPendiente}}</ion-col>
+      </ion-row>
+    </div>
   </ion-grid>
   <app-mes-detalle [detalle]="detalle"></app-mes-detalle>
 </ion-content>

@@ -4,7 +4,6 @@ import { Camera, CameraResultType, Photo } from '@capacitor/camera';
 import { File, FileEntry } from '@awesome-cordova-plugins/file/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { AlertController, ModalController, PopoverController } from '@ionic/angular';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 
 import { PopoverInfoComponent } from 'src/app/components/popover-info/popover-info.component';
 import { CrearTicket, PopoverItem, TiposSolicitud } from 'src/app/interfaces/interface';
@@ -146,8 +145,8 @@ export class CreaTicketPage implements OnInit {
 
     const {role} = await modal.onWillDismiss();
     if(role === 'confirm'){
-      this.limpiarCampos();
-      this.init();//inicializa los valores en los campos
+      this.limpiarCampos(); //limpia los campos del formulario
+      this.init();//inicializa tipos de solicitud
     }
   }
 

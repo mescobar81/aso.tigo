@@ -15,8 +15,6 @@ export class AuthGuard implements CanLoad, CanActivate {
               private navCtrl:NavController){}
   canActivate(): boolean {
     this.authSvr.validarUsuario().then(valid =>{
-     console.log('Valid canactivate: ' + valid);
-      
       if(!valid) {
         this.navCtrl.navigateRoot('/login');
       }
@@ -26,7 +24,6 @@ export class AuthGuard implements CanLoad, CanActivate {
 
   canLoad(): boolean {
      this.authSvr.validarUsuario().then(valid =>{
-      console.log('Valid canload: ' + valid);
       if(!valid) {
         this.navCtrl.navigateRoot('/login');
       }
