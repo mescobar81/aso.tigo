@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from 'src/app/guards/auth.guard';
 
 import { OrdenesPendientesPage } from './ordenes-pendientes.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: OrdenesPendientesPage
+    component: OrdenesPendientesPage,
+    canActivate:[AuthGuard]
   }
 ];
 

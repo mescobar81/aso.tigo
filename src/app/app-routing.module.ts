@@ -22,17 +22,18 @@ const routes: Routes = [
   {
     path: 'inicio/mes-abierto',
     loadChildren: () => import('./pages/mes-abierto/mes-abierto.module').then( m => m.MesAbiertoPageModule),
-   
+    canLoad:[AuthGuard]
   },
   
   {
     path: 'inicio/mes-cerrado',
     loadChildren: () => import('./pages/mes-cerrado/mes-cerrado.module').then( m => m.MesCerradoPageModule),
-  
+    canLoad:[AuthGuard]
   },
   {
     path: 'inicio/movimiento-br',
-    loadChildren: () => import('./pages/movimiento-br/movimiento-br.module').then( m => m.MovimientoBrPageModule)
+    loadChildren: () => import('./pages/movimiento-br/movimiento-br.module').then( m => m.MovimientoBrPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'inicio/solicitud-orden',
@@ -41,15 +42,18 @@ const routes: Routes = [
   },
   {
     path: 'inicio/ordenes-pendientes',
-    loadChildren: () => import('./pages/ordenes-pendientes/ordenes-pendientes.module').then( m => m.OrdenesPendientesPageModule)
+    loadChildren: () => import('./pages/ordenes-pendientes/ordenes-pendientes.module').then( m => m.OrdenesPendientesPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'inicio/orden-rechazada',
-    loadChildren: () => import('./pages/orden-rechazada/orden-rechazada.module').then( m => m.OrdenRechazadaPageModule)
+    loadChildren: () => import('./pages/orden-rechazada/orden-rechazada.module').then( m => m.OrdenRechazadaPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'inicio/crea-ticket',
-    loadChildren: () => import('./pages/crea-ticket/crea-ticket.module').then( m => m.CreaTicketPageModule)
+    loadChildren: () => import('./pages/crea-ticket/crea-ticket.module').then( m => m.CreaTicketPageModule),
+    canLoad:[AuthGuard]
   }
 
 
