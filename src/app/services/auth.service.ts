@@ -14,7 +14,7 @@ const urlBase = environment.urlBase;
 export class AuthService {
 
   constructor(private http: HttpClient,
-             private storageSrv: StorageService) {
+    private storageSrv: StorageService) {
   }
 
   login(usuario: UsuarioRequest): Promise<ResponseUsuario> {
@@ -22,7 +22,7 @@ export class AuthService {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json; charset=utf-8');
 
-    return new Promise<ResponseUsuario>(async (resolve, reject) => {
+    return new Promise<ResponseUsuario>((resolve, reject) => {
       this.http.post<ResponseUsuario>(`${urlBase}/loginPost/`, usuario, { headers }).subscribe(resp => {
 
         if (resp.usuario.valido) {
@@ -48,11 +48,11 @@ export class AuthService {
      * ver: si no se coloca esta linea la primera vez el usuario es null
      */
     await this.storageSrv.init();
-    
+
     const usuario = await this.storageSrv.getUsuario();
-    
+
     if (!usuario) {
-       return Promise.resolve(false);
+      return Promise.resolve(false);
     } else {
       return Promise.resolve(true);
     }

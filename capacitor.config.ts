@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'aso.tigo',
+  appId: 'com.asociados.tigo',
+  appName: 'AsoTigo',
   webDir: 'www',
   bundledWebRuntime: false
 };

@@ -48,10 +48,11 @@ export class LoginPage {
 
     /**
      * crea un nuevo usuario en una constante para evitar modificaciones
-     * en el template detalles visuales para el usuario
+     * en el template, detalles visuales para el usuario
      */
     const nuevoUsuario: UsuarioRequest = {
       documento: this.usuario.documento,
+      //encripta la clave usando librerias externas de javascript
       clave: CryptoJS.SHA256(this.usuario.clave).toString(CryptoJS.enc.Hex),
       device: {
         os: this.device.platform,
@@ -65,9 +66,9 @@ export class LoginPage {
       if (!response.usuario.valido) {
         this.alertSvr.presentAlert("Atención", "", response.usuario.mensaje, "Aceptar");
       } else {
-        this.storageSrv.guardarUsuario(response.usuario);
-        this.navCtrl.navigateRoot('inicio');
-        this.menuCtrl.open('first');
+        this.storageSrv.guardarUsuario(response.usuario);//guarda los datos del usuario en el local storage
+        this.navCtrl.navigateRoot('inicio');//llama a la pantalla incio
+        this.menuCtrl.open('first');//llama al menu
       }
     }).catch(err => {
       console.log('ERROR: ', JSON.stringify(err));
