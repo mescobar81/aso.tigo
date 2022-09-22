@@ -33,7 +33,17 @@ export class MenuService {
           console.log("ERROR: en obtener opciones de menú", JSON.stringify(err));
         });
       } else if (rol === 'tesorero') {
-        this.http.get<MenuItem>(`${pathAssets}/tesorero-opc.json`);
+        this.http.get<MenuItem>(`${pathAssets}/tesorero-opc.json`).subscribe(resp => {
+          resolve(resp);
+        }, err => {
+          console.log("ERROR: en obtener opciones de menú", JSON.stringify(err));
+        });
+      }else if(rol === 'presidente'){
+        this.http.get<MenuItem>(`${pathAssets}/presidente-opc.json`).subscribe(resp => {
+          resolve(resp);
+        }, err => {
+          console.log("ERROR: en obtener opciones de menú", JSON.stringify(err));
+        });
       }
     });
   }

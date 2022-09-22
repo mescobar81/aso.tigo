@@ -1,0 +1,70 @@
+<ion-header class="ion-no-border" translucent>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button text="Atrás" defaultHref="/inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-capitalize">cambiar contraseña</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-icon slot="start" name="people"></ion-icon>
+          <ion-label position="floating">Nro. Documento:</ion-label>
+        <ion-input type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        
+        <ion-item>
+          <ion-icon slot="start" name="lock-closed"></ion-icon>
+          <ion-label position="floating">Clave actual:</ion-label>
+          <ion-icon *ngIf="oneye" slot="end" name="eye"></ion-icon>
+          <ion-icon *ngIf="!oneye" slot="end" name="eye-off"></ion-icon>
+        <ion-input type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-icon slot="start" name="lock-closed"></ion-icon>
+          <ion-label position="floating">Clave nueva:</ion-label>
+          <ion-icon *ngIf="oneye" slot="end" name="eye"></ion-icon>
+          <ion-icon *ngIf="!oneye" slot="end" name="eye-off"></ion-icon>
+        <ion-input type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-icon slot="start" name="lock-closed"></ion-icon>
+          <ion-label position="floating">Repita su clave:</ion-label>
+          <ion-icon *ngIf="oneye" slot="end" name="eye"></ion-icon>
+          <ion-icon *ngIf="!oneye" slot="end" name="eye-off"></ion-icon>
+        <ion-input type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-button class="iongrid__button" (click)="cambiarContrasenia()" expand="block" shape="round">
+          CAMBIAR PASSWORD
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

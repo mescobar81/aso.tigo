@@ -54,7 +54,12 @@ const routes: Routes = [
     path: 'inicio/crea-ticket',
     loadChildren: () => import('./pages/crea-ticket/crea-ticket.module').then( m => m.CreaTicketPageModule),
     canLoad:[AuthGuard]
+  },
+  {
+    path: 'cambiar-contrasenia',
+    loadChildren: () => import('./pages/cambiar-contrasenia/cambiar-contrasenia.module').then( m => m.CambiarContraseniaPageModule)
   }
+
 
 
 

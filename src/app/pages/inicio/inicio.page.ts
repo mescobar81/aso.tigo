@@ -22,7 +22,7 @@ export class InicioPage implements OnInit {
     id:2,
     title: 'Cambiar Contraseña',
     route:'',
-    icon:'',
+    icon:'ellipsis-horizontal',
     enabled:true
   }
 ];
@@ -59,7 +59,7 @@ export class InicioPage implements OnInit {
       this.navCtrl.navigateRoot('login');
     }
     if(id === 2){//cambiar contraseña
-      //TO DO: llamar a pantalla cambiar contraseña
+      this.navCtrl.navigateRoot('cambiar-contrasenia');
     }
 
   }
