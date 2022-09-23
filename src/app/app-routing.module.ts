@@ -59,13 +59,6 @@ const routes: Routes = [
     path: 'cambiar-contrasenia',
     loadChildren: () => import('./pages/cambiar-contrasenia/cambiar-contrasenia.module').then( m => m.CambiarContraseniaPageModule)
   }
-
-
-
-
-
-
-
 ];
 
 @NgModule({

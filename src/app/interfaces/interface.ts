@@ -286,3 +286,17 @@ export interface ResponseTicketSuccess {
     mensaje: string;
     status:  string;
 }
+
+export interface RequestCambioContraseña{
+    documento:string;
+    claveActual:string;
+    claveNueva:string;
+    confirmacionClave:string;
+}
+
+export interface ResponseClaveModificada {
+    documento: number;
+    mensaje:   string;
+    status:    string;
+    parametrosGlobales: ParametrosGlobales;
+}

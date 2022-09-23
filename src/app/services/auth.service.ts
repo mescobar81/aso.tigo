@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
-import { ResponseUsuario, UsuarioRequest } from '../interfaces/interface';
+import { RequestCambioContraseña, ResponseClaveModificada, ResponseUsuario, UsuarioRequest } from '../interfaces/interface';
 import { StorageService } from './storage.service';
 
 
@@ -57,5 +57,22 @@ export class AuthService {
       return Promise.resolve(true);
     }
 
+  }
+
+  cambiarContraseña(cambioClave:RequestCambioContraseña):Promise<ResponseClaveModificada>{
+
+    return new Promise<ResponseClaveModificada>((resolve,reject) => {
+      this.http.post<ResponseClaveModificada>(`${urlBase}/cambioPasswordAsociado`, cambioClave).subscribe(resp =>{
+        if(resp.status === 'success'){
+          resolve(resp);
+        }else{
+          resolve(resp);
+        }
+      }, err => {
+        console.error("ERROR: ", JSON.stringify(err));
+        reject(err);   
+      });
+
+    })
   }
 }

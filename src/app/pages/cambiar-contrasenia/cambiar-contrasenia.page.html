@@ -8,14 +8,17 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
+<form #myForm="ngForm" (ngSubmit)="cambiarContrasenia(myForm)">
   <ion-grid>
     <ion-row>
       <ion-col size="12">
         <ion-item>
           <ion-icon slot="start" name="people"></ion-icon>
           <ion-label position="floating">Nro. Documento:</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text"
+                   name="documento"
+                   [(ngModel)]="cambioClave.documento"
+                   required></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -26,9 +29,11 @@
         <ion-item>
           <ion-icon slot="start" name="lock-closed"></ion-icon>
           <ion-label position="floating">Clave actual:</ion-label>
-          <ion-icon *ngIf="oneye" slot="end" name="eye"></ion-icon>
-          <ion-icon *ngIf="!oneye" slot="end" name="eye-off"></ion-icon>
-        <ion-input type="text"></ion-input>
+        <ion-input name="claveActual"
+                   [type]="!showPassword?'text':'password'"
+                   [(ngModel)]="cambioClave.claveActual"
+                   required></ion-input>
+                   <ion-icon slot="end" (click)="toggleShow()" [name]="passwordToggleIcon"></ion-icon>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -38,9 +43,11 @@
         <ion-item>
           <ion-icon slot="start" name="lock-closed"></ion-icon>
           <ion-label position="floating">Clave nueva:</ion-label>
-          <ion-icon *ngIf="oneye" slot="end" name="eye"></ion-icon>
-          <ion-icon *ngIf="!oneye" slot="end" name="eye-off"></ion-icon>
-        <ion-input type="text"></ion-input>
+        <ion-input [type]="!showPasswordNuevo? 'text':'password'"
+                   name="claveNueva"
+                   [(ngModel)]="cambioClave.claveNueva"
+                   required></ion-input>
+            <ion-icon slot="end" (click)="toggleShowNuevo()" [name]="passwordToggleIconNuevo"></ion-icon>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -50,21 +57,23 @@
         <ion-item>
           <ion-icon slot="start" name="lock-closed"></ion-icon>
           <ion-label position="floating">Repita su clave:</ion-label>
-          <ion-icon *ngIf="oneye" slot="end" name="eye"></ion-icon>
-          <ion-icon *ngIf="!oneye" slot="end" name="eye-off"></ion-icon>
-        <ion-input type="text"></ion-input>
+        <ion-input [type]="!showPasswordConfirm? 'text':'password'"
+                   name="confirmacionClave"
+                   [(ngModel)]="cambioClave.confirmacionClave"
+                   required></ion-input>
+            <ion-icon slot="end" (click)="toggleShowConfirm()" [name]="passwordToggleIconConfirm"></ion-icon>
         </ion-item>
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col size="12">
-        <ion-button class="iongrid__button" (click)="cambiarContrasenia()" expand="block" shape="round">
+        <ion-button class="iongrid__button" type="submit" expand="block" shape="round">
           CAMBIAR PASSWORD
         </ion-button>
       </ion-col>
     </ion-row>
 
   </ion-grid>
-
+</form>
 </ion-content>
