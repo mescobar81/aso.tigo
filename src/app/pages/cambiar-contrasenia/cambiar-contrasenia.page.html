@@ -30,7 +30,7 @@
           <ion-icon slot="start" name="lock-closed"></ion-icon>
           <ion-label position="floating">Clave actual:</ion-label>
         <ion-input name="claveActual"
-                   [type]="!showPassword?'text':'password'"
+                   [type]="showPassword?'text':'password'"
                    [(ngModel)]="cambioClave.claveActual"
                    required></ion-input>
                    <ion-icon slot="end" (click)="toggleShow()" [name]="passwordToggleIcon"></ion-icon>
@@ -43,7 +43,7 @@
         <ion-item>
           <ion-icon slot="start" name="lock-closed"></ion-icon>
           <ion-label position="floating">Clave nueva:</ion-label>
-        <ion-input [type]="!showPasswordNuevo? 'text':'password'"
+        <ion-input [type]="showPasswordNuevo? 'text':'password'"
                    name="claveNueva"
                    [(ngModel)]="cambioClave.claveNueva"
                    required></ion-input>
@@ -57,7 +57,7 @@
         <ion-item>
           <ion-icon slot="start" name="lock-closed"></ion-icon>
           <ion-label position="floating">Repita su clave:</ion-label>
-        <ion-input [type]="!showPasswordConfirm? 'text':'password'"
+        <ion-input [type]="showPasswordConfirm? 'text':'password'"
                    name="confirmacionClave"
                    [(ngModel)]="cambioClave.confirmacionClave"
                    required></ion-input>

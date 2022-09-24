@@ -1,7 +1,7 @@
 <ion-content class="contenedor" scrollY="false">
   <ion-grid class="contentheader">
     <ion-row>
-      <ion-col class="ion-text-center" size="12"><img src="./../../../assets/imgs/ic_notification_asotigo.png"></ion-col>
+      <ion-col class="ion-text-center" size="12"><img src="./../../../assets/imgs/Logo Asotigo blanco.png"></ion-col>
     </ion-row>
 
   </ion-grid>
@@ -14,10 +14,14 @@
             <ion-item>
               <ion-label position="floating">Nro. Documento</ion-label>
               <ion-input name="documento" type="text" [(ngModel)]="usuario.documento" required></ion-input>
+              <ion-icon slot="start" name="people"></ion-icon>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Clave</ion-label>
-              <ion-input name="clave" type="password" [(ngModel)]="usuario.clave" required></ion-input>
+              <ion-input name="clave" [type]="typeInput" [(ngModel)]="usuario.clave" required></ion-input>
+              <ion-icon slot="start" 
+                        [name]="nameIcon"
+                        (click)="toggleShow()"></ion-icon>
             </ion-item>
           </ion-list>
         </ion-col>

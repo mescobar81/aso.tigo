@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
-import { MenuController, ModalController, NavController } from '@ionic/angular';
+import { MenuController, ModalController, NavController, ToastController } from '@ionic/angular';
 import * as CryptoJS from 'crypto-js';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 
@@ -17,6 +17,9 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class LoginPage {
 
+  typeInput:string = 'password';
+  nameIcon:string = 'eye';
+  passwordToggleIcon:boolean = false;
   usuario: UsuarioRequest = {
     documento: "",
     clave: "",
@@ -33,7 +36,8 @@ export class LoginPage {
     private storageSrv: StorageService,
     private device: Device,
     private alertSvr: AlertPresentService,
-    private modalCtrl: ModalController) { }
+    private modalCtrl: ModalController,
+    private toastCtrl: ToastController) { }
 
   /**
    * se encarga de llamar al servicio para dar ingreso al usuario
@@ -43,6 +47,7 @@ export class LoginPage {
   login(fLogin: NgForm) {
 
     if (!fLogin.valid) {
+      this.presentToast('bottom');
       return;
     }
 
@@ -78,6 +83,28 @@ export class LoginPage {
 
   }
 
+  async presentToast(position: 'top' | 'middle' | 'bottom') {
+    const toast = await this.toastCtrl.create({
+      message: '¡Favor ingresar sus credenciales!',
+      duration: 2200,
+      position: position,
+      icon:'information-circle',
+      cssClass:'custom-toast'
+    });
+
+    await toast.present();
+  }
+
+  toggleShow(){
+    this.passwordToggleIcon = !this.passwordToggleIcon;
+    if(this.passwordToggleIcon){
+      this.typeInput = 'text';
+      this.nameIcon = 'eye-off';
+    }else{
+      this.typeInput = 'password';
+      this.nameIcon = 'eye';
+    }
+  }
   async presentarModal(title: string, descripcion: string, isCss: boolean) {
     const modal = await this.modalCtrl.create({
       component: ModalInfoComponent,
