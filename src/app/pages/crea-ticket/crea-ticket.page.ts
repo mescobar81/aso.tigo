@@ -105,15 +105,18 @@ export class CreaTicketPage implements OnInit {
    * envia los datos del archivo y el ticket al servidor
    * @param formData valores de los datos
    */
-  async uploadFile(formData: FormData) {
-    const {mensaje, status} = await this.creaTicketSrv.enviarSolicitud(formData);
-    if(status === 'success'){
-      this.presentarModal('Información', mensaje, true);
-    }else if(status === 'failure'){
-      this.presentarModal('Error', mensaje, false);
-    }else{
-      console.log('ERROR: ', JSON.stringify(mensaje));
-    }
+  uploadFile(formData: FormData) {
+    this.creaTicketSrv.enviarSolicitud(formData).then(resp =>{
+      if(resp.status === 'success'){
+        this.presentarModal('Información', resp.mensaje, true);
+      }else if(resp.status === 'failure'){
+        this.presentarModal('Error', resp.mensaje, false);
+      }
+    }).catch(err =>{
+      this.presentarModal('ERROR', JSON.stringify(err), false)
+      console.log(JSON.stringify(err));
+    });
+    
   }
 
   limpiarCampos(){
