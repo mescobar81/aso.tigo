@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
@@ -29,10 +29,9 @@ export class CreaTicketService {
   }
 
   enviarSolicitud(formData:FormData):Promise<ResponseTicketSuccess>{
-    const headers = new HttpHeaders()
-    .set('Content-Type', 'multipart/form-data');
+
     return new Promise<ResponseTicketSuccess>((resolve, reject) => {
-      this.http.post<ResponseTicketSuccess>(`${urlBase}/nuevoTicket`, formData, {headers}).subscribe(resp =>{
+      this.http.post<ResponseTicketSuccess>(`${urlBase}/nuevoTicket`, formData).subscribe(resp =>{
         if(resp.status === 'success'){
           resolve(resp);
         }else{
