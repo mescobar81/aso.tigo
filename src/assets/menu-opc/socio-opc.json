@@ -32,7 +32,7 @@
             "activo":false
         },
         {
-            "title": "Órdenes pendientes",
+            "title": "Mis Órdenes pendientes",
             "icon": "document-text",
             "ruta": "ordenes-pendientes",
             "activo":true

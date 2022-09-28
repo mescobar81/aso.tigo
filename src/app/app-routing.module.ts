@@ -58,7 +58,13 @@ const routes: Routes = [
   {
     path: 'cambiar-contrasenia',
     loadChildren: () => import('./pages/cambiar-contrasenia/cambiar-contrasenia.module').then( m => m.CambiarContraseniaPageModule)
+  },
+  {
+    path: 'inicio/aprobar-rechazar-orden',
+    loadChildren: () => import('./pages/aprobar-rechazar-orden/aprobar-rechazar-orden.module').then( m => m.AprobarRechazarOrdenPageModule),
+    canLoad:[AuthGuard]
   }
+
 ];
 
 @NgModule({

@@ -28,7 +28,7 @@ export class CreaTicketService {
     });
   }
 
-  enviarSolicitud(formData:FormData):Promise<ResponseTicketSuccess>{
+   enviarSolicitud(formData:FormData):Promise<ResponseTicketSuccess>{
 
     return new Promise<ResponseTicketSuccess>((resolve, reject) => {
       this.http.post<ResponseTicketSuccess>(`${urlBase}/nuevoTicket`, formData).subscribe(resp =>{
@@ -42,5 +42,6 @@ export class CreaTicketService {
         reject(err);
       });
     });
+
   }
 }

@@ -1,0 +1,48 @@
+<app-header title="órdenes pendientes"></app-header>
+
+<ion-content class="ion-padding">
+  <ion-grid *ngFor="let item of [1,1,1,1]">
+    <ion-row>
+      <ion-col class="ion-text-left" size="6">
+      <ion-button color="warning">
+        Pendiente
+      </ion-button>
+    </ion-col>
+      <ion-col class="ion-text-right" size="6">#356</ion-col>
+    </ion-row>
+    <ion-row class="contentgrid--cell">
+      <ion-col class="ion-text-left" size="6">Nombre Asociado:</ion-col>
+      <ion-col class="ion-text-left" size="6">Humberto</ion-col>
+    </ion-row>
+    <ion-row class="contentgrid--cell">
+      <ion-col class="ion-text-left" size="6">Nro. de Socio:</ion-col>
+      <ion-col class="ion-text-left" size="6">Humberto</ion-col>
+    </ion-row>
+    <ion-row class="contentgrid--cell">
+      <ion-col class="ion-text-left" size="6">Proveedor:</ion-col>
+      <ion-col class="ion-text-left" size="6">Humberto</ion-col>
+    </ion-row>
+    <ion-row class="contentgrid--cell">
+      <ion-col class="ion-text-left" size="6">Monto:</ion-col>
+      <ion-col class="ion-text-left" size="6">Humberto</ion-col>
+    </ion-row>
+    <ion-row class="contentgrid--cell">
+      <ion-col class="ion-text-left" size="6">Cuota:</ion-col>
+      <ion-col class="ion-text-left" size="6">Humberto</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-right" size="6">
+        <ion-button color="success">
+          <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+          Aprobar
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button color="danger">
+          <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+          Rechazar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

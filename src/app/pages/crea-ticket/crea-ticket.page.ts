@@ -85,8 +85,10 @@ export class CreaTicketPage implements OnInit {
         const realReader = (reader as any)._realReader;
         realReader.onloadend = (res:any) => {
 
-          const blob = new Blob([new Uint8Array(res.target.result)], { type: file.type });
+          let blob = new Blob([ new Uint8Array(res.target.result)], { type: file.type });
+
           const formData = new FormData();
+
           formData.append('file', blob, file.name);
           formData.append('documento', usuario.documento.toString());
           formData.append('tipoSolicitud', fSolicitud.value.tipoSolicitud);
@@ -94,6 +96,7 @@ export class CreaTicketPage implements OnInit {
           formData.append('rol', usuario.rol.roles[0]);
           formData.append('codUsuario', usuario.nroSocio);
           formData.append('comentario', fSolicitud.value.comentario);
+
           this.uploadFile(formData);//envia el form data al servidor
         }
         reader.readAsArrayBuffer(file);
@@ -201,6 +204,8 @@ export class CreaTicketPage implements OnInit {
     // passed to the Filesystem API to read the raw data of the image,
     // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
 
+    console.log(image);
+    
     if (!image) { return };
 
     const img = window.Ionic.WebView.convertFileSrc(image.path);

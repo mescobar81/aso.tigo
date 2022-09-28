@@ -18,7 +18,7 @@ export class MenuService {
 
   async getMenuOpcion(rol:string): Promise<MenuItem> {
 
-    const pathAssets = '/assets/menu-opc';
+    const pathMenuOpcion = '/assets/menu-opc';
 
     this.usuario = await this.storageSvr.getUsuario();
 
@@ -27,19 +27,19 @@ export class MenuService {
     return new Promise((resolve) => {
 
       if (rol === 'socio') {
-        this.http.get<MenuItem>(`${pathAssets}/socio-opc.json`).subscribe(resp => {
+        this.http.get<MenuItem>(`${pathMenuOpcion}/socio-opc.json`).subscribe(resp => {
           resolve(resp);
         }, err => {
           console.log("ERROR: en obtener opciones de menú", JSON.stringify(err));
         });
       } else if (rol === 'tesorero') {
-        this.http.get<MenuItem>(`${pathAssets}/tesorero-opc.json`).subscribe(resp => {
+        this.http.get<MenuItem>(`${pathMenuOpcion}/tesorero-opc.json`).subscribe(resp => {
           resolve(resp);
         }, err => {
           console.log("ERROR: en obtener opciones de menú", JSON.stringify(err));
         });
       }else if(rol === 'presidente'){
-        this.http.get<MenuItem>(`${pathAssets}/presidente-opc.json`).subscribe(resp => {
+        this.http.get<MenuItem>(`${pathMenuOpcion}/presidente-opc.json`).subscribe(resp => {
           resolve(resp);
         }, err => {
           console.log("ERROR: en obtener opciones de menú", JSON.stringify(err));
