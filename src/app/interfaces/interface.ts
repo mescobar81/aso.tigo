@@ -300,3 +300,26 @@ export interface ResponseClaveModificada {
     status:    string;
     parametrosGlobales: ParametrosGlobales;
 }
+export interface ResponseOrdenByRol {
+    mensaje:     string;
+    status:      string;
+    solicitudes: Solicitud[];
+}
+
+export interface Solicitud {
+    monto:          number;
+    fechaSolicitud: string;
+    fechaProceso:   string;
+    nroSocio:       number;
+    codEmpresa:     number;
+    nro:            number;
+    nombre:         string;
+    cantidadCuotas: number;
+    nombreEmpresa:  string;
+    codAso:         string;
+}
+
+export interface ResponseStatusOrden{
+    mensaje :string;
+    status  :string;
+}

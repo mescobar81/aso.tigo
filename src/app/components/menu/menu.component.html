@@ -9,21 +9,29 @@
           <ion-row>
             <ion-col class="ion-text-center" size="12">Asociados</ion-col>
           </ion-row>
+        </ion-grid>
+        
+        <ion-grid>
           <ion-row>
-            <ion-col size="12">
+            <ion-col class="ion-text-left" size="2">
               <div class="toolbar__logo"></div>
+            </ion-col>
+            <ion-col class="ion-text-left" size="10">
               <div class="toolbar__nombre"><ion-label>{{getUsuario?.nombre}}</ion-label></div>
             </ion-col>
-            <!-- <ion-col class="ion-text-left" size="9">{{getUsuario?.nombre}}</ion-col> -->
+
           </ion-row>
           <ion-row>
-            <ion-col size="12">{{getUsuario?.rol.roles[0]}}</ion-col>
+            <div class="toolbar__rol">
+              <ion-col class="ion-text-center" size="12">{{getUsuario?.rol.roles[0]}}</ion-col>
+            </div>
           </ion-row>
           <ion-row>
             <ion-col class="ion-text-left" size="7">Codigo: {{getUsuario?.codaso}}</ion-col>
-            <ion-col class="ion-text-right" size="5">Versión 2.11</ion-col>
+            <ion-col class="ion-text-right" size="5">Versión 1.0</ion-col>
           </ion-row>
         </ion-grid>
+        
       </ion-toolbar>
     </ion-header>
     <div *ngFor="let item of menuOpc?.menus">
@@ -47,6 +55,7 @@
         <ion-menu-toggle>
           <ion-item *ngFor="let sub of item.submenus"
                     [routerLink]="sub.ruta"
+                    [disabled]="!sub.activo"
                      routerLinkActive="active">
             <ion-icon slot="start" [name]="sub.icon"></ion-icon>
             <ion-label>{{sub.title}}</ion-label>

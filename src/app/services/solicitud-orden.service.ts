@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
-import { OrdenSolicitada, ResponseCasaComercial, ResponseFormaDePago, ResponseOrdenLeido, ResponseOrdenPendiente, ResponseOrdenRechazada, ResponseSolicitudOrden } from '../interfaces/interface';
+import { OrdenSolicitada, ResponseCasaComercial, ResponseFormaDePago, ResponseOrdenByRol, ResponseOrdenLeido, ResponseOrdenPendiente, ResponseOrdenRechazada, ResponseSolicitudOrden, ResponseStatusOrden } from '../interfaces/interface';
 
 const urlBase = environment.urlBase;
 @Injectable({
@@ -66,6 +66,36 @@ export class SolicitudOrdenService {
             
         }
       }, err => {
+        console.log(JSON.stringify(err));
+        reject(err);
+      });
+    });
+  }
+
+  enviarSolicitudAprobadoRechazado(solicitud:any):Promise<ResponseStatusOrden>{
+    return new Promise((resolve,reject) =>{
+      this.http.put<ResponseStatusOrden>(`${urlBase}/responderSolicitudOrden`, solicitud).subscribe(resp =>{
+        if(resp.status === 'success'){
+          resolve(resp);
+        }else{
+          resolve(resp);
+        }
+      },err =>{
+        console.log(JSON.stringify(err));
+        reject(err);
+      });
+    });
+  }
+
+  listarOrdenesPendientesByRol(rol:string):Promise<ResponseOrdenByRol>{
+    return new Promise<ResponseOrdenByRol>((resolve, reject) =>{
+      this.http.get<ResponseOrdenByRol>(`${urlBase}/solicitudesPendientes?rol=${rol}`).subscribe(resp =>{
+        if(resp.status === 'success'){
+          resolve(resp);
+        }else{
+          resolve(resp);
+        }
+      }, err =>{
         console.log(JSON.stringify(err));
         reject(err);
       });

@@ -1,48 +1,48 @@
 <app-header title="órdenes pendientes"></app-header>
 
 <ion-content class="ion-padding">
-  <ion-grid *ngFor="let item of [1,1,1,1]">
-    <ion-row>
-      <ion-col class="ion-text-left" size="6">
-      <ion-button color="warning">
-        Pendiente
-      </ion-button>
-    </ion-col>
-      <ion-col class="ion-text-right" size="6">#356</ion-col>
-    </ion-row>
-    <ion-row class="contentgrid--cell">
-      <ion-col class="ion-text-left" size="6">Nombre Asociado:</ion-col>
-      <ion-col class="ion-text-left" size="6">Humberto</ion-col>
-    </ion-row>
-    <ion-row class="contentgrid--cell">
-      <ion-col class="ion-text-left" size="6">Nro. de Socio:</ion-col>
-      <ion-col class="ion-text-left" size="6">Humberto</ion-col>
-    </ion-row>
-    <ion-row class="contentgrid--cell">
-      <ion-col class="ion-text-left" size="6">Proveedor:</ion-col>
-      <ion-col class="ion-text-left" size="6">Humberto</ion-col>
-    </ion-row>
-    <ion-row class="contentgrid--cell">
-      <ion-col class="ion-text-left" size="6">Monto:</ion-col>
-      <ion-col class="ion-text-left" size="6">Humberto</ion-col>
-    </ion-row>
-    <ion-row class="contentgrid--cell">
-      <ion-col class="ion-text-left" size="6">Cuota:</ion-col>
-      <ion-col class="ion-text-left" size="6">Humberto</ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col class="ion-text-right" size="6">
-        <ion-button color="success">
-          <ion-icon slot="icon-only" name="checkmark"></ion-icon>
-          Aprobar
+    <ion-grid *ngFor="let item of solicitudes">
+      <ion-row>
+        <ion-col class="ion-text-left" size="6">
+        <ion-button color="warning">
+          Pendiente
         </ion-button>
       </ion-col>
-      <ion-col size="6">
-        <ion-button color="danger">
-          <ion-icon slot="icon-only" name="close-circle"></ion-icon>
-          Rechazar
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+        <ion-col class="ion-text-right" size="6">#{{item.nro}}</ion-col>
+      </ion-row>
+      <ion-row class="contentgrid--cell">
+        <ion-col class="ion-text-left" size="6">Nombre Asociado:</ion-col>
+        <ion-col class="ion-text-left" size="6">{{item.nombre}}</ion-col>
+      </ion-row>
+      <ion-row class="contentgrid--cell">
+        <ion-col class="ion-text-left" size="6">Nro. de Socio:</ion-col>
+        <ion-col class="ion-text-left" size="6">{{item.nroSocio}}</ion-col>
+      </ion-row>
+      <ion-row class="contentgrid--cell">
+        <ion-col class="ion-text-left" size="6">Proveedor:</ion-col>
+        <ion-col class="ion-text-left" size="6">{{item.nombreEmpresa}}</ion-col>
+      </ion-row>
+      <ion-row class="contentgrid--cell">
+        <ion-col class="ion-text-left" size="6">Monto:</ion-col>
+        <ion-col class="ion-text-left" size="6">{{item.monto | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-col>
+      </ion-row>
+      <ion-row class="contentgrid--cell">
+        <ion-col class="ion-text-left" size="6">Cuota:</ion-col>
+        <ion-col class="ion-text-left" size="6">{{item.cantidadCuotas}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-right" size="6">
+          <ion-button (click)="enviarSolicitudAprobadoRechazado('', 'A', item.nro)" color="success">
+            <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+            Aprobar
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button (click)="openModal(item.nro)" color="danger">
+            <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+            Rechazar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 </ion-content>

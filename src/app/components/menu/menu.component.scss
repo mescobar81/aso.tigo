@@ -1,5 +1,5 @@
 .toolbar{
-    height: 230px;
+    height: 200px;
 }
 
 .toolbar__logo{
@@ -12,6 +12,15 @@
     border-radius: 50%;
     border: 3px solid #048beb;
     margin-bottom: 5px;
+}
+
+.toolbar__nombre{
+    margin-left: 10px;
+}
+
+.toolbar__rol{
+    margin-top: -20px;
+    margin-left: 56px;
 }
 
 .col__logo{
