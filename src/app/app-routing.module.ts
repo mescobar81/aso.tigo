@@ -61,10 +61,8 @@ const routes: Routes = [
   },
   {
     path: 'inicio/aprobar-rechazar-orden',
-    loadChildren: () => import('./pages/aprobar-rechazar-orden/aprobar-rechazar-orden.module').then( m => m.AprobarRechazarOrdenPageModule),
-    canLoad:[AuthGuard]
+    loadChildren: () => import('./pages/aprobar-rechazar-orden/aprobar-rechazar-orden.module').then( m => m.AprobarRechazarOrdenPageModule)
   }
-
 ];
 
 @NgModule({

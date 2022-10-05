@@ -13,7 +13,10 @@
           <ion-list>
             <ion-item>
               <ion-label position="floating">Nro. Documento</ion-label>
-              <ion-input name="documento" type="text" [(ngModel)]="usuario.documento" required></ion-input>
+              <ion-input name="documento" type="text" 
+                         [(ngModel)]="usuario.documento"
+                         autocomplete="on"
+                         required></ion-input>
               <ion-icon slot="start" name="people"></ion-icon>
             </ion-item>
             <ion-item>

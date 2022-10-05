@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
-import { ModalRechazoSolicitudComponent } from 'src/app/components/modal-rechazo-solicitud/modal-rechazo-solicitud.component';
 import { Solicitud } from 'src/app/interfaces/interface';
+import { ModalRechazoSolicitudComponent } from 'src/app/components/modal-rechazo-solicitud/modal-rechazo-solicitud.component';
 import { SolicitudOrdenService } from 'src/app/services/solicitud-orden.service';
 import { StorageService } from 'src/app/services/storage.service';
 

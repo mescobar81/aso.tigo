@@ -10,6 +10,7 @@ import { PopoverInfoComponent } from './popover-info/popover-info.component';
 import { ModalInfoComponent } from './modal-info/modal-info.component';
 import { ModalRechazoSolicitudComponent } from './modal-rechazo-solicitud/modal-rechazo-solicitud.component';
 import { FormsModule } from '@angular/forms';
+import { ModalNotificacionComponent } from './modal-notificacion/modal-notificacion.component';
 
 
 
@@ -20,14 +21,16 @@ import { FormsModule } from '@angular/forms';
     MesDetalleComponent,
     PopoverInfoComponent,
     ModalInfoComponent,
-    ModalRechazoSolicitudComponent
+    ModalRechazoSolicitudComponent,
+    ModalNotificacionComponent
   ],
   exports: [
     HeaderComponent,
     MenuComponent,
     MesDetalleComponent,
     ModalInfoComponent,
-    ModalRechazoSolicitudComponent
+    ModalRechazoSolicitudComponent,
+    ModalNotificacionComponent
   ],
   imports: [
     CommonModule,

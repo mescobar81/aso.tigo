@@ -28,6 +28,7 @@
     "@capacitor/cli": "^4.1.0",
     "@capacitor/haptics": "4.0.1",
     "@capacitor/keyboard": "4.0.1",
+    "@capacitor/push-notifications": "^4.1.0",
     "@capacitor/status-bar": "4.0.1",
     "@ionic/angular": "^6.1.9",
     "@ionic/storage": "^3.0.6",
