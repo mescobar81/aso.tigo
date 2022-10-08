@@ -5,11 +5,11 @@ const config: CapacitorConfig = {
   appName: 'AsoTigo',
   webDir:'www',
   bundledWebRuntime: false,
-  /* plugins: {
+  plugins: {
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert"],
-    },
-  } */
+    }
+  }
 };
 
 export default config;

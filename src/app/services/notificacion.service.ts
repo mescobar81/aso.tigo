@@ -32,7 +32,7 @@ export class NotificacionService {
     if(this.platform.is('capacitor')){
       PushNotifications.requestPermissions().then(result => {
         if(result.receive === 'granted'){
-          //registramos permisos de recibir notificaciones
+          //registramos permisos para recibir notificaciones
           PushNotifications.register();
           //agregamos los oyentes
           this.addListeners();
@@ -65,7 +65,9 @@ export class NotificacionService {
     PushNotifications.addListener('pushNotificationReceived',
       async (notification: PushNotificationSchema) => {
         const usuario = await this.storageSrv.getUsuario() || null;
-        console.log('Usuario: ', usuario);
+        if(!usuario){
+          return;
+        }
         this.openModal(notification);
         console.log('Push received: ' + JSON.stringify(notification));
       }
@@ -75,11 +77,12 @@ export class NotificacionService {
       PushNotifications.addListener('pushNotificationActionPerformed',
       async (notification:ActionPerformed) => {
         const usuario = await this.storageSrv.getUsuario() || null;
-        console.log('Usuario: ', usuario);
+        if(!usuario){
+          return;
+        }
         console.log('Push action performed: ', notification.actionId ,notification.notification.data);
 
-        if(usuario?.rol?.roles[0].toLowerCase() === 'presidente' || usuario?.rol?.roles[0].toLowerCase() === 'tesorero'){
-          console.log('Estoy dentro del If');
+        if(usuario.rol.roles[0].toLowerCase() === 'presidente' || usuario.rol.roles[0].toLowerCase() === 'tesorero'){
           this.navCtrl.navigateRoot('/inicio/aprobar-rechazar-orden');
         }
       }
