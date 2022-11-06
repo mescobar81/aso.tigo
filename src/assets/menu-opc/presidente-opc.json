@@ -71,8 +71,8 @@
                 {
                     "title": "Cobertura Médica",
                     "icon": "bag-add",
-                    "ruta": "",
-                    "activo":false
+                    "ruta": "menu-cobertura",
+                    "activo":true
                 }
             ]
         },

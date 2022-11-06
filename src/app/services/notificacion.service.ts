@@ -50,6 +50,7 @@ export class NotificacionService {
     // On success, we should be able to receive notifications
     PushNotifications.addListener('registration',
       (token: Token) => {
+        this.storageSrv.guardarToken(token.value);
         console.log('Push registration success, token:', token.value);
       }
     );

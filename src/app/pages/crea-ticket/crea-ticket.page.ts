@@ -183,7 +183,9 @@ export class CreaTicketPage implements OnInit {
       .then(() => console.log('File is opened'))
       .catch(e => console.log('Error opening file', e));
 
+
   }
+  
   async tomarFoto() {
 
     const image = await Camera.getPhoto({
@@ -204,7 +206,6 @@ export class CreaTicketPage implements OnInit {
     // passed to the Filesystem API to read the raw data of the image,
     // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
 
-    console.log(image);
     
     if (!image) { return };
 

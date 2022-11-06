@@ -86,7 +86,7 @@
           <ion-select class="fixed__opcion"
                       interface="popover"
                       name="cantidadCuotas"
-                      (ionChange)="calcularCuotaMensual()"
+                      (ionChange)="recalcularCuotaMensual()"
                       [(ngModel)]="solicitudOrden.cantidadCuotas"
                        required>
             <ion-select-option *ngFor="let c of cuotasMaximas" 
@@ -106,7 +106,7 @@
           <ion-input name="montoSolicitado"
                      type="number"
                      [(ngModel)]="solicitudOrden.montoSolicitado"
-                     (input)="calcularCuotaMensual()"
+                     (ionInput)="calcularCuotaMensual($event)"
                      required>
           </ion-input>
         </ion-item>

@@ -1,0 +1,84 @@
+<ion-header class="ion-no-border" translucent>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button text="Atrás" defaultHref="/inicio/menu-cobertura"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Adjuntar Documentos</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<div class="container-cabecera">
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-center" size="12">Cobertura Médica</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center" size="12">Grupo Telecel - ASOTIGO</ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
+
+<ion-content>
+  <ion-card color="secondary">
+    <ion-card-header>
+      <ion-card-title>Adjuntar documentos requeridos</ion-card-title>
+      <ion-card-subtitle>Ejemplo:</ion-card-subtitle>
+      <ion-card-subtitle>Solicitud de inscripción</ion-card-subtitle>
+      <ion-card-subtitle>Por cada integrante</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-card-subtitle>Declaración jurada de salud para adultos</ion-card-subtitle>
+      <ion-card-subtitle>Declaración jurada de salud para menores</ion-card-subtitle>
+
+      <ion-card-subtitle>Copia cédula frontal</ion-card-subtitle>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12"><input type="file" (change)="seleccionarArchivo($event)"></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button color="secondary" expand="block" (click)="tomarFoto()">
+          Cámara
+          <ion-icon slot="end" name="camera"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-list-header>
+          <ion-label>Archivos adjuntos</ion-label>
+        </ion-list-header>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let a of adjuntados; let i = index">
+      <ion-col size="8">
+        <ion-item>
+          <ion-label>{{a}}</ion-label>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-chip color="danger" outline="false" (click)="eliminarAdjunto(i)">
+          <ion-icon name="trash"></ion-icon>
+          <ion-label>Eliminar</ion-label>
+        </ion-chip>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button color="secondary" (click)="subirAdjunto()" expand="block">
+          Guardar sin enviar
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button color="secondary" (click)="enviarAsismed()" expand="block">
+          Enviar Asismed
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

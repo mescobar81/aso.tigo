@@ -28,6 +28,10 @@ export class LoginPage {
       version: '',
       model: '',
       ip: ''
+    },
+    recordarSesion:false,
+    notificacion:{
+      idTokenFirebase:''
     }
   };
   constructor(private authSvr: AuthService,
@@ -44,13 +48,14 @@ export class LoginPage {
    * @param fLogin valores del formulario
    * @returns 
    */
-  login(fLogin: NgForm) {
+  async login(fLogin: NgForm) {
 
     if (!fLogin.valid) {
       this.presentToast('bottom');
       return;
     }
 
+    const token = await this.storageSrv.getToken();
     /**
      * crea un nuevo usuario en una constante para evitar modificaciones
      * en el template, detalles visuales para el usuario
@@ -64,9 +69,14 @@ export class LoginPage {
         version: this.device.version,
         model: this.device.model,
         ip: '',//this.device.uuid
+      },
+      recordarSesion:this.usuario.recordarSesion,
+      notificacion:{
+        idTokenFirebase:token
       }
     }
-
+    console.log(nuevoUsuario);
+    
     this.authSvr.login(nuevoUsuario).then(response => {
       if (!response.usuario.valido) {
         this.alertSvr.presentAlert("Atención", "", response.usuario.mensaje, "Aceptar");

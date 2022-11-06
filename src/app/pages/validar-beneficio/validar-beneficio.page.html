@@ -1,0 +1,39 @@
+<ion-header class="ion-no-border" translucent>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button text="Atrás" defaultHref="/inicio/menu-cobertura"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-capitalize">{{title}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<div class="container-cabecera">
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-center" size="12">Cobertura Médica</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center" size="12">Grupo Telecel - ASOTIGO</ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
+
+<ion-content class="ion-padding">
+
+  
+  <ion-item>
+    <ion-label>Para la inscripción:</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>Debe solicitar verificación de beneficio</ion-label>
+  </ion-item>
+
+  <div class="container__middle">
+    <ion-item lines="none">
+      <ion-label>Presione el botón</ion-label>
+    </ion-item>
+    <ion-button (click)="consultarBeneficio()" expand="block">
+      Consultar Beneficio
+    </ion-button>
+  </div>
+</ion-content>

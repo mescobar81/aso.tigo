@@ -62,7 +62,29 @@ const routes: Routes = [
   {
     path: 'inicio/aprobar-rechazar-orden',
     loadChildren: () => import('./pages/aprobar-rechazar-orden/aprobar-rechazar-orden.module').then( m => m.AprobarRechazarOrdenPageModule)
+  },
+  {
+    path: 'inicio/menu-cobertura',
+    loadChildren: () => import('./pages/menu-cobertura/menu-cobertura.module').then( m => m.MenuCoberturaPageModule)
+  },
+  {
+    path: 'inicio/validar-beneficio/:beneficio',
+    loadChildren: () => import('./pages/validar-beneficio/validar-beneficio.module').then( m => m.ValidarBeneficioPageModule)
+  },
+  {
+    path: 'inicio/cotizar-plan/:beneficio',
+    loadChildren: () => import('./pages/cotizar-plan/cotizar-plan.module').then( m => m.CotizarPlanPageModule)
+  },
+  {
+    path: 'adjuntar-documento/:codigoRetorno',
+    loadChildren: () => import('./pages/adjuntar-documento/adjuntar-documento.module').then( m => m.AdjuntarDocumentoPageModule)
+  },
+  {
+    path: 'inscripcion-medica-rechazo/:mensaje/:codigoRetorno',
+    loadChildren: () => import('./pages/inscripcion-medica-rechazo/inscripcion-medica-rechazo.module').then( m => m.InscripcionMedicaRechazoPageModule)
   }
+
+
 ];
 
 @NgModule({

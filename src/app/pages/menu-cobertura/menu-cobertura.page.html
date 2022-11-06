@@ -1,0 +1,42 @@
+<ion-header class="ion-no-border" translucent>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button text="Atrás" defaultHref="/inicio"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<div class="container-cabecera">
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-center" size="12">
+        Cobertura Médica
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="ion-text-center" size="12">
+        Grupo Telecel - ASOTIGO
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
+  <ion-content class="ion-padding">
+    <div class="container">
+
+
+      <ion-button (click)="descargarDocumento()" expand="block">
+        Descargar Documentos
+      </ion-button>
+
+      <ion-button (click)="irCoberturaMedica()" expand="block">
+        Inscripción a Cobertura Médica
+      </ion-button>
+      <ion-button expand="block">
+        Agregar Beneficiarios/Adherentes
+      </ion-button>
+      <ion-button expand="block">
+        Solicitud de exclusión
+      </ion-button>
+    </div>
+  </ion-content>

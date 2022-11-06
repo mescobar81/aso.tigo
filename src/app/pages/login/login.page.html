@@ -31,6 +31,20 @@
       </ion-row>
       <ion-row>
         <ion-col size="12">
+          <ion-list>
+            <ion-item lines="none">
+              <ion-label slot="end">Recordar</ion-label>
+              <ion-toggle color="primary"
+                          name="recordarSesion"
+                          [(ngModel)]="usuario.recordarSesion"
+                          slot="end">
+              </ion-toggle>
+            </ion-item>
+        </ion-list>
+      </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
           <ion-button class="contentgrid_btn" expand="block" shape="round" type="submit">
             Ingresar
           </ion-button>

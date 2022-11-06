@@ -1,0 +1,57 @@
+.btn__contizar{
+    --background:linear-gradient(to left, #001F5F,#00C0FF) !important;
+}
+
+.btn__adjuntar{
+    --background:linear-gradient(to left, #001F5F,#00C0FF) !important;
+}
+.contentgrid--cell{
+    width: 100%;
+    background-color: #9d9fa6;
+}
+
+.container-cabecera{
+    display:flex;
+    background-color: #001F5F;
+    height: 100px;
+    color: #fff;
+    align-items: center;
+    font-size:18px; 
+}
+
+.item-divider__importeTotal{
+    width: 100%;
+    padding-right: 3px;
+    text-align: right;
+}
+
+.file-select {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .file-select::before {
+    background:linear-gradient(to left, #001F5F,#00C0FF) !important;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    content: 'Seleccionar'; /* testo por defecto */
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+  
+  .file-select input[type="file"] {
+    opacity: 0;
+    width: 340px;
+    height: 45px;
+    display: inline-block;
+  }
+  
+  #src-file1::before {
+    content: 'Adjuntar Documento';
+  }

@@ -32,14 +32,14 @@ export interface Rol {
 export interface UsuarioRequest {
     documento: string;
     clave: string;
-    recordarSesion?: boolean;
+    recordarSesion: boolean;
     device?: {
         os: string;
         version: string;
         model: string;
         ip: string;
     }
-    notificacion?: {
+    notificacion: {
         idTokenFirebase: string;
     }
 }
@@ -323,3 +323,70 @@ export interface ResponseStatusOrden{
     mensaje :string;
     status  :string;
 }
+
+export interface ResponseValidaInscripcion {
+    nroSolicitud:         number;
+    descripcionRespuesta: string;
+    beneficio:            string;
+    mensaje:              string;
+    comentario:           string;
+    parametrosGlobales:   ParametrosGlobales;
+    codigoRetorno:        number;
+    status:               string;
+}
+
+export interface ResponseSolicitudPlan {
+    Planes:  Plane[];
+    mensaje: string;
+    status:  string;
+}
+
+export interface Plane {
+    idplan:   string;
+    descPlan: string;
+}
+export interface ResponseGrupoFamiliar {
+    mensaje:      string;
+    status:       string;
+    GrupoFamilia: GrupoFamilia[];
+}
+
+export interface GrupoFamilia {
+    codigo:      number;
+    Monto:       number;
+    DescripSevi: string;
+}
+
+export interface ResponseStatusConsultaBeneficio{
+    mensaje :string;
+    status  :string;
+}
+
+export interface ResponseAdherente {
+    Adherente: Adherente[];
+    mensaje:   string;
+    status:    string;
+}
+
+export interface Adherente {
+    codigo:      number;
+    Monto:       number;
+    DescripSevi: string;
+}
+
+export interface ResponseStatusMessage{
+    mensaje: string;
+    status: string;
+}
+
+export interface ResponseRecuperarAdjuntos {
+    ArchivoAdjunto: ArchivoAdjunto[];
+    mensaje:        string;
+    status:         string;
+}
+
+export interface ArchivoAdjunto {
+    adjunto: string;
+    idreg:   number;
+}
+

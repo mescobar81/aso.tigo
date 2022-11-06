@@ -62,6 +62,12 @@
             "activo":true,
             "open":false,
             "submenus":[
+                {
+                    "title": "Cobertura Médica",
+                    "icon": "bag-add",
+                    "ruta": "menu-cobertura",
+                    "activo":true
+                }
             ]
         },
         {

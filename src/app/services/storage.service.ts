@@ -9,6 +9,8 @@ import { Usuario } from '../interfaces/interface';
 export class StorageService {
 
   usuario:Usuario;
+  token:string = '';
+  nroSolicitud:string;
   constructor(private storage:Storage) { 
     this.init();
   }
@@ -16,6 +18,16 @@ export class StorageService {
   async getUsuario(){
     this.usuario = await this.storage.get('usuario') || null;
     return this.usuario;
+  }
+
+  async getToken(){
+    this.token = await this.storage.get('token');
+    return this.token;
+  }
+
+  async getNroSolicitud(){
+    this.nroSolicitud = await this.storage.get('nroSolicitud');
+    return this.nroSolicitud;
   }
 
   async init(){   
@@ -30,6 +42,13 @@ export class StorageService {
     await this.storage.set('usuario', usuario);
   }
 
+  async guardarToken(token:string){
+    await this.storage.set('token', token);
+  }
+
+  async guardarNroSolicitud(nroSolicitud:Number){
+    await this.storage.set('nroSolicitud', nroSolicitud);
+  }
   /**
    * limpia el local storage
    */
