@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import {
@@ -8,7 +8,9 @@ import {
   ResponseStatusConsultaBeneficio,
   ResponseStatusMessage,
   ResponseValidaInscripcion,
-  ResponseRecuperarAdjuntos
+  ResponseRecuperarAdjuntos,
+  ResponseBeneficiarioAdherente,
+  ResponseNuevoGrupoFamiliar
 } from '../interfaces/interface';
 
 const urlBase = environment.urlBase;
@@ -27,7 +29,7 @@ export class CoberturaMedicaService {
         nombre: nombre
       }).subscribe({
         next: (resp: ResponseStatusConsultaBeneficio) => {
-          if (resp.status === 'success') {
+          if (resp.status == 'success') {
             resolve(resp);
           } else {
             resolve(resp);
@@ -48,7 +50,7 @@ export class CoberturaMedicaService {
       this.http.get(`${urlBase}/validarInscripcion?nroSocio=${nroSocio}`).
         subscribe({
           next: (resp: ResponseValidaInscripcion) => {
-            if (resp.status === 'success') {
+            if (resp.status == 'success') {
               resolve(resp);
             } else {
               resolve(resp);
@@ -69,7 +71,7 @@ export class CoberturaMedicaService {
       this.http.get(`${urlBase}/planes`).
         subscribe({
           next: (resp: ResponseSolicitudPlan) => {
-            if (resp.status === 'success') {
+            if (resp.status == 'success') {
               resolve(resp);
             } else {
               resolve(resp);
@@ -89,7 +91,21 @@ export class CoberturaMedicaService {
     return new Promise<ResponseGrupoFamiliar>((resolve, reject) => {
 
       this.http.get<ResponseGrupoFamiliar>(`${urlBase}/consultaGrupoFamilia?Pbeneficio='${beneficio}'&idplan='${idPlan}'`).
-        subscribe();
+        subscribe({
+            next: (resp: ResponseGrupoFamiliar) => {
+              if (resp.status == 'success') {
+                resolve(resp);
+              } else {
+                resolve(resp);
+              }
+            },
+            error: (err: any) => {
+              console.log(JSON.stringify(err));
+  
+              reject(err);
+            }
+          }
+        );
     });
   }
 
@@ -98,7 +114,7 @@ export class CoberturaMedicaService {
       this.http.get(`${urlBase}/consultaAdherente?idplan='${plan}'`)
         .subscribe({
           next: (resp: ResponseAdherente) => {
-            if (resp.status === 'success') {
+            if (resp.status == 'success') {
               resolve(resp);
             } else {
               resolve(resp);
@@ -119,7 +135,7 @@ export class CoberturaMedicaService {
       this.http.post(`${urlBase}/cotizar`, cotizar)
         .subscribe({
           next: (resp: ResponseStatusMessage) => {
-            if (resp.status === 'success') {
+            if (resp.status == 'success') {
               resolve(resp);
             } else {
               resolve(resp);
@@ -136,20 +152,17 @@ export class CoberturaMedicaService {
 
   subirAdjunto(formData: FormData): Promise<ResponseStatusMessage> {
     return new Promise<ResponseStatusMessage>((resolve, reject) => {
-      this.http.post(`${urlBase}/adjuntarDocumento`, formData)
-        .subscribe({
-          next: (resp: ResponseStatusMessage) => {
-            if (resp.status === 'success') {
-              resolve(resp);
-            } else {
-              resolve(resp);
-            }
-          },
-          error: (err: any) => {
-            console.log(JSON.stringify(err));
-
-            reject(err);
+      this.http.post<ResponseStatusMessage>(`${urlBase}/adjuntarDocumento`, formData)
+        .subscribe((resp:ResponseStatusMessage) => {
+          if(resp.status == 'success'){
+            resolve(resp);
+          } else {
+            resolve(resp);
           }
+        }, (err) =>{
+          console.log(JSON.stringify(err));
+          
+          reject(err);
         });
     });
   }
@@ -159,7 +172,7 @@ export class CoberturaMedicaService {
       this.http.post(`${urlBase}/enviarAsisMed?nroSolicitud=${dato.nroSolicitud}&nombre=${dato.nombre}`, {})
         .subscribe({
           next: (resp: ResponseStatusMessage) => {
-            if (resp.status === 'success') {
+            if (resp.status == 'success') {
               resolve(resp);
             } else {
               resolve(resp);
@@ -187,50 +200,74 @@ export class CoberturaMedicaService {
         }, err => {
 
           console.log(JSON.stringify(err));
-
           reject(err);
         });
     });
   }
-  async getBlobFromUrl(url: string) {
-    console.log(url);
-    
-    const headers = new HttpHeaders()
-    .set("Access-Control-Allow-Origin", "*"
-    );
-    return new Promise<any>(async (resolve, reject) => {
-       fetch(url, {
-        headers:new Headers({
-          "Access-Control-Allow-Origin": "*"
-        })
-      }).then(response =>{
-        console.log(response);
-        
-      }).catch(err => {
-        console.log(err);
-        
+
+  getSolicitudBeneficiarioAdherente(nroSocio:String):Promise<ResponseBeneficiarioAdherente>{
+    return new Promise<ResponseBeneficiarioAdherente>((resolve, reject) =>{
+      this.http.get(`${urlBase}/validaAgregaAdherente?nroSocio=${nroSocio}`)
+      .subscribe((resp: ResponseBeneficiarioAdherente)=>{
+        if(resp.status == 'success'){
+          resolve(resp);
+        }else{
+          resolve(resp);
+        }
+      }, err =>{
+        console.log(JSON.stringify(err));
+        reject(err);
       });
     });
-    /* const response = await fetch(url);
-    const data = await response.blob();
-    let metadata = {
-      type: 'image/jpeg'
-    };
-    return new File([data], 'JPEG_20221029_164700_8709833261284334121.jpg', {
-      type: metadata.type
-    }); */
-
-    //return new Promise((resolve, reject) => {
-
-    /* let request = new XMLHttpRequest();
-    request.open('GET', url, true);
-    request.responseType = 'blob';
-    request.onload = () => {
-      resolve(request.response);
-    };
-    request.onerror = reject;
-    request.send();
-  }); */
-    //}
   }
+
+  getNuevoGrupoFamiliar(codigo:string, codSegmento:string, idPlan:string, beneficio:string, pOpcion:string):Promise<ResponseNuevoGrupoFamiliar>{
+    return new Promise<ResponseNuevoGrupoFamiliar>((resolve, reject) =>{
+      this.http.get(`${urlBase}/seleccionarNuevoGrupoFamilaS?Pcodigo=${codigo}&Pcodsegemento=${codSegmento}&idplan=${idPlan}&Pbeneficio=${beneficio}&Popcion=${pOpcion}`)
+      .subscribe((resp:ResponseNuevoGrupoFamiliar)=>{
+        if(resp.status == 'success'){
+          resolve(resp);
+        }else{
+          resolve(resp);
+        }
+      }, err => {
+        console.log(JSON.stringify(err));
+        reject(err)
+      });
+    })
+  }
+
+  obtenerAdherentes(idPlan:string):Promise<ResponseAdherente>{
+    return new Promise<ResponseAdherente>((resolve, reject) => {
+      this.http.get(`${urlBase}/consultaAdherente?idplan='${idPlan}'`)
+      .subscribe((res:ResponseAdherente) => {
+        if(res.status == 'success'){
+          resolve(res);
+        }else{
+          resolve(res);
+        }
+      }, err => {
+        console.log(JSON.stringify(err));
+        reject(err);
+      });
+    });
+  }
+  /**
+   * convierte la representacion de cadena en formato file a partir de una url
+   */
+  /* async getBlobFromUrl(url: string) {
+
+    return new Promise((resolve, reject) => {
+
+      let request = new XMLHttpRequest();
+      request.open('GET', url, true);
+      request.responseType = 'blob';
+      request.onload = () => {
+        resolve(request.response);
+      };
+      request.onerror = reject;
+      request.send();
+    });
+
+  } */
 }

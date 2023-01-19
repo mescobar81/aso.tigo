@@ -76,15 +76,13 @@ export class ConsultarBeneficioPage implements OnInit {
   }
 
   async listarGrupoFamiliarByPlan(beneficio: string, plan: Plane) {
-    const { GrupoFamilia } = await this.coberturaMedicaSrv.listarGrupoFamiliarByPlan(beneficio, plan.idplan);
-    this.gruposFamilia = GrupoFamilia;
+    
+    this.gruposFamilia = (await this.coberturaMedicaSrv.listarGrupoFamiliarByPlan(beneficio, plan.idplan)).GrupoFamilia;
 
   }
 
   async listarAdherentes(plan: Plane) {
-    const { Adherente } = await this.coberturaMedicaSrv.listarAdherentes(plan.idplan);
-
-    this.adherenteBeneficiarios = Adherente;
+    this.adherenteBeneficiarios =  (await this.coberturaMedicaSrv.listarAdherentes(plan.idplan)).Adherente;
   }
 
   agregarAdherente() {
@@ -169,7 +167,7 @@ export class ConsultarBeneficioPage implements OnInit {
     await modal.present();
     const {role} = await modal.onWillDismiss();
     if(role === 'confirm' && isCss) {
-      this.navCtrl.navigateRoot('/inicio/adjuntar-documento');
+      this.navCtrl.navigateRoot(`adjuntar-documento/${this.activatedRoute.snapshot.params.codigoRetorno}`);
     }
   }
 

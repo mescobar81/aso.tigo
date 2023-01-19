@@ -390,3 +390,53 @@ export interface ArchivoAdjunto {
     idreg:   number;
 }
 
+export interface ResponseBeneficiarioAdherente {
+    descripcionRespuesta: string;
+    estado:               string;
+    codigo:               number;
+    Popcion:              string;
+    idplan:               string;
+    Nomserv:              string;
+    codsegmento:          string;
+    comentario:           string;
+    parametrosGlobales:   ParametrosGlobalesAdherente;
+    codigoRetorno:        number;
+    nroSolicitud:         number;
+    beneficio:            string;
+    nroSocio:             number;
+    mensaje:              string;
+    status:               string;
+}
+
+export interface ParametrosGlobalesAdherente {
+    appVersionActualPlayStore: number;
+    estado:                    boolean;
+    importeMinimoOrden:        number;
+    importeMinimoPrestamo:     number;
+    requiereUpdate:            boolean;
+}
+
+export interface ResponseNuevoGrupoFamiliar {
+    NuevoGrupoFamilia: NuevoGrupoFamiliar[];
+    mensaje:           string;
+    status:            string;
+}
+
+export interface NuevoGrupoFamiliar {
+    monto:         number;
+    nuevocodigo:   number;
+    DescripSevi:   string;
+    nuevosegmento: string;
+}
+
+export interface ResponseAdherente {
+    Adherente: Adherente[];
+    mensaje:   string;
+    status:    string;
+}
+
+export interface Adherente {
+    codigo:      number;
+    Monto:       number;
+    DescripSevi: string;
+}

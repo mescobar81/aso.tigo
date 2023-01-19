@@ -72,7 +72,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/validar-beneficio/validar-beneficio.module').then( m => m.ValidarBeneficioPageModule)
   },
   {
-    path: 'inicio/cotizar-plan/:beneficio',
+    path: 'inicio/cotizar-plan/:beneficio/:codigoRetorno',
     loadChildren: () => import('./pages/cotizar-plan/cotizar-plan.module').then( m => m.CotizarPlanPageModule)
   },
   {
@@ -82,7 +82,12 @@ const routes: Routes = [
   {
     path: 'inscripcion-medica-rechazo/:mensaje/:codigoRetorno',
     loadChildren: () => import('./pages/inscripcion-medica-rechazo/inscripcion-medica-rechazo.module').then( m => m.InscripcionMedicaRechazoPageModule)
+  },
+  {
+    path: 'cotizar-adherente',
+    loadChildren: () => import('./pages/cotizar-adherente/cotizar-adherente.module').then( m => m.CotizarAdherentePageModule)
   }
+
 
 
 ];

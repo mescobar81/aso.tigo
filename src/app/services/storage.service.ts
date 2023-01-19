@@ -49,6 +49,14 @@ export class StorageService {
   async guardarNroSolicitud(nroSolicitud:Number){
     await this.storage.set('nroSolicitud', nroSolicitud);
   }
+
+  async guardarDatosDeBeneficiarioAdherente(beneficiario:any){
+    await this.storage.set('beneficiario', beneficiario);
+  }
+  
+  async getDatoBeneficiarioAdherente(){
+    return this.storage.get('beneficiario');
+  }
   /**
    * limpia el local storage
    */

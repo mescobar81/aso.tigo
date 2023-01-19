@@ -19,7 +19,7 @@ export class MenuCoberturaPage implements OnInit {
     private device: Device,
     private storageSvr: StorageService,
     private toastCtrl: ToastController,
-    private validarInscripcionService: CoberturaMedicaService) { }
+    private coberturaMedicaService: CoberturaMedicaService) { }
 
   ngOnInit() {
   }
@@ -38,10 +38,9 @@ export class MenuCoberturaPage implements OnInit {
     let { nroSolicitud,
        beneficio,
         codigoRetorno,
-         descripcionRespuesta } = await this.validarInscripcionService.validaInsrcipcion(nroSocio);
+         descripcionRespuesta } = await this.coberturaMedicaService.validaInsrcipcion(nroSocio);
          
     /* const descripcionRespuesta = 'Falta adjuntar solicitud de baja'; */
-    codigoRetorno = 94;
     await this.storageSvr.guardarNroSolicitud(nroSolicitud);
     if (codigoRetorno == 0) {
       
@@ -59,7 +58,7 @@ export class MenuCoberturaPage implements OnInit {
 
     }
     if(codigoRetorno == 97){
-      this.navCtrl.navigateRoot(`/inicio/cotizar-plan/${beneficio}`);
+      this.navCtrl.navigateRoot(`/inicio/cotizar-plan/${beneficio}/${codigoRetorno}`);
     }
     if(codigoRetorno == 96){
       this.navCtrl.navigateRoot(`adjuntar-documento/${codigoRetorno}`);
@@ -72,6 +71,27 @@ export class MenuCoberturaPage implements OnInit {
     if (codigoRetorno == 94) {
       this.navCtrl.navigateRoot(`inscripcion-medica-rechazo/${descripcionRespuesta}/${codigoRetorno}`);
     }
+  }
+
+  async agregarBeneficiarioAdherente(){
+    const {nroSocio} = await this.storageSvr.getUsuario();
+    
+    let {codigoRetorno, Nomserv, codigo, Popcion, idplan, codsegmento, beneficio} = await this.coberturaMedicaService.getSolicitudBeneficiarioAdherente('114');
+    const beneficiario = {
+      Nomserv,
+      codigo,
+      Popcion,
+      idplan,
+      codsegmento,
+      beneficio
+    }
+    await this.storageSvr.guardarDatosDeBeneficiarioAdherente(beneficiario);
+    codigoRetorno = 0;
+
+    if(codigoRetorno == 0){
+      this.navCtrl.navigateRoot(`cotizar-adherente`);
+    }
+
   }
 
   async presentToast(position: 'top' | 'middle' | 'bottom', mensaje: string) {

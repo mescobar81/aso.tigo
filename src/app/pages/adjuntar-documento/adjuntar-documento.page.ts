@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { File, FileEntry } from '@awesome-cordova-plugins/file/ngx';
 import { Camera, CameraResultType, Photo } from '@capacitor/camera';
-import { ModalController, ToastController } from '@ionic/angular';
+import { ModalController, NavController, ToastController } from '@ionic/angular';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 import { CoberturaMedicaService } from 'src/app/services/cobertura-medica.service';
 import { StorageService } from 'src/app/services/storage.service';
@@ -21,7 +21,7 @@ export class AdjuntarDocumentoPage implements OnInit {
   adjuntados: string[] = [];
   file: File;
   dato = {
-    nroSolicitud:0,
+    nroSolicitud:'',
     nombre:''
   }
   constructor(private archivo: File,
@@ -29,38 +29,51 @@ export class AdjuntarDocumentoPage implements OnInit {
     private coberturaMedicaSrv: CoberturaMedicaService,
     private toastCtrl: ToastController,
     private activatedRoute: ActivatedRoute,
+    private navCtrl: NavController,
     private storageSrv: StorageService) { }
 
   async ngOnInit() {
     const codigoRetorno = this.activatedRoute.snapshot.params.codigoRetorno;
     const nroSolicitud = await this.storageSrv.getNroSolicitud();
-    if(codigoRetorno == 94){
-      const {ArchivoAdjunto} = await this.coberturaMedicaSrv.recuperarAdjuntos(Number(nroSolicitud));
 
-      try {
-        this.coberturaMedicaSrv.getBlobFromUrl(ArchivoAdjunto[1].adjunto);
-      } catch (error) {
-        console.log(error);
-        
+    //ver: codigo 94 para saber si la solicitud es rechazada por la clinica medica
+    //solo para recuperacion de documentos adjuntos
+    if(codigoRetorno == 94){
+      const {status, mensaje, ArchivoAdjunto} = await this.coberturaMedicaSrv.recuperarAdjuntos(Number(nroSolicitud));
+
+      if(status == 'success'){
+        try {
+          if(ArchivoAdjunto.length > 0){
+            ArchivoAdjunto.forEach(async a =>{
+              const cadenaExtraidaInicial = a.adjunto.substring(7);
+              let arregloCadena = cadenaExtraidaInicial.split('/');
+
+              this.adjuntados.push(arregloCadena[4]);//en la posicion 4 cargamos el nombre del archivo
+              
+            });
+          } else {
+            this.presentToast('bottom', 'Sin archivos adjuntos');
+          }         
+          
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        this.presentarModal('Adjunto Recuperado', mensaje, false);
       }
       
     }
-
-   /*  const {nombre} = await this.storageSrv.getUsuario();
-    this.dato.nroSolicitud = Number(nroSolicitud);
-    this.dato.nombre = nombre; */
   }
 
   seleccionarArchivo(event: any) {
-    console.log(event.target.files[0]);
-    
+
     this.file = event.target.files[0];
     this.adjuntados.push(event.target.files[0].name);//para mostrar en la vista de ususario los nombres
     this.adjuntos.push({
       blob: this.file,
       name: event.target.files[0].name
     });//para el envio de archivos blob al servicio
-
+    
   }
 
   async tomarFoto() {
@@ -103,6 +116,7 @@ export class AdjuntarDocumentoPage implements OnInit {
 
           let blob = new Blob([new Uint8Array(res.target.result)], { type: file.type });
 
+          //array de archivos para enviar al servicio web
           this.adjuntos.push({
             blob: blob,
             name: file.name
@@ -122,31 +136,34 @@ export class AdjuntarDocumentoPage implements OnInit {
       return;
     }
 
-    
-    //llamamos a este metodo para enviar un archivo adjunto
-    //en caso que el usuario haya presionado enviar a asismed
-    this.subirAdjunto();
+    this.dato.nombre = (await this.storageSrv.getUsuario()).nombre;
+    this.dato.nroSolicitud = await this.storageSrv.getNroSolicitud();
 
     const {status, mensaje} = await this.coberturaMedicaSrv.enviarAsismed(this.dato);
 
     if(status === 'success'){
-      this.presentarModal('Solicitud Asismed', mensaje, true);
+      await this.presentarModal('Solicitud Asismed', mensaje, true);
     }
     //limpia los datos del envio a asismed
     this.dato = {
-      nroSolicitud:0,
+      nroSolicitud:'',
       nombre:''
     };
+        
+    //llamamos a este metodo para enviar un archivo adjunto
+    //en caso que el usuario haya presionado enviar a asismed
+    this.subirAdjunto();
   }
 
 //envia adjuntos sin guardar
-  subirAdjunto() {
+  async subirAdjunto() {
 
-    if(this.adjuntados.length === 0) {
+    if(this.adjuntos.length == 0) {
       this.presentToast('bottom', 'Favor ingresar archivos adjuntos');
       return;
     }
 
+    this.dato.nroSolicitud = await this.storageSrv.getNroSolicitud();
     
     try {
       this.adjuntos.forEach(async (file: any) => {
@@ -158,8 +175,8 @@ export class AdjuntarDocumentoPage implements OnInit {
         const { status, mensaje } = await this.coberturaMedicaSrv.subirAdjunto(formData);
 
         if (status == 'success') {
-          this.presentToast('bottom', mensaje);
-        } 
+          await this.presentToast('bottom', mensaje);
+        }
       });
 
     } catch (error) {
@@ -168,6 +185,7 @@ export class AdjuntarDocumentoPage implements OnInit {
     }
 
     this.limpiarDatos();
+    this.navCtrl.navigateRoot('inicio/menu-cobertura');
   }
 
   eliminarAdjunto(index:number){
