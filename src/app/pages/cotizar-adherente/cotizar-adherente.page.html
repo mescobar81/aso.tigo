@@ -29,8 +29,12 @@
         <ion-row>
           <ion-col size="12">
 
-            <ion-select interface="popover" placeholder="Seleccionar grupo familiar">
-              <ion-select-option *ngFor="let b of beneficiarioAdherentes" [value]="b">{{b.DescripSevi}}
+            <ion-select interface="popover"
+                        name="grupoFamiliar"
+                        [(ngModel)]="grupoFamiliar"
+                        placeholder="Seleccionar grupo familiar"
+                        required>
+              <ion-select-option class="select" *ngFor="let b of gruposFamiliar" [value]="b">{{b.DescripSevi}}
               </ion-select-option>
             </ion-select>
 
@@ -77,8 +81,14 @@
           <ion-col size="12">
             <ion-list>
               <ion-item>
-                <ion-select interface="popover" placeholder="Seleccionar adherentes">
-                  <ion-select-option *ngFor="let a of adherentes" [value]="a">{{a.DescripSevi}}</ion-select-option>
+                <ion-select [multiple]="true"
+                            name="adherente"
+                            (ionChange)="agregarAdherente($event)"
+                            placeholder="Seleccionar adherentes"
+                            required>
+                  <ion-select-option *ngFor="let a of adherentes;let i =index"
+                                     [value]="a"
+                  >{{a.DescripSevi}}</ion-select-option>
                 </ion-select>
               </ion-item>
             </ion-list>
@@ -93,32 +103,31 @@
         <ion-col class="ion-text-center" size="6">Adherente</ion-col>
         <ion-col class="ion-text-center" size="6">Monto</ion-col>
       </ion-row>
-      <ion-row *ngFor="let item of [1,2,3]">
-        <ion-col class="ion-text-center" size="3">Adherente 1</ion-col>
-        <ion-col class="ion-text-center" size="4">
-          <div style="display: flex; background-color: #001F5F; width: 120px;">
+      <ion-row *ngFor="let a of adherentesAgregado;let i= index">
+        <ion-col class="ion-text-center" size="8">{{a.DescripSevi}}
+          <div class="flex">
             <div>
-              <ion-button color="warning" (click)="decrementarValor()">
+              <ion-button color="medium" (click)="decrementarValor(i)">
                 -
               </ion-button>
             </div>
-            <div style="width:30px; height:30px; margin-top: 15px; color:white;">
-              <ion-label>{{cantidad}}</ion-label>
+            <div class="flex__cantidad">
+              <ion-input type="text" id="{{i}}" name="cantidad" value="1"></ion-input>
             </div>
             <div>
-              <ion-button color="warning"  (click)="incrementarValor()">
+              <ion-button color="medium"  (click)="incrementarValor(i)">
                 +
               </ion-button>
             </div>
           </div>
         </ion-col>
-        <ion-col class="ion-text-right" size="5">56000</ion-col>
+        <ion-col class="ion-text-right" size="4">{{a.Monto | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-col>
       </ion-row>
     </ion-grid>
     <ion-grid>
       <ion-row>
         <ion-col size="6">Total:</ion-col>
-        <ion-col class="ion-text-right" size="6">56000</ion-col>
+        <ion-col class="ion-text-right" size="6">{{importeTotal | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-col>
       </ion-row>
     </ion-grid>
     <ion-grid>
@@ -127,10 +136,13 @@
         <ion-col size="8">
           <ion-item>
             <ion-label>Seleccione forma de pago</ion-label>
-            <ion-select interface="popover">
-              <ion-select-option value="peperoni">Efectivo</ion-select-option>
-              <ion-select-option value="peperoni">Tigo Money</ion-select-option>
-              <ion-select-option value="peperoni">Tarjeta Credito</ion-select-option>
+            <ion-select interface="popover" 
+                        name="formaPago"
+                       [(ngModel)]="formaPago"
+                       required>
+              <ion-select-option *ngFor="let f of formasPago"
+                                 [value]="f"
+                                 >{{f.formaPagoDesc}}</ion-select-option>
             </ion-select>
           </ion-item>
         </ion-col>

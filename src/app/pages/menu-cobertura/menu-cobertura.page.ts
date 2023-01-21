@@ -89,9 +89,8 @@ export class MenuCoberturaPage implements OnInit {
     codigoRetorno = 0;
 
     if(codigoRetorno == 0){
-      this.navCtrl.navigateRoot(`cotizar-adherente`);
+      this.navCtrl.navigateRoot(`cotizar-adherente/${codigoRetorno}`);
     }
-
   }
 
   async presentToast(position: 'top' | 'middle' | 'bottom', mensaje: string) {

@@ -423,8 +423,8 @@ export interface ResponseNuevoGrupoFamiliar {
 }
 
 export interface NuevoGrupoFamiliar {
-    monto:         number;
-    nuevocodigo:   number;
+    Monto:         number;
+    Nuevocodigo:   number;
     DescripSevi:   string;
     nuevosegmento: string;
 }

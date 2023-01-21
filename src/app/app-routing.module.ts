@@ -84,7 +84,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/inscripcion-medica-rechazo/inscripcion-medica-rechazo.module').then( m => m.InscripcionMedicaRechazoPageModule)
   },
   {
-    path: 'cotizar-adherente',
+    path: 'cotizar-adherente/:codigoRetorno',
     loadChildren: () => import('./pages/cotizar-adherente/cotizar-adherente.module').then( m => m.CotizarAdherentePageModule)
   }
 

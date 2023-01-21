@@ -1,8 +1,27 @@
-.contentgrid--cell{
-    width: 100%;
+.contentgrid--cell {
+    width           : 100%;
     background-color: #9d9fa6;
 }
 
-.btn{
+.btn {
     display: flex;
+}
+
+.flex {
+    display         : flex;
+    background-color: #001F5F;
+    border-radius   : 6px;
+    width           : 120px;
+    justify-content : center;
+}
+
+.flex__cantidad {
+    width     : 30px;
+    height    : 30px;
+    margin-top: 15px;
+    color     : white;
+}
+
+.select{
+    width: 300px;
 }
