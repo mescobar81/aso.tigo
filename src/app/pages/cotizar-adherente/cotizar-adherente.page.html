@@ -29,19 +29,20 @@
         <ion-row>
           <ion-col size="12">
 
-            <ion-select interface="popover"
+            <ion-select
                         name="grupoFamiliar"
-                        [(ngModel)]="grupoFamiliar"
+                        (ionChange)="seleccionarGrupoFamiliar($event)"
                         placeholder="Seleccionar grupo familiar"
-                        required>
-              <ion-select-option class="select" *ngFor="let b of gruposFamiliar" [value]="b">{{b.DescripSevi}}
+                        >
+              <ion-select-option class="select-option" *ngFor="let b of gruposFamiliar" [value]="b">{{b.DescripSevi}}
               </ion-select-option>
             </ion-select>
-
           </ion-col>
         </ion-row>
 
-
+        <ion-row>
+          <ion-col size="12">{{grupoFamiliar?.DescripSevi}}</ion-col>
+        </ion-row>
         <ion-row>
           <ion-col size="12">
             <ion-label>Favor Indicar:</ion-label>
@@ -85,7 +86,7 @@
                             name="adherente"
                             (ionChange)="agregarAdherente($event)"
                             placeholder="Seleccionar adherentes"
-                            required>
+                            >
                   <ion-select-option *ngFor="let a of adherentes;let i =index"
                                      [value]="a"
                   >{{a.DescripSevi}}</ion-select-option>
@@ -99,12 +100,12 @@
     </ion-grid>
 
     <ion-grid>
-      <ion-row class="contentgrid--cell">
-        <ion-col class="ion-text-center" size="6">Adherente</ion-col>
-        <ion-col class="ion-text-center" size="6">Monto</ion-col>
+      <ion-row >
+        <ion-col class="ion-text-center ion-text-center--color" size="6">Adherente/s</ion-col>
+        <ion-col class="ion-text-center ion-text-center--color" size="6">Monto</ion-col>
       </ion-row>
       <ion-row *ngFor="let a of adherentesAgregado;let i= index">
-        <ion-col class="ion-text-center" size="8">{{a.DescripSevi}}
+        <ion-col class="ion-text-center contentgrid--cell" size="8">{{a.DescripSevi}}
           <div class="flex">
             <div>
               <ion-button color="medium" (click)="decrementarValor(i)">
@@ -112,22 +113,22 @@
               </ion-button>
             </div>
             <div class="flex__cantidad">
-              <ion-input type="text" id="{{i}}" name="cantidad" value="1"></ion-input>
+              <ion-input type="text" id="{{i}}" value="1"></ion-input>
             </div>
             <div>
-              <ion-button color="medium"  (click)="incrementarValor(i)">
+              <ion-button color="medium" (click)="incrementarValor(i)">
                 +
               </ion-button>
             </div>
           </div>
         </ion-col>
-        <ion-col class="ion-text-right" size="4">{{a.Monto | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-col>
+        <ion-col class="ion-text-right contentgrid--cell" size="4">{{a.Monto | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-col>
       </ion-row>
     </ion-grid>
     <ion-grid>
       <ion-row>
         <ion-col size="6">Total:</ion-col>
-        <ion-col class="ion-text-right" size="6">{{importeTotal | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-col>
+        <ion-col class="ion-text-right ion-text-right--color" size="6">{{importeTotal | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-col>
       </ion-row>
     </ion-grid>
     <ion-grid>
@@ -146,6 +147,9 @@
             </ion-select>
           </ion-item>
         </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">{{formaPago?.formaPagoDesc}}</ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="12">

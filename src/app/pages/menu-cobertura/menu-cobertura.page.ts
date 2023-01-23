@@ -76,14 +76,15 @@ export class MenuCoberturaPage implements OnInit {
   async agregarBeneficiarioAdherente(){
     const {nroSocio} = await this.storageSvr.getUsuario();
     
-    let {codigoRetorno, Nomserv, codigo, Popcion, idplan, codsegmento, beneficio} = await this.coberturaMedicaService.getSolicitudBeneficiarioAdherente('114');
+    let {codigoRetorno, Nomserv, codigo, Popcion, idplan, codsegmento, beneficio, nroSolicitud} = await this.coberturaMedicaService.getSolicitudBeneficiarioAdherente(nroSocio);
     const beneficiario = {
       Nomserv,
       codigo,
       Popcion,
       idplan,
       codsegmento,
-      beneficio
+      beneficio,
+      nroSolicitud
     }
     await this.storageSvr.guardarDatosDeBeneficiarioAdherente(beneficiario);
     codigoRetorno = 0;

@@ -116,7 +116,7 @@ export class AdjuntarDocumentoPage implements OnInit {
 
           let blob = new Blob([new Uint8Array(res.target.result)], { type: file.type });
 
-          //array de archivos para enviar al servicio web
+          //array de archivos adjuntados para enviar al servicio web
           this.adjuntos.push({
             blob: blob,
             name: file.name

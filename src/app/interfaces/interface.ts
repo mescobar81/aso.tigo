@@ -440,3 +440,9 @@ export interface Adherente {
     Monto:       number;
     DescripSevi: string;
 }
+
+export interface ResponseStatusCotizaAdherente{
+    nroSolicitud: string;
+    mensaje: string;    
+    status: string;
+}

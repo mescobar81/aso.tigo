@@ -18,12 +18,20 @@ export class CotizarAdherentePage implements OnInit {
   cantidad:number = 1;
   importeTotal:number = 0;
   formasPago: FormasPago[] = [];
-  grupoFamiliar!:NuevoGrupoFamiliar;
+  grupoFamiliar:NuevoGrupoFamiliar = {
+    Nuevocodigo:0,
+    DescripSevi:'',
+    Monto:0,
+    nuevosegmento:''
+  };
   formaPago!:FormasPago;
   gruposFamiliar:NuevoGrupoFamiliar[] =  [];
   adherentes:Adherente[] = [];
   adherentesAgregado:Adherente[] = [];
   adherenteAuxiliar = [];
+  codigoSegmento:string = '';
+  nroSolicitud:number = 0;
+  codigoGrupoFamilia:number = 0;
   constructor(private coberturaMedicaSvr: CoberturaMedicaService,
     private activatedRoute: ActivatedRoute,
     private navCtrl: NavController,
@@ -34,39 +42,67 @@ export class CotizarAdherentePage implements OnInit {
    }
 
   async ngOnInit() {
-    const {Nomserv, codigo, Popcion, idplan, codsegmento, beneficio} = await this.storageService.getDatoBeneficiarioAdherente();
-    this.formasPago =  (await this.formaPagoSvr.listarFormasDePagos()).FormasPago;
+    const {Nomserv, codigo, Popcion, idplan, codsegmento, beneficio, nroSolicitud} = await this.storageService.getDatoBeneficiarioAdherente();
+    this.codigoGrupoFamilia = codigo;
+    this.codigoSegmento = codsegmento;
+    this.nroSolicitud = nroSolicitud;
     this.titulo = Nomserv;
-    this.gruposFamiliar =  (await this.coberturaMedicaSvr.getNuevoGrupoFamiliar(codigo, codsegmento, idplan, beneficio, Popcion)).NuevoGrupoFamilia;
+    this.listarFormasDePago();
+    this.listarGruposFamiliar(codigo, codsegmento, idplan, beneficio, Popcion);
+    this.listarAdherentes(idplan);
+  }
+
+  async listarFormasDePago(){
+    this.formasPago =  (await this.formaPagoSvr.listarFormasDePagos()).FormasPago;
+  }
+
+  async listarGruposFamiliar(codigo:string, codSegmento:string, idPlan:string, beneficio:string, pOpcion:string){
+
+    this.gruposFamiliar =  (await this.coberturaMedicaSvr.getNuevoGrupoFamiliar(codigo, codSegmento, idPlan, beneficio, pOpcion)).NuevoGrupoFamilia;
+  }
+
+  async listarAdherentes(idplan:string){
     this.adherentes =  (await this.coberturaMedicaSvr.obtenerAdherentes(idplan)).Adherente;
   }
 
+  seleccionarGrupoFamiliar(e:any){
+    this.grupoFamiliar = e.detail.value;
+  }
   async cotizar(fCotizar:NgForm){
     console.log(fCotizar.invalid);
     if(fCotizar.invalid){
       this.presentToast('bottom', 'Favor. Ingresar campos requeridos');
       return;
     }
-    const nroSolicitud = await this.storageService.getNroSolicitud();
+    console.log(this.grupoFamiliar.Nuevocodigo);
+    
+    console.log(fCotizar);
+    
     const {nroSocio, nombre} = await this.storageService.getUsuario();
+
     const cotizacion = {
       nroSocio: Number(nroSocio),
       nombre,
-      nroSolicitud,
+      nroSolicitud:this.nroSolicitud,
       importeTotal: this.importeTotal,
       formaPago:this.formaPago.formaPagoId,
-      codigoGrupoFamilia:this.grupoFamiliar.Nuevocodigo,
-      montoGrupoFamilia:this.grupoFamiliar.Monto,
+      codigoGrupoFamilia:this.codigoGrupoFamilia,
+      montoGrupoFamilia:0,
+      SegmentoGrupoFamilia:this.codigoSegmento,
+      NuevocodigoGrupoFamilia:this.grupoFamiliar.Nuevocodigo,
+      NuevoDescripSeviGrupoFamilia:this.grupoFamiliar.DescripSevi,
+      NuevoSegmentoGrupoFamilia:this.grupoFamiliar.nuevosegmento,
+      NuevomontoGrupoFamilia:this.grupoFamiliar.Monto,
       adherentes:this.adherentesAgregado
     };
     console.log(cotizacion);
 
-    /*const {mensaje, status} = await this.coberturaMedicaSvr.enviarCotizacion(cotizacion);
+    /*const {mensaje, status} = await this.coberturaMedicaSvr.enviarCotizacionAdhrente(cotizacion);
     if(status == 'success'){
       this.presentarModal('Cotización', mensaje, true);
     }else{
       this.presentarModal('Cotización', mensaje, false);
-    } */
+    }*/
   }
 
   agregarAdherente(e:any){
@@ -115,7 +151,9 @@ export class CotizarAdherentePage implements OnInit {
         --cantidad;
         inputComponente.value = cantidad;
         montoDecrementado-=montoInicial;
+        //actualiza el monto en el arreglo de adherentes
         this.adherentesAgregado[indice].Monto = montoDecrementado;
+        //actualiza el monto si mientras se decrementa en los botonnes
         this.importeTotal -= montoInicial;
         break;
       }

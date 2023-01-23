@@ -10,7 +10,8 @@ import {
   ResponseValidaInscripcion,
   ResponseRecuperarAdjuntos,
   ResponseBeneficiarioAdherente,
-  ResponseNuevoGrupoFamiliar
+  ResponseNuevoGrupoFamiliar,
+  ResponseStatusCotizaAdherente
 } from '../interfaces/interface';
 
 const urlBase = environment.urlBase;
@@ -147,6 +148,22 @@ export class CoberturaMedicaService {
             reject(err);
           }
         });
+    });
+  }
+
+  enviarCotizacionAdhrente(cotizacion:any):Promise<ResponseStatusCotizaAdherente> {
+    return new Promise<ResponseStatusCotizaAdherente>((resolve, reject) => {
+      this.http.post(`${urlBase}/cotizarAdherente`, cotizacion).subscribe((resp:ResponseStatusCotizaAdherente) =>{
+        if(resp.status === 'success'){
+          resolve(resp);
+        }else{
+          resolve(resp);
+        }
+      }, (err) =>{
+        console.log(JSON.stringify(err));
+        
+        reject(err);
+      });
     });
   }
 
