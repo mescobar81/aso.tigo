@@ -20,6 +20,8 @@ export class AdjuntarDocumentoPage implements OnInit {
   adjuntos: any[] = [];
   adjuntados: string[] = [];
   file: File;
+  mensaje:string = '';
+  status:string = '';
   dato = {
     nroSolicitud:'',
     nombre:''
@@ -35,13 +37,13 @@ export class AdjuntarDocumentoPage implements OnInit {
   async ngOnInit() {
     const codigoRetorno = this.activatedRoute.snapshot.params.codigoRetorno;
     const nroSolicitud = await this.storageSrv.getNroSolicitud();
-
+    this.dato.nroSolicitud = nroSolicitud;
     //ver: codigo 94 para saber si la solicitud es rechazada por la clinica medica
     //solo para recuperacion de documentos adjuntos
     if(codigoRetorno == 94){
       const {status, mensaje, ArchivoAdjunto} = await this.coberturaMedicaSrv.recuperarAdjuntos(Number(nroSolicitud));
 
-      if(status == 'success'){
+      if(status === 'success'){
         try {
           if(ArchivoAdjunto.length > 0){
             ArchivoAdjunto.forEach(async a =>{
@@ -137,20 +139,16 @@ export class AdjuntarDocumentoPage implements OnInit {
     }
 
     this.dato.nombre = (await this.storageSrv.getUsuario()).nombre;
-    this.dato.nroSolicitud = await this.storageSrv.getNroSolicitud();
-
+    
     const {status, mensaje} = await this.coberturaMedicaSrv.enviarAsismed(this.dato);
 
     if(status === 'success'){
       await this.presentarModal('Solicitud Asismed', mensaje, true);
+    }else{
+      await this.presentarModal('Solicitud Asismed', mensaje, false);
     }
-    //limpia los datos del envio a asismed
-    this.dato = {
-      nroSolicitud:'',
-      nombre:''
-    };
         
-    //llamamos a este metodo para enviar un archivo adjunto
+    //llamamos a este metodo para enviar un archivos adjuntos
     //en caso que el usuario haya presionado enviar a asismed
     this.subirAdjunto();
   }
@@ -162,19 +160,19 @@ export class AdjuntarDocumentoPage implements OnInit {
       this.presentToast('bottom', 'Favor ingresar archivos adjuntos');
       return;
     }
-
-    this.dato.nroSolicitud = await this.storageSrv.getNroSolicitud();
+    console.log('DATO: ' + JSON.stringify(this.dato));
     
     try {
       this.adjuntos.forEach(async (file: any) => {
         
         let formData = new FormData();
         formData.append('file', file.blob, file.name);
-        formData.append('nroSolicitud', this.dato.nroSolicitud.toString().trim());
+        formData.append('nroSolicitud', this.dato.nroSolicitud);
         
         const { status, mensaje } = await this.coberturaMedicaSrv.subirAdjunto(formData);
-
-        if (status == 'success') {
+        if (status === 'success') {
+          await this.presentToast('bottom', mensaje);
+        }else{
           await this.presentToast('bottom', mensaje);
         }
       });
@@ -183,10 +181,10 @@ export class AdjuntarDocumentoPage implements OnInit {
       console.log(JSON.stringify(error));
       this.presentarModal('Archivos adjuntos', error, false);
     }
-
     this.limpiarDatos();
     this.navCtrl.navigateRoot('inicio/menu-cobertura');
   }
+
 
   eliminarAdjunto(index:number){
     this.adjuntados.splice(index, 1);

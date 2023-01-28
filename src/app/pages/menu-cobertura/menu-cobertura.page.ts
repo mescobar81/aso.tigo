@@ -76,7 +76,7 @@ export class MenuCoberturaPage implements OnInit {
   async agregarBeneficiarioAdherente(){
     const {nroSocio} = await this.storageSvr.getUsuario();
     
-    let {codigoRetorno, Nomserv, codigo, Popcion, idplan, codsegmento, beneficio, nroSolicitud} = await this.coberturaMedicaService.getSolicitudBeneficiarioAdherente(nroSocio);
+    let {codigoRetorno, Nomserv, codigo, Popcion, idplan, codsegmento, beneficio, nroSolicitud, descripcionRespuesta} = await this.coberturaMedicaService.getSolicitudBeneficiarioAdherente(nroSocio);
     const beneficiario = {
       Nomserv,
       codigo,
@@ -84,13 +84,28 @@ export class MenuCoberturaPage implements OnInit {
       idplan,
       codsegmento,
       beneficio,
-      nroSolicitud
+      descripcionRespuesta
     }
     await this.storageSvr.guardarDatosDeBeneficiarioAdherente(beneficiario);
-    codigoRetorno = 0;
-
+    await this.storageSvr.guardarNroSolicitud(nroSolicitud);
+    //codigoRetorno = 0;
+    console.log('Cod. Retorno: ' + codigoRetorno);
+    
     if(codigoRetorno == 0){
       this.navCtrl.navigateRoot(`cotizar-adherente/${codigoRetorno}`);
+    }
+    if(codigoRetorno == 99){
+      this.presentToast('bottom', descripcionRespuesta);
+    }
+
+    if(codigoRetorno == 96){
+      this.navCtrl.navigateRoot(`adjuntar-documento/${codigoRetorno}`);
+    }
+    if(codigoRetorno == 95){
+      this.presentToast('bottom', descripcionRespuesta);
+    }
+    if(codigoRetorno == 94){
+      this.navCtrl.navigateRoot(`inscripcion-medica-rechazo/${descripcionRespuesta}/${codigoRetorno}`);
     }
   }
 

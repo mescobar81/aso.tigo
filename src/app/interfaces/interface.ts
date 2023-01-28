@@ -426,7 +426,7 @@ export interface NuevoGrupoFamiliar {
     Monto:         number;
     Nuevocodigo:   number;
     DescripSevi:   string;
-    nuevosegmento: string;
+    Nuevosegmento: string;
 }
 
 export interface ResponseAdherente {

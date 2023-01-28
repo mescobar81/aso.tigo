@@ -22,7 +22,7 @@ export class CotizarAdherentePage implements OnInit {
     Nuevocodigo:0,
     DescripSevi:'',
     Monto:0,
-    nuevosegmento:''
+    Nuevosegmento:''
   };
   formaPago!:FormasPago;
   gruposFamiliar:NuevoGrupoFamiliar[] =  [];
@@ -32,6 +32,8 @@ export class CotizarAdherentePage implements OnInit {
   codigoSegmento:string = '';
   nroSolicitud:number = 0;
   codigoGrupoFamilia:number = 0;
+  conyugue:string = '';
+  hijo:string = '';
   constructor(private coberturaMedicaSvr: CoberturaMedicaService,
     private activatedRoute: ActivatedRoute,
     private navCtrl: NavController,
@@ -42,10 +44,11 @@ export class CotizarAdherentePage implements OnInit {
    }
 
   async ngOnInit() {
-    const {Nomserv, codigo, Popcion, idplan, codsegmento, beneficio, nroSolicitud} = await this.storageService.getDatoBeneficiarioAdherente();
+    const {Nomserv, codigo, Popcion, idplan, codsegmento, beneficio} = await this.storageService.getDatoBeneficiarioAdherente();
+    const nroSolicitud = await this.storageService.getNroSolicitud();
+    this.nroSolicitud = parseInt(nroSolicitud);
     this.codigoGrupoFamilia = codigo;
     this.codigoSegmento = codsegmento;
-    this.nroSolicitud = nroSolicitud;
     this.titulo = Nomserv;
     this.listarFormasDePago();
     this.listarGruposFamiliar(codigo, codsegmento, idplan, beneficio, Popcion);
@@ -68,13 +71,29 @@ export class CotizarAdherentePage implements OnInit {
   seleccionarGrupoFamiliar(e:any){
     this.grupoFamiliar = e.detail.value;
   }
+
+  seleccionarConyugue(e:any){
+     if(e.detail.checked){
+      this.conyugue = 'S';
+      return;
+     }
+     this.conyugue = 'N';
+  }
+
+  seleccionarHijo(e:any){
+    if(e.detail.checked){
+      this.hijo = 'S';
+      return;
+    }
+    this.hijo = 'N';
+  }
+
   async cotizar(fCotizar:NgForm){
     console.log(fCotizar.invalid);
     if(fCotizar.invalid){
-      this.presentToast('bottom', 'Favor. Ingresar campos requeridos');
+      this.presentToast('bottom', '¡Favor!. Seleccionar forma de pago');
       return;
     }
-    console.log(this.grupoFamiliar.Nuevocodigo);
     
     console.log(fCotizar);
     
@@ -87,29 +106,41 @@ export class CotizarAdherentePage implements OnInit {
       importeTotal: this.importeTotal,
       formaPago:this.formaPago.formaPagoId,
       codigoGrupoFamilia:this.codigoGrupoFamilia,
-      montoGrupoFamilia:0,
       SegmentoGrupoFamilia:this.codigoSegmento,
       NuevocodigoGrupoFamilia:this.grupoFamiliar.Nuevocodigo,
       NuevoDescripSeviGrupoFamilia:this.grupoFamiliar.DescripSevi,
-      NuevoSegmentoGrupoFamilia:this.grupoFamiliar.nuevosegmento,
+      NuevoSegmentoGrupoFamilia:this.grupoFamiliar.Nuevosegmento,
       NuevomontoGrupoFamilia:this.grupoFamiliar.Monto,
-      adherentes:this.adherentesAgregado
+      adherentes:this.adherentesAgregado,
+      conyugue:this.conyugue,
+      hijo:this.hijo
     };
     console.log(cotizacion);
 
-    /*const {mensaje, status} = await this.coberturaMedicaSvr.enviarCotizacionAdhrente(cotizacion);
+    const {mensaje, status, nroSolicitud} = await this.coberturaMedicaSvr.enviarCotizacionAdhrente(cotizacion);
     if(status == 'success'){
+      await this.storageService.guardarNroSolicitud(parseInt(nroSolicitud));
       this.presentarModal('Cotización', mensaje, true);
     }else{
       this.presentarModal('Cotización', mensaje, false);
-    }*/
+    }
   }
 
   agregarAdherente(e:any){
-    const adherente:Adherente[] = e.detail.value;
     this.adherenteAuxiliar = [];
+    this.adherentesAgregado = [];
     this.importeTotal = 0;
-    this.adherentesAgregado = adherente;
+    console.log(e.detail.value);
+    
+    e.detail.value.forEach((a) =>{
+      let adherenteAgregado = {
+        codigo:a.codigo,
+        Monto:a.Monto,
+        DescripSevi:a.DescripSevi,
+      }
+      this.adherentesAgregado.push(adherenteAgregado);
+    });
+
     this.adherentesAgregado.forEach(a =>{
       this.adherenteAuxiliar.push({Monto:a.Monto});
       this.importeTotal += a.Monto;
@@ -153,7 +184,7 @@ export class CotizarAdherentePage implements OnInit {
         montoDecrementado-=montoInicial;
         //actualiza el monto en el arreglo de adherentes
         this.adherentesAgregado[indice].Monto = montoDecrementado;
-        //actualiza el monto si mientras se decrementa en los botonnes
+        //actualiza el monto mientras se presiona en los botonnes
         this.importeTotal -= montoInicial;
         break;
       }
