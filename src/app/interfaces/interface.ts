@@ -446,3 +446,49 @@ export interface ResponseStatusCotizaAdherente{
     mensaje: string;    
     status: string;
 }
+
+export interface ResponseValidarBaja {
+    descripcionRespuesta: string;
+    estado:               string;
+    codigo:               number;
+    Popcion:              string;
+    idplan:               string;
+    Nomserv?:              string;
+    codsegmento:          string;
+    comentario:           string;
+    parametrosGlobales:   ParametrosGlobalesBaja;
+    codigoRetorno:        number;
+    nroSolicitud:         number;
+    beneficio:            string;
+    nroSocio:             number;
+    mensaje:              string;
+    status:               string;
+}
+
+export interface ParametrosGlobalesBaja {
+    appVersionActualPlayStore: number;
+    estado:                    boolean;
+    importeMinimoOrden:        number;
+    importeMinimoPrestamo:     number;
+    requiereUpdate:            boolean;
+}
+
+export interface ResponseConsultaAdherenteBySocio {
+    AdherenteSocio: AdherenteSocio[];
+    mensaje:        string;
+    status:         string;
+}
+
+export interface AdherenteSocio {
+    codigo:      number;
+    beneficio:   string;
+    segmento:    string;
+    codplan:     string;
+    descripSevi: string;
+}
+
+export interface ResponseStatusBajaParcial{
+    nroSolicitud:string;
+    mensaje: string;
+    status: string;
+}

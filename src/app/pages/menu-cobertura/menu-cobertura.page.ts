@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavController, ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
 
 import { CoberturaMedicaService } from 'src/app/services/cobertura-medica.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { environment } from 'src/environments/environment';
+
+const urlDescargaDocumento = environment.urlDescargaDocumento;
 
 @Component({
   selector: 'app-menu-cobertura',
   templateUrl: './menu-cobertura.page.html',
   styleUrls: ['./menu-cobertura.page.scss'],
 })
-export class MenuCoberturaPage implements OnInit {
+export class MenuCoberturaPage {
 
   constructor(private navCtrl: NavController,
     private browser: InAppBrowser,
@@ -21,15 +24,12 @@ export class MenuCoberturaPage implements OnInit {
     private toastCtrl: ToastController,
     private coberturaMedicaService: CoberturaMedicaService) { }
 
-  ngOnInit() {
-  }
-
   descargarDocumento() {
     const platform = this.device.platform;
     if (platform === 'ios' || platform === 'android') {
-      this.browser.create('https://www.web.asotigo.com.py/seguromedico');
+      this.browser.create(urlDescargaDocumento);
     } else {
-      window.open('https://www.web.asotigo.com.py/seguromedico', '_blank');
+      window.open(urlDescargaDocumento, '_blank');
     }
   }
 
@@ -106,6 +106,53 @@ export class MenuCoberturaPage implements OnInit {
     }
     if(codigoRetorno == 94){
       this.navCtrl.navigateRoot(`inscripcion-medica-rechazo/${descripcionRespuesta}/${codigoRetorno}`);
+    }
+  }
+
+  async irOpcionBajas(){
+
+    const {nroSocio} = await this.storageSvr.getUsuario();
+    const {codigo, codigoRetorno, Nomserv, nroSolicitud, descripcionRespuesta, Popcion, idplan, beneficio, codsegmento} = await this.coberturaMedicaService.validarBaja(nroSocio);
+    let validacionBaja = {
+      codigo,
+      codigoRetorno,
+      Nomserv,
+      nroSolicitud,
+      descripcionRespuesta,
+      Popcion,
+      idplan,
+      beneficio,
+      codsegmento
+    };
+
+    //guarda los datos de la validacion de baja en el local storage
+    //para usar posterior en la pantall de baja parcial
+    await this.storageSvr.guardarValidacionBaja(validacionBaja);
+    console.log(codigoRetorno);
+    
+    if(codigoRetorno == 0){
+      this.navCtrl.navigateRoot('opcion-bajas');
+    }
+    if(codigoRetorno == 99){
+      this.presentToast('bottom', descripcionRespuesta);
+    }
+    if(codigoRetorno == 96){
+      this.navCtrl.navigateRoot('opcion-baja-parcial');
+    }
+    if(codigoRetorno == 95){
+      this.presentToast('bottom', descripcionRespuesta);
+    }
+    if(codigoRetorno == 94){
+      this.presentToast('bottom', descripcionRespuesta);
+    }
+    if(codigoRetorno == 93){
+      this.presentToast('bottom', descripcionRespuesta);
+    }
+    if(codigoRetorno == 92){
+      this.presentToast('bottom', descripcionRespuesta);
+    }
+    if(codigoRetorno == 91){
+      this.presentToast('bottom', descripcionRespuesta);
     }
   }
 

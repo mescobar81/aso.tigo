@@ -53,7 +53,14 @@ export class StorageService {
   async guardarDatosDeBeneficiarioAdherente(beneficiario:any){
     await this.storage.set('beneficiario', beneficiario);
   }
+
+  async guardarValidacionBaja(validacionBaja:any){
+    await this.storage.set('baja', validacionBaja);
+  }
   
+  async getValidacionBaja(){
+    return this.storage.get('baja');
+  }
   async getDatoBeneficiarioAdherente(){
     return this.storage.get('beneficiario');
   }

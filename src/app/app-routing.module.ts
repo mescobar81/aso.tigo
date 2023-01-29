@@ -86,7 +86,19 @@ const routes: Routes = [
   {
     path: 'cotizar-adherente/:codigoRetorno',
     loadChildren: () => import('./pages/cotizar-adherente/cotizar-adherente.module').then( m => m.CotizarAdherentePageModule)
+  },  {
+    path: 'opcion-bajas',
+    loadChildren: () => import('./pages/opcion-bajas/opcion-bajas.module').then( m => m.OpcionBajasPageModule)
+  },
+  {
+    path: 'opcion-baja-parcial',
+    loadChildren: () => import('./pages/opcion-baja-parcial/opcion-baja-parcial.module').then( m => m.OpcionBajaParcialPageModule)
+  },
+  {
+    path: 'opcion-baja-total',
+    loadChildren: () => import('./pages/opcion-baja-total/opcion-baja-total.module').then( m => m.OpcionBajaTotalPageModule)
   }
+
 
 
 

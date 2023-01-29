@@ -11,7 +11,9 @@ import {
   ResponseRecuperarAdjuntos,
   ResponseBeneficiarioAdherente,
   ResponseNuevoGrupoFamiliar,
-  ResponseStatusCotizaAdherente
+  ResponseStatusCotizaAdherente,
+  ResponseValidarBaja,
+  ResponseStatusBajaParcial
 } from '../interfaces/interface';
 
 const urlBase = environment.urlBase;
@@ -268,6 +270,73 @@ export class CoberturaMedicaService {
         reject(err);
       });
     });
+  }
+
+  validarBaja(nroSocio:string):Promise<ResponseValidarBaja>{
+
+    return new Promise<ResponseValidarBaja>((resolve, reject) => {
+      this.http.get(`${urlBase}/validaBaja?nroSocio=${nroSocio}`).
+      subscribe((resp:ResponseValidarBaja) => {
+        if(resp.status === 'success') {
+          console.log(resp);
+          
+          resolve(resp);
+        }else {
+          resolve(resp);
+        }
+      }, err => {
+        console.log(JSON.stringify(err));
+        reject(err);
+      });
+    });
+
+  }
+
+  enviarSolicitudBajaTotal(formData:FormData):Promise<ResponseStatusMessage>{
+    return new Promise<ResponseStatusMessage>((resolve, reject) =>{
+      this.http.post(`${urlBase}/enviarBajaTotal`, formData).
+      subscribe((resp: ResponseStatusMessage) =>{
+        if(resp.status == 'success'){
+          resolve(resp);
+        }else{
+          resolve(resp);
+        }
+      }, (err) =>{
+        console.log(JSON.stringify(err));
+        reject(err);
+      });
+    });
+  }
+
+  enviarSolicitudBajaParcial(formData: FormData):Promise<ResponseStatusBajaParcial>{
+    return new Promise<ResponseStatusBajaParcial>((resolve, reject) =>{
+      this.http.post(`${urlBase}/enviarBajaParcial`, formData).
+      subscribe((resp:ResponseStatusBajaParcial) =>{
+        if(resp.status === 'success'){
+          console.log(resp);
+          
+          resolve(resp);
+        }else{
+          resolve(resp);
+        }
+      }, err =>{
+        console.log(JSON.stringify(err));
+        reject(err);
+      });
+    });
+  }
+
+  listarAdherenteBySocio(nroSocio:string):Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.http.get(`${urlBase}/consultaAdherenteSocio?Pnrosoc=${nroSocio}`).
+      subscribe((resp:any) => {
+        resolve(resp);
+      }, (err) => {
+        console.log(JSON.stringify(err));
+        reject(err);
+      });
+    });
+
   }
   /**
    * convierte la representacion de cadena en formato file a partir de una url

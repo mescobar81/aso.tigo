@@ -47,6 +47,17 @@
     font-weight: bold;
 }
 
-.select-option{
-    font-size: 12px !important;
+
+.list{
+    border: 2px solid #001F5F;
+    width:96%;
+    margin: 0 auto;
+}
+.list__item{
+    font-size: 10px;
+}
+
+.list__item__checked{
+    width: 18px;
+    height: 18px;
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { File, FileEntry } from '@awesome-cordova-plugins/file/ngx';
 import { Camera, CameraResultType, Photo } from '@capacitor/camera';
-import { ModalController, NavController, ToastController } from '@ionic/angular';
+import { ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 import { CoberturaMedicaService } from 'src/app/services/cobertura-medica.service';
 import { StorageService } from 'src/app/services/storage.service';
@@ -70,7 +70,7 @@ export class AdjuntarDocumentoPage implements OnInit {
   seleccionarArchivo(event: any) {
 
     this.file = event.target.files[0];
-    this.adjuntados.push(event.target.files[0].name);//para mostrar en la vista de ususario los nombres
+    this.adjuntados.push(event.target.files[0].name);//para mostrar los nombres de archivo al usuario
     this.adjuntos.push({
       blob: this.file,
       name: event.target.files[0].name
@@ -106,6 +106,7 @@ export class AdjuntarDocumentoPage implements OnInit {
     this.adjuntados.push(image.path.substring(54));
 
     //TO DO: pones validacion para verificar si es dispositivo o web
+
     this.archivo.resolveLocalFilesystemUrl(this.image.path).then((fileEntry: FileEntry) => {
       fileEntry.file(file => {
         const reader = new FileReader();
@@ -160,7 +161,6 @@ export class AdjuntarDocumentoPage implements OnInit {
       this.presentToast('bottom', 'Favor ingresar archivos adjuntos');
       return;
     }
-    console.log('DATO: ' + JSON.stringify(this.dato));
     
     try {
       this.adjuntos.forEach(async (file: any) => {
