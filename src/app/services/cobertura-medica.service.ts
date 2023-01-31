@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/dist/types/internal/Observable';
 import { environment } from 'src/environments/environment';
 import {
   ResponseAdherente,
@@ -308,28 +309,47 @@ export class CoberturaMedicaService {
     });
   }
 
-  enviarSolicitudBajaParcial(formData: FormData):Promise<ResponseStatusBajaParcial>{
-    return new Promise<ResponseStatusBajaParcial>((resolve, reject) =>{
-      this.http.post(`${urlBase}/enviarBajaParcial`, formData).
+  enviarSolicitudBajaParcial(formData: FormData):Observable<ResponseStatusBajaParcial>{
+    /* return new Promise<ResponseStatusBajaParcial>((resolve, reject) =>{
+      this.http.post(`${urlBase}/enviarBajaParcial`, formData)
+      .subscribe({
+        next: (resp: ResponseStatusBajaParcial) => {
+          if (resp.status == 'success') {
+            resolve(resp);
+          } else {
+            resolve(resp);
+          }
+        },
+        error: (err: any) => {
+          console.log(JSON.stringify(err));
+
+          reject(err);
+        }
+      });
+    }); */
+
+    return this.http.post(`${urlBase}/enviarBajaParcial`, formData);
+    /* const urlBajaParcial = `${urlBase}/enviarBajaParcial`;
+    return this.http.post(urlBajaParcial, formData).
       subscribe((resp:ResponseStatusBajaParcial) =>{
         if(resp.status === 'success'){
           console.log(resp);
           
-          resolve(resp);
         }else{
-          resolve(resp);
+          console.log(resp);
+          
         }
-      }, err =>{
+      },  err => {
         console.log(JSON.stringify(err));
-        reject(err);
-      });
-    });
+
+      }); */
   }
 
   listarAdherenteBySocio(nroSocio:string):Promise<any> {
     return new Promise<any>((resolve, reject) => {
       this.http.get(`${urlBase}/consultaAdherenteSocio?Pnrosoc=${nroSocio}`).
       subscribe((resp:any) => {
+        
         resolve(resp);
       }, (err) => {
         console.log(JSON.stringify(err));

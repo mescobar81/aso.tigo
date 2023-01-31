@@ -16,7 +16,7 @@ export class OpcionBajaParcialPage implements OnInit {
   file!: File;
   nomserv: string = '';
   adherente: any = {};
-  adherenteExcluido: any[] = [];
+  adherentesExcluido: any[] = [];
   solicitudAdjuntados: any[] = [];
   gruposFamiliar: NuevoGrupoFamiliar[] = [];
   grupoFamiliar?: NuevoGrupoFamiliar;
@@ -68,11 +68,11 @@ export class OpcionBajaParcialPage implements OnInit {
 
   excluirAdherente(e: any) {
     if (e.detail.checked) {
-      this.adherenteExcluido.push({codigo:e.detail.value.codigo});
+      this.adherentesExcluido.push({codigo:e.detail.value.codigo});
     } else {
-      for (let i = 0; i < this.adherenteExcluido.length; i++) {
-        if (e.detail.value.codigo === this.adherenteExcluido[i].codigo) {
-          this.adherenteExcluido.splice(i, 1);
+      for (let i = 0; i < this.adherentesExcluido.length; i++) {
+        if (e.detail.value.codigo === this.adherentesExcluido[i].codigo) {
+          this.adherentesExcluido.splice(i, 1);//sacamos el adherente del indice especificado
           break;
         }
       }
@@ -93,7 +93,7 @@ export class OpcionBajaParcialPage implements OnInit {
   }
 
   async enviarSolicitud() {
-    if(!this.grupoFamiliar){
+   if(!this.grupoFamiliar){
       this.presentToast('bottom', '¡Incluir integrante grupo familiar!');
       return;
     }
@@ -101,7 +101,7 @@ export class OpcionBajaParcialPage implements OnInit {
       this.presentToast('bottom', '¡Agregue solicitud de baja antes de enviar!');
       return;
     }
-    if (this.adherenteExcluido.length === 0) {
+    if (this.adherentesExcluido.length === 0) {
       this.presentToast('bottom', '¡Seleccione al menos un adherente!');
       return;
     }
@@ -110,22 +110,22 @@ export class OpcionBajaParcialPage implements OnInit {
     const { nroSocio, nombre } = await this.storageService.getUsuario();
     const { codigo, codsegmento } = await this.storageService.getValidacionBaja();
     const formData = new FormData();
-    const json = {
-      codigoGrupoFamila: codigo,
-      SegmentoGrupoFamilia: codsegmento,
-      NuevoCodigoGrupoFamilia: this.grupoFamiliar.Nuevocodigo,
-      NuevoSegmentoGrupoFamilia: this.grupoFamiliar.Nuevosegmento,
-      conyugue: this.conyugue,
-      hijo: this.hijo,
-      adherentes: this.adherenteExcluido
-    };
-    console.log(json);
 
+    const json = {
+      "SegmentoGrupoFamilia": codsegmento,
+      "codigoGrupoFamilia": codigo,
+      "NuevocodigoGrupoFamilia": this.grupoFamiliar.Nuevocodigo,
+      "NuevoSegmentoGrupoFamilia": this.grupoFamiliar.Nuevosegmento,
+      "conyugue":this.conyugue,
+      "hijo":this.hijo,
+      "adherentes": this.adherentesExcluido
+    };
+    
     formData.append('file', this.blob, this.solicitudAdjuntados[0].name);
     formData.append('nroSolicitud', nroSolicitud);
     formData.append('nroSocio', nroSocio);
     formData.append('nombre', nombre);
-    formData.append('json', JSON.stringify(json));
+    formData.append('json', `"${JSON.stringify(json)}"`);
 
     console.log(formData.get('file'));
     console.log(formData.get('nroSolicitud'));
@@ -134,15 +134,20 @@ export class OpcionBajaParcialPage implements OnInit {
     console.log(formData.get('json'));
     
     try {
-      const { status, mensaje } = await this.coberturaMedicaService.enviarSolicitudBajaParcial(formData);
-      if (status === 'success') {
+      //const {status, mensaje, nroSolicitud} = await this.coberturaMedicaService.enviarSolicitudBajaParcial(formData);
+      this.coberturaMedicaService.enviarSolicitudBajaParcial(formData).subscribe(resp =>{
+        if(resp.status === 'success'){
+          this.presentarModal('Baja Parcial', resp.mensaje, true);
+        }else{
+          this.presentarModal('Baja Parcial', resp.mensaje, false);
+        }
+      });
+      /*if (status === 'success') {
         this.presentarModal('Baja Parcial', mensaje, true);
       } else {
         this.presentarModal('Baja Parcial', mensaje, false);
-      }
+      }*/
     } catch (error) {
-      console.log(error);
-
       this.presentarModal('Baja Parcial', JSON.stringify(error), false);
     }
   }
