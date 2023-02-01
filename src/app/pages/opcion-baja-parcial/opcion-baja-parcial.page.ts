@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { File } from '@awesome-cordova-plugins/file/ngx';
-import { ModalController, ToastController } from '@ionic/angular';
+import { ModalController, NavController, ToastController } from '@ionic/angular';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 import { CoberturaMedicaService } from 'src/app/services/cobertura-medica.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { environment } from 'src/environments/environment';
 import { NuevoGrupoFamiliar } from '../../interfaces/interface';
 
+const urlBase = environment.urlBase;
 @Component({
   selector: 'app-opcion-baja-parcial',
   templateUrl: './opcion-baja-parcial.page.html',
@@ -24,6 +26,7 @@ export class OpcionBajaParcialPage implements OnInit {
   hijo: string = 'N';
   blob!: any;
   constructor(private storageService: StorageService,
+    private navCtrl: NavController,
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
     private coberturaMedicaService: CoberturaMedicaService) { }
@@ -62,8 +65,6 @@ export class OpcionBajaParcialPage implements OnInit {
 
   seleccionarGrupoFamiliar(e: any) {
     this.grupoFamiliar = e.detail.value;
-    console.log(this.grupoFamiliar);
-
   }
 
   excluirAdherente(e: any) {
@@ -88,7 +89,7 @@ export class OpcionBajaParcialPage implements OnInit {
     this.solicitudAdjuntados = [];
     this.file = e.target.files[0];
     this.blob = this.file;
-    this.solicitudAdjuntados.push({ name: e.target.files[0].name });
+    this.solicitudAdjuntados.unshift({ name: e.target.files[0].name });
 
   }
 
@@ -114,8 +115,8 @@ export class OpcionBajaParcialPage implements OnInit {
     const json = {
       "SegmentoGrupoFamilia": codsegmento,
       "codigoGrupoFamilia": codigo,
-      "NuevocodigoGrupoFamilia": this.grupoFamiliar.Nuevocodigo,
-      "NuevoSegmentoGrupoFamilia": this.grupoFamiliar.Nuevosegmento,
+      "NuevocodigoGrupoFamilia": 0,
+      "NuevoSegmentoGrupoFamilia": 'GFA',
       "conyugue":this.conyugue,
       "hijo":this.hijo,
       "adherentes": this.adherentesExcluido
@@ -126,27 +127,33 @@ export class OpcionBajaParcialPage implements OnInit {
     formData.append('nroSocio', nroSocio);
     formData.append('nombre', nombre);
     formData.append('json', `"${JSON.stringify(json)}"`);
-
-    console.log(formData.get('file'));
-    console.log(formData.get('nroSolicitud'));
-    console.log(formData.get('nroSocio'));
-    console.log(formData.get('nombre'));
-    console.log(formData.get('json'));
     
     try {
-      //const {status, mensaje, nroSolicitud} = await this.coberturaMedicaService.enviarSolicitudBajaParcial(formData);
-      this.coberturaMedicaService.enviarSolicitudBajaParcial(formData).subscribe(resp =>{
-        if(resp.status === 'success'){
-          this.presentarModal('Baja Parcial', resp.mensaje, true);
+      /*const data = {
+        body:formData,
+        method:'POST'
+      }
+
+      fetch(`${urlBase}/enviarBajaParcial`, data).then(async data => {
+        const {status, mensaje} = await data.json();
+        if(status === 'success'){
+          await this.presentarModal('Baja Parcial', mensaje, true);
+         
         }else{
-          this.presentarModal('Baja Parcial', resp.mensaje, false);
+          this.presentarModal('Baja Parcial', mensaje, false);
         }
-      });
-      /*if (status === 'success') {
+      }).then(res => {
+        console.log(res);
+        
+      })*/
+
+      const {status, mensaje, nroSolicitud} = await this.coberturaMedicaService.enviarSolicitudBajaParcial(formData);
+
+      if (status === 'success') {
         this.presentarModal('Baja Parcial', mensaje, true);
       } else {
         this.presentarModal('Baja Parcial', mensaje, false);
-      }*/
+      }
     } catch (error) {
       this.presentarModal('Baja Parcial', JSON.stringify(error), false);
     }
@@ -161,6 +168,13 @@ export class OpcionBajaParcialPage implements OnInit {
         isCss
       }
     });
+    await modal.present();
+    const {role} = await modal.onWillDismiss();
+    if(role === 'confirm' && isCss){
+      this.navCtrl.navigateRoot('/inicio/menu-cobertura');
+    }else{
+      this.navCtrl.navigateRoot('/opcion-bajas');
+    }
   }
 
   async presentToast(position: 'top' | 'middle' | 'bottom', mensaje: string) {

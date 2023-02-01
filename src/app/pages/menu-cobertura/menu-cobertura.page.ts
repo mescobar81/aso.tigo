@@ -40,7 +40,6 @@ export class MenuCoberturaPage {
         codigoRetorno,
          descripcionRespuesta } = await this.coberturaMedicaService.validaInsrcipcion(nroSocio);
          
-    /* const descripcionRespuesta = 'Falta adjuntar solicitud de baja'; */
     await this.storageSvr.guardarNroSolicitud(nroSolicitud);
     if (codigoRetorno == 0) {
       
@@ -88,8 +87,6 @@ export class MenuCoberturaPage {
     }
     await this.storageSvr.guardarDatosDeBeneficiarioAdherente(beneficiario);
     await this.storageSvr.guardarNroSolicitud(nroSolicitud);
-    //codigoRetorno = 0;
-    console.log('Cod. Retorno: ' + codigoRetorno);
     
     if(codigoRetorno == 0){
       this.navCtrl.navigateRoot(`cotizar-adherente/${codigoRetorno}`);
@@ -112,7 +109,7 @@ export class MenuCoberturaPage {
   async irOpcionBajas(){
 
     const {nroSocio} = await this.storageSvr.getUsuario();
-    const {codigo, codigoRetorno, Nomserv, nroSolicitud, descripcionRespuesta, Popcion, idplan, beneficio, codsegmento} = await this.coberturaMedicaService.validarBaja(nroSocio);
+    let {codigo, codigoRetorno, Nomserv, nroSolicitud, descripcionRespuesta, Popcion, idplan, beneficio, codsegmento} = await this.coberturaMedicaService.validarBaja(nroSocio);
     let validacionBaja = {
       codigo,
       codigoRetorno,
@@ -128,7 +125,6 @@ export class MenuCoberturaPage {
     //guarda los datos de la validacion de baja en el local storage
     //para usar posterior en la pantall de baja parcial
     await this.storageSvr.guardarValidacionBaja(validacionBaja);
-    console.log(codigoRetorno);
     
     if(codigoRetorno == 0){
       this.navCtrl.navigateRoot('opcion-bajas');

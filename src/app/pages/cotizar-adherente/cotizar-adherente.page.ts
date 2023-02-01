@@ -89,13 +89,11 @@ export class CotizarAdherentePage implements OnInit {
   }
 
   async cotizar(fCotizar:NgForm){
-    console.log(fCotizar.invalid);
+
     if(fCotizar.invalid){
       this.presentToast('bottom', '¡Favor!. Seleccionar forma de pago');
       return;
     }
-    
-    console.log(fCotizar);
     
     const {nroSocio, nombre} = await this.storageService.getUsuario();
 
@@ -115,7 +113,6 @@ export class CotizarAdherentePage implements OnInit {
       conyugue:this.conyugue,
       hijo:this.hijo
     };
-    console.log(cotizacion);
 
     const {mensaje, status, nroSolicitud} = await this.coberturaMedicaSvr.enviarCotizacionAdhrente(cotizacion);
     if(status == 'success'){
@@ -130,7 +127,6 @@ export class CotizarAdherentePage implements OnInit {
     this.adherenteAuxiliar = [];
     this.adherentesAgregado = [];
     this.importeTotal = 0;
-    console.log(e.detail.value);
     
     e.detail.value.forEach((a) =>{
       let adherenteAgregado = {

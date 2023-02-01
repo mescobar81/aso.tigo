@@ -57,46 +57,58 @@ const routes: Routes = [
   },
   {
     path: 'cambiar-contrasenia',
-    loadChildren: () => import('./pages/cambiar-contrasenia/cambiar-contrasenia.module').then( m => m.CambiarContraseniaPageModule)
+    loadChildren: () => import('./pages/cambiar-contrasenia/cambiar-contrasenia.module').then( m => m.CambiarContraseniaPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'inicio/aprobar-rechazar-orden',
-    loadChildren: () => import('./pages/aprobar-rechazar-orden/aprobar-rechazar-orden.module').then( m => m.AprobarRechazarOrdenPageModule)
+    loadChildren: () => import('./pages/aprobar-rechazar-orden/aprobar-rechazar-orden.module').then( m => m.AprobarRechazarOrdenPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'inicio/menu-cobertura',
-    loadChildren: () => import('./pages/menu-cobertura/menu-cobertura.module').then( m => m.MenuCoberturaPageModule)
+    loadChildren: () => import('./pages/menu-cobertura/menu-cobertura.module').then( m => m.MenuCoberturaPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'inicio/validar-beneficio/:beneficio',
-    loadChildren: () => import('./pages/validar-beneficio/validar-beneficio.module').then( m => m.ValidarBeneficioPageModule)
+    loadChildren: () => import('./pages/validar-beneficio/validar-beneficio.module').then( m => m.ValidarBeneficioPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'inicio/cotizar-plan/:beneficio/:codigoRetorno',
-    loadChildren: () => import('./pages/cotizar-plan/cotizar-plan.module').then( m => m.CotizarPlanPageModule)
+    loadChildren: () => import('./pages/cotizar-plan/cotizar-plan.module').then( m => m.CotizarPlanPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'adjuntar-documento/:codigoRetorno',
-    loadChildren: () => import('./pages/adjuntar-documento/adjuntar-documento.module').then( m => m.AdjuntarDocumentoPageModule)
+    loadChildren: () => import('./pages/adjuntar-documento/adjuntar-documento.module').then( m => m.AdjuntarDocumentoPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'inscripcion-medica-rechazo/:mensaje/:codigoRetorno',
-    loadChildren: () => import('./pages/inscripcion-medica-rechazo/inscripcion-medica-rechazo.module').then( m => m.InscripcionMedicaRechazoPageModule)
+    loadChildren: () => import('./pages/inscripcion-medica-rechazo/inscripcion-medica-rechazo.module').then( m => m.InscripcionMedicaRechazoPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'cotizar-adherente/:codigoRetorno',
-    loadChildren: () => import('./pages/cotizar-adherente/cotizar-adherente.module').then( m => m.CotizarAdherentePageModule)
-  },  {
+    loadChildren: () => import('./pages/cotizar-adherente/cotizar-adherente.module').then( m => m.CotizarAdherentePageModule),
+    canLoad:[AuthGuard]
+  },
+  {
     path: 'opcion-bajas',
-    loadChildren: () => import('./pages/opcion-bajas/opcion-bajas.module').then( m => m.OpcionBajasPageModule)
+    loadChildren: () => import('./pages/opcion-bajas/opcion-bajas.module').then( m => m.OpcionBajasPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'opcion-baja-parcial',
-    loadChildren: () => import('./pages/opcion-baja-parcial/opcion-baja-parcial.module').then( m => m.OpcionBajaParcialPageModule)
+    loadChildren: () => import('./pages/opcion-baja-parcial/opcion-baja-parcial.module').then( m => m.OpcionBajaParcialPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'opcion-baja-total',
-    loadChildren: () => import('./pages/opcion-baja-total/opcion-baja-total.module').then( m => m.OpcionBajaTotalPageModule)
+    loadChildren: () => import('./pages/opcion-baja-total/opcion-baja-total.module').then( m => m.OpcionBajaTotalPageModule),
+    canLoad:[AuthGuard]
   }
 
 

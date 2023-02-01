@@ -173,11 +173,6 @@ export class CreaTicketPage implements OnInit {
   }
   
   adjuntarDocumento() {
-    /* this.archivo.checkDir(this.archivo.dataDirectory, 'files').then((dir) => {
-      console.log('Directorio: ', dir);
-      
-    }); */
-
 
     this.fileOpener.showOpenWithDialog('Documentos', 'application/pdf')
       .then(() => console.log('File is opened'))

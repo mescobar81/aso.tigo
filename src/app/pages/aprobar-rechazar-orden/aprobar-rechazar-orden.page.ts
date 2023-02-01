@@ -53,8 +53,6 @@ export class AprobarRechazarOrdenPage implements OnInit {
       }
     }
 
-    console.log(solicitud);
-
     try {
       const { mensaje, status } = await this.solicitudSrv.enviarSolicitudAprobadoRechazado(solicitud);
 

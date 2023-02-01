@@ -75,7 +75,6 @@ export class LoginPage {
         idTokenFirebase:token
       }
     }
-    console.log(nuevoUsuario);
     
     this.authSvr.login(nuevoUsuario).then(response => {
       if (!response.usuario.valido) {

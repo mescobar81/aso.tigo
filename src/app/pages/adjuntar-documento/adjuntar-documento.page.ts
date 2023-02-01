@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { File, FileEntry } from '@awesome-cordova-plugins/file/ngx';
 import { Camera, CameraResultType, Photo } from '@capacitor/camera';
-import { ModalController, NavController, Platform, ToastController } from '@ionic/angular';
+import { ModalController, NavController, ToastController } from '@ionic/angular';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 import { CoberturaMedicaService } from 'src/app/services/cobertura-medica.service';
 import { StorageService } from 'src/app/services/storage.service';
@@ -58,7 +58,8 @@ export class AdjuntarDocumentoPage implements OnInit {
           }         
           
         } catch (error) {
-          console.log(error);
+          console.log(JSON.stringify(error));
+          this.presentarModal('Recuperación de adjuntos', JSON.stringify(JSON.stringify(error)), false);
         }
       } else {
         this.presentarModal('Adjunto Recuperado', mensaje, false);
@@ -141,12 +142,18 @@ export class AdjuntarDocumentoPage implements OnInit {
 
     this.dato.nombre = (await this.storageSrv.getUsuario()).nombre;
     
-    const {status, mensaje} = await this.coberturaMedicaSrv.enviarAsismed(this.dato);
+    try {
+      const {status, mensaje} = await this.coberturaMedicaSrv.enviarAsismed(this.dato);
 
     if(status === 'success'){
       await this.presentarModal('Solicitud Asismed', mensaje, true);
     }else{
       await this.presentarModal('Solicitud Asismed', mensaje, false);
+    }
+    } catch (error) {
+      console.log(JSON.stringify(error));
+      this.presentarModal('Solicitud de envio', JSON.stringify(error), false);
+      
     }
         
     //llamamos a este metodo para enviar un archivos adjuntos
