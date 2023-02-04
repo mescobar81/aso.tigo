@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "7746773029",
+    "firebase_url": "https://asotigo-asociados.firebaseio.com",
+    "project_id": "asotigo-asociados",
+    "storage_bucket": "asotigo-asociados.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7746773029:android:f387d3365ac68c563b9fcc",
+        "android_client_info": {
+          "package_name": "py.com.sysasotigo.asociados"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7746773029-97v91t3p3rqm4b7jjm5ah23l29905mrv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "py.com.sysasotigo.asociados",
+            "certificate_hash": "a79d8879e969ba969fb0ea918ba62ebb734e63b8"
+          }
+        },
+        {
+          "client_id": "7746773029-7js142tjjj45o28d5iki8cahiigu4vu6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyicRRt84Yt_sG66-N6b2BeYlfI0yvCQE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "7746773029-7js142tjjj45o28d5iki8cahiigu4vu6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "7746773029-a70b24bcdom490sjbutkvm1njrud22bt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "py.com.sysasotigo.asociados"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
