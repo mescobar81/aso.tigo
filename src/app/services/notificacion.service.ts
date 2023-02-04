@@ -22,6 +22,7 @@ export class NotificacionService {
               private modalCtrl: ModalController,
               private storageSrv: StorageService) { 
     this.init();
+    
   }
 
   /**
