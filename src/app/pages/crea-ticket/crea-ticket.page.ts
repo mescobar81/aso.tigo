@@ -63,12 +63,16 @@ export class CreaTicketPage implements OnInit {
   }
 
   async enviarSolicitud(fSolicitud: NgForm) {
-
+    console.log(fSolicitud.value);
     const usuario = await this.storageSrv.getUsuario();
     if (!usuario) {
       return;
     }
 
+    if(fSolicitud.value.tipoSolicitud <= 0){
+      this.presentAlert('Atención', 'Seleccione tipo de solicitud.', '');
+      return;
+    }
     if(this.fotos.length === 0){
       this.presentAlert('Atención', 'No hay archivos adjuntos. ¡Favor verifique!', '');
       return;
