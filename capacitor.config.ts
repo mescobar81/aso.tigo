@@ -6,9 +6,14 @@ const config: CapacitorConfig = {
   appName: 'AsoTigo',
   webDir:'www',
   bundledWebRuntime: false,
+  backgroundColor:'#001F5F',
   plugins: {
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert"],
+    },
+    "SplashScreen": {
+      "launchAutoHide": false,
+      "showSpinner": false
     }
   }
 };

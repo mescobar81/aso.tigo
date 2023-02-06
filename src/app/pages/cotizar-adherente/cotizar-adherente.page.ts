@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, NavController, ToastController } from '@ionic/angular';
@@ -14,6 +14,7 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./cotizar-adherente.page.scss'],
 })
 export class CotizarAdherentePage implements OnInit {
+
   titulo:String = "";
   cantidad:number = 1;
   importeTotal:number = 0;
@@ -114,12 +115,17 @@ export class CotizarAdherentePage implements OnInit {
       hijo:this.hijo
     };
 
-    const {mensaje, status, nroSolicitud} = await this.coberturaMedicaSvr.enviarCotizacionAdhrente(cotizacion);
+    try {
+      const {mensaje, status, nroSolicitud} = await this.coberturaMedicaSvr.enviarCotizacionAdhrente(cotizacion);
     if(status == 'success'){
       await this.storageService.guardarNroSolicitud(parseInt(nroSolicitud));
       this.presentarModal('Cotización', mensaje, true);
     }else{
       this.presentarModal('Cotización', mensaje, false);
+    }
+    } catch (error) {
+      console.log(JSON.stringify(error));
+      this.presentarModal('Cotizar Adherente', error, false);
     }
   }
 

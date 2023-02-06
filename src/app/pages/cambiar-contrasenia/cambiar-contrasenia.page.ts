@@ -66,12 +66,17 @@ export class CambiarContraseniaPage implements OnInit {
       confirmacionClave: CryptoJS.SHA256(nuevaClave.confirmacionClave).toString(CryptoJS.enc.Hex)
     }
 
-    const { status, mensaje } = await this.authSrv.cambiarContraseña(this.cambioClave);
+    try {
+      const { status, mensaje } = await this.authSrv.cambiarContraseña(this.cambioClave);
     
     if (status === 'success') {
       this.presentarModal('Cambio de Clave', mensaje, true);
     }else{
       this.presentarModal('Cambio de Clave', mensaje, false);  
+    }
+    } catch (error) {
+      console.log(JSON.stringify(error));
+      this.presentarModal('Cambio de clave', error, false);
     }
   }
 
