@@ -36,19 +36,20 @@
 
       <ion-row>
         <ion-col size="12">
-          <ion-item>
-            <ion-select class="fixed__opcion"
-                        (ionChange)="seleccionarComercio()" 
-                        interface="popover"
-                        name="comercio"
-                        [(ngModel)]="solicitudOrden.comercio"
-                        required>
-              <ion-select-option *ngFor="let c of comercios"
-                                 [value]="c"
-                                 >{{c.nombreComercio}}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
+          <ion-list>
+            <ion-item>
+              <ion-select
+                          (ionChange)="seleccionarComercio()"
+                          name="comercio"
+                          [(ngModel)]="solicitudOrden.comercio"
+                          required>
+                <ion-select-option *ngFor="let c of comercios"
+                                   [value]="c"
+                                   >{{c.nombreComercio}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
         </ion-col>
       </ion-row>
 

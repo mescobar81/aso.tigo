@@ -28,15 +28,16 @@
 
         <ion-row>
           <ion-col size="12">
-
-            <ion-select
+            <ion-list>
+              <ion-select okText="Aceptar"
                         name="grupoFamiliar"
                         (ionChange)="seleccionarGrupoFamiliar($event)"
                         placeholder="Seleccionar grupo familiar"
                         >
-              <ion-select-option class="select-option" *ngFor="let b of gruposFamiliar" [value]="b">{{b.DescripSevi}}
+              <ion-select-option *ngFor="let b of gruposFamiliar" [value]="b">{{b.DescripSevi}}
               </ion-select-option>
             </ion-select>
+            </ion-list>
           </ion-col>
         </ion-row>
 
@@ -135,17 +136,19 @@
       <ion-row>
         <ion-col size="4">Forma de pago:</ion-col>
         <ion-col size="8">
-          <ion-item>
-            <ion-label>Seleccione forma de pago</ion-label>
-            <ion-select interface="popover" 
-                        name="formaPago"
-                       [(ngModel)]="formaPago"
-                       required>
-              <ion-select-option *ngFor="let f of formasPago"
-                                 [value]="f"
-                                 >{{f.formaPagoDesc}}</ion-select-option>
-            </ion-select>
-          </ion-item>
+          <ion-list>
+            <ion-item>
+              <ion-label>Seleccione forma de pago</ion-label>
+              <ion-select
+                          name="formaPago"
+                         [(ngModel)]="formaPago"
+                         required>
+                <ion-select-option *ngFor="let f of formasPago"
+                                   [value]="f"
+                                   >{{f.formaPagoDesc}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
         </ion-col>
       </ion-row>
       <ion-row>

@@ -2,15 +2,26 @@
 
 <ion-content class="ion-padding">
   <form #fSolicitud="ngForm" (ngSubmit)="enviarSolicitud(fSolicitud)">
-    <ion-item>
+    <ion-list>
+      <ion-item>
+        <ion-label>Tipo Solicitud</ion-label>
+        <ion-select okText="Aceptar"
+                  name="tipoSolicitud"
+                  [ngModel]="nuevaSolicitud.tipoSolicitud"
+                  (ngModel)="$event">
+          <ion-select-option *ngFor="let t of tiposSolicitud" [value]="t.id" required>{{t.descripcion}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <!-- <ion-item>
       <ion-label>Tipo de solicitud</ion-label>
-      <ion-select interface="popover"
+      <ion-select class="text-wrap" interface="popover"
                   name="tipoSolicitud"
                   [ngModel]="nuevaSolicitud.tipoSolicitud"
                   (ngModel)="$event">
         <ion-select-option *ngFor="let t of tiposSolicitud" [value]="t.id" required>{{t.descripcion}}</ion-select-option>
       </ion-select>
-    </ion-item>
+    </ion-item> -->
     
     <ion-item>
       <ion-label>Asunto:</ion-label>
