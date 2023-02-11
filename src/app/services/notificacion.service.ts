@@ -5,18 +5,18 @@ import {
   ActionPerformed,
   PushNotificationSchema,
   PushNotifications,
-  Token,
+  Token
 } from '@capacitor/push-notifications';
 
 import { StorageService } from './storage.service';
 import { ModalNotificacionComponent } from '../components/modal-notificacion/modal-notificacion.component';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificacionService {
 
+  mostrarNotificacion:PushNotificationSchema;
   constructor(private platform: Platform,
               private navCtrl: NavController,
               private modalCtrl: ModalController,
@@ -70,8 +70,10 @@ export class NotificacionService {
         if(!usuario){
           return;
         }
-        this.openModal(notification);
+        this.mostrarNotificacion = notification;
         console.log('Push received: ' + JSON.stringify(notification));
+        this.openModal(notification);
+
       }
     );
 
@@ -82,10 +84,14 @@ export class NotificacionService {
         if(!usuario){
           return;
         }
+        console.log(this.mostrarNotificacion);
+        
         console.log('Push action performed: ', notification.actionId ,notification.notification.data);
 
         if(usuario.rol.roles[0].toLowerCase() === 'presidente' || usuario.rol.roles[0].toLowerCase() === 'tesorero'){
           this.navCtrl.navigateRoot('/inicio/aprobar-rechazar-orden');
+        }else if(this.mostrarNotificacion){
+          this.openModal(this.mostrarNotificacion);
         }
       }
     );
@@ -104,6 +110,6 @@ export class NotificacionService {
       }
     });
 
-    modal.present();
+    await modal.present();
   }
 }
