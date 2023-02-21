@@ -109,11 +109,11 @@ const routes: Routes = [
     path: 'opcion-baja-total',
     loadChildren: () => import('./pages/opcion-baja-total/opcion-baja-total.module').then( m => m.OpcionBajaTotalPageModule),
     canLoad:[AuthGuard]
+  },
+  {
+    path: 'inicio/tikets-abiertos',
+    loadChildren: () => import('./pages/tikets-abiertos/tikets-abiertos.module').then( m => m.TiketsAbiertosPageModule)
   }
-
-
-
-
 ];
 
 @NgModule({

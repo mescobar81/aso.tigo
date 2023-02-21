@@ -52,8 +52,8 @@
         {
             "title": "Mis tickets abiertos",
             "icon": "bookmarks",
-            "ruta": "dds",
-            "activo":false
+            "ruta": "tikets-abiertos",
+            "activo":true
         },
         {
             "title":"Otras opciones",

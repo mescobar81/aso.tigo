@@ -21,7 +21,7 @@ export class StorageService {
   }
 
   async getToken(){
-    this.token = await this.storage.get('token');
+    this.token = await this.storage.get('tokenFirebase');
     return this.token;
   }
 
@@ -43,7 +43,7 @@ export class StorageService {
   }
 
   async guardarToken(token:string){
-    await this.storage.set('token', token);
+    await this.storage.set('tokenFirebase', token);
   }
 
   async guardarNroSolicitud(nroSolicitud:Number){

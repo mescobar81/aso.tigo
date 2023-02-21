@@ -52,7 +52,7 @@
         {
             "title": "Mis tickets abiertos",
             "icon": "bookmarks",
-            "ruta": "",
+            "ruta": "tikets-abiertos",
             "activo":true
         },
         {

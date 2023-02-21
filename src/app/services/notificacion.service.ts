@@ -10,13 +10,13 @@ import {
 
 import { StorageService } from './storage.service';
 import { ModalNotificacionComponent } from '../components/modal-notificacion/modal-notificacion.component';
+import { ModalMensajeriaComponent } from '../components/modal-mensajeria/modal-mensajeria.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificacionService {
 
-  mostrarNotificacion:PushNotificationSchema;
   constructor(private platform: Platform,
               private navCtrl: NavController,
               private modalCtrl: ModalController,
@@ -68,12 +68,26 @@ export class NotificacionService {
       async (notification: PushNotificationSchema) => {
         const usuario = await this.storageSrv.getUsuario() || null;
         if(!usuario){
+          this.navCtrl.navigateRoot('/login');
           return;
         }
-        this.mostrarNotificacion = notification;
-        console.log('Push received: ' + JSON.stringify(notification));
-        this.openModal(notification);
 
+        console.log('Push received: ' + JSON.stringify(notification));
+        const {pantallaAbrir} = notification.data;
+        //TODO: llamar a la pantalla de aprobar-rechazar-orden si es rol presidente y tesorero
+        if(usuario.rol.roles[0].toLowerCase() === 'presidente' || usuario.rol.roles[0].toLowerCase() === 'tesorero'){
+          this.openModal(notification);
+        }else if(usuario.rol.roles[0].toLowerCase() === 'socio'){
+          if(pantallaAbrir === 'HOME'){
+            this.navCtrl.navigateRoot('/inicio');
+          }else if(pantallaAbrir.toString().toLowerCase() === 'cotizar_plan_seguro_medico'){
+            this.navCtrl.navigateRoot('inicio/cotizar-plan/""/0');
+          }else if(pantallaAbrir.toString().toLowerCase() === 'mis-tickets'){
+            //TODO: llama a una pantalla mis tickets abiertos
+          }else if(pantallaAbrir.toString().toLowerCase() === 'rechazo_asismed'){
+            //TODO: llama a una pantalla modal - mensajeria
+          }
+        }
       }
     );
 
@@ -82,16 +96,24 @@ export class NotificacionService {
       async (notification:ActionPerformed) => {
         const usuario = await this.storageSrv.getUsuario() || null;
         if(!usuario){
+          //llamar al login
           return;
         }
-        console.log(this.mostrarNotificacion);
         
         console.log('Push action performed: ', notification.actionId ,notification.notification.data);
-
+        const {pantallaAbrir, mensaje} = notification.notification.data;
         if(usuario.rol.roles[0].toLowerCase() === 'presidente' || usuario.rol.roles[0].toLowerCase() === 'tesorero'){
           this.navCtrl.navigateRoot('/inicio/aprobar-rechazar-orden');
-        }else if(this.mostrarNotificacion){
-          this.openModal(this.mostrarNotificacion);
+        }else if(usuario.rol.roles[0].toLowerCase() === 'socio'){
+          if(pantallaAbrir === 'HOME'){
+            this.navCtrl.navigateRoot('/inicio');
+          }else if(pantallaAbrir.toString().toLowerCase() === 'cotizar_plan_seguro_medico'){
+            this.navCtrl.navigateRoot('inicio/cotizar-plan/""/0');
+          }else if(pantallaAbrir.toString().toLowerCase() === 'mis-tickets'){
+            //TODO: llama a una pantalla mis tickets abiertos falta desarrollo
+          }else if(pantallaAbrir.toString().toLowerCase() === 'rechazo_asismed'){
+            this.openModalMensajeria(notification.notification.data.mensaje.descripcionCorta)
+          }
         }
       }
     );
@@ -107,6 +129,22 @@ export class NotificacionService {
       component: ModalNotificacionComponent,
       componentProps:{
         notification
+      }
+    });
+
+    await modal.present();
+    const {role} = await modal.onWillDismiss();
+    if(role === 'cancel'){
+      this.navCtrl.navigateRoot('/inicio/aprobar-rechazar-orden');
+    }
+  }
+
+  async openModalMensajeria(mensaje:any){
+
+    const modal = await this.modalCtrl.create({
+      component: ModalMensajeriaComponent,
+      componentProps:{
+        mensaje
       }
     });
 

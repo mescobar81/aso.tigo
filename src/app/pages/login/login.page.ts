@@ -8,6 +8,7 @@ import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.com
 import { UsuarioRequest } from 'src/app/interfaces/interface';
 import { AlertPresentService } from 'src/app/services/alert-present.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { NotificacionService } from 'src/app/services/notificacion.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
@@ -35,13 +36,17 @@ export class LoginPage {
     }
   };
   constructor(private authSvr: AuthService,
+    private notificationService: NotificacionService,
     private menuCtrl: MenuController,
     private navCtrl: NavController,
     private storageSrv: StorageService,
     private device: Device,
     private alertSvr: AlertPresentService,
     private modalCtrl: ModalController,
-    private toastCtrl: ToastController) { }
+    private toastCtrl: ToastController) { 
+      this.notificationService.init();
+      
+    }
 
   /**
    * se encarga de llamar al servicio para dar ingreso al usuario
@@ -49,13 +54,13 @@ export class LoginPage {
    * @returns 
    */
   async login(fLogin: NgForm) {
-
     if (!fLogin.valid) {
       this.presentToast('bottom');
       return;
     }
 
     const token = await this.storageSrv.getToken();
+
     /**
      * crea un nuevo usuario en una constante para evitar modificaciones
      * en el template, detalles visuales para el usuario
@@ -75,6 +80,8 @@ export class LoginPage {
         idTokenFirebase:token
       }
     }
+    
+    console.log('NuevoUsuario: ', nuevoUsuario);
     
     this.authSvr.login(nuevoUsuario).then(response => {
       if (!response.usuario.valido) {

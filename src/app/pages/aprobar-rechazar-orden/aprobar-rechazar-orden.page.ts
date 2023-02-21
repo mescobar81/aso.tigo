@@ -37,7 +37,7 @@ export class AprobarRechazarOrdenPage implements OnInit {
     let solicitud = {};
     if (tipoSolicitud === 'R') {
       solicitud = {
-        nroSocio: usuario.nroSocio,
+        nroSocio: parseInt(usuario.nroSocio),
         nroRegistro: nro,
         solicitudRespuesta: tipoSolicitud,
         motivoRechazo: motivoRechazo,
@@ -45,7 +45,7 @@ export class AprobarRechazarOrdenPage implements OnInit {
       }
     } else {
       solicitud = {
-        nroSocio: usuario.nroSocio,
+        nroSocio: parseInt(usuario.nroSocio),
         nroRegistro: nro,
         solicitudRespuesta: tipoSolicitud,
         motivoRechazo: motivoRechazo,
