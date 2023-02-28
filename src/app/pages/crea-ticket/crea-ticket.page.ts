@@ -7,7 +7,7 @@ import { AlertController, ModalController, PopoverController } from '@ionic/angu
 
 import { PopoverInfoComponent } from 'src/app/components/popover-info/popover-info.component';
 import { CrearTicket, PopoverItem, TiposSolicitud } from 'src/app/interfaces/interface';
-import { CreaTicketService } from 'src/app/services/crea-ticket.service';
+import { TicketService } from 'src/app/services/ticket.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 
@@ -50,7 +50,7 @@ export class CreaTicketPage implements OnInit {
     codUsuario: '',
     comentario: ''
   };
-  constructor(private creaTicketSrv: CreaTicketService,
+  constructor(private ticketSrv: TicketService,
     private archivo: File,
     private fileOpener: FileOpener,
     private popoverCtrl: PopoverController,
@@ -113,7 +113,7 @@ export class CreaTicketPage implements OnInit {
    * @param formData valores de los datos
    */
   uploadFile(formData: FormData) {
-    this.creaTicketSrv.enviarSolicitud(formData).then(resp =>{
+    this.ticketSrv.enviarSolicitud(formData).then(resp =>{
       if(resp.status === 'success'){
         this.presentarModal('Información', resp.mensaje, true);
       }else if(resp.status === 'failure'){
@@ -238,6 +238,6 @@ export class CreaTicketPage implements OnInit {
   }
 
   async init() {
-    this.tiposSolicitud = (await this.creaTicketSrv.listarTipoSolicitud()).tiposSolicitud;
+    this.tiposSolicitud = (await this.ticketSrv.listarTipoSolicitud()).tiposSolicitud;
   }
 }

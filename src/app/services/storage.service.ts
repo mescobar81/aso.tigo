@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
-import { Usuario } from '../interfaces/interface';
+import { DetalleTicket, Ticket, Usuario } from '../interfaces/interface';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +64,23 @@ export class StorageService {
   async getDatoBeneficiarioAdherente(){
     return this.storage.get('beneficiario');
   }
+
+  async guardarTicket(ticket:Ticket){
+    await this.storage.set('ticket', ticket);
+  }
+
+  async guardarDetalleTicket(detalle:DetalleTicket){
+    await this.storage.set('detalleTicket', detalle);
+  }
+
+  async getTicket(){
+    return await this.storage.get('ticket');
+  }
+
+  async getDetalleTicket(){
+    return await this.storage.get('detalleTicket');
+  }
+
   /**
    * limpia el local storage
    */

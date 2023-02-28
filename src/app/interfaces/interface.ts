@@ -492,3 +492,64 @@ export interface ResponseStatusBajaParcial{
     mensaje: string;
     status: string;
 }
+
+export interface ResponseTicketsAbierto {
+    tickets:            Ticket[];
+    mensaje:            string;
+    parametrosGlobales: ParametrosGlobales;
+    status:             string;
+}
+
+export interface ParametrosGlobales {
+    appVersionActualPlayStore: number;
+    estado:                    boolean;
+    importeMinimoOrden:        number;
+    importeMinimoPrestamo:     number;
+    requiereUpdate:            boolean;
+}
+
+export interface Ticket {
+    cabecera: Cabecera;
+    detalle:  DetalleTicket[];
+}
+
+export interface Cabecera {
+    asunto:    string;
+    nroticket: number;
+}
+
+export interface DetalleTicket {
+    fecha:           string;
+    nroreg:          number;
+    adjunto:         string;
+    usuario_responde: UsuarioResponde;
+    leido:           Leido;
+    comentario:      string;
+    url:             string;
+}
+
+export enum Leido {
+    N = "N",
+}
+
+export enum UsuarioResponde {
+    Socio = "SOCIO",
+    UsuarioRespondeSocio = "socio",
+}
+
+export interface ResponseStatusResponderTicket {
+    mensaje:            string;
+    parametrosGlobales: ParametrosGlobales;
+    status:             string;
+}
+
+export interface ResponseCalificacionTicket {
+    calificaciones: Calificacion[];
+    mensaje:        string;
+    status:         string;
+}
+
+export interface Calificacion {
+    descripcion: string;
+    id:          number;
+}

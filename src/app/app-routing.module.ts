@@ -113,7 +113,15 @@ const routes: Routes = [
   {
     path: 'inicio/tikets-abiertos',
     loadChildren: () => import('./pages/tikets-abiertos/tikets-abiertos.module').then( m => m.TiketsAbiertosPageModule)
+  },  {
+    path: 'responder-ticket',
+    loadChildren: () => import('./pages/responder-ticket/responder-ticket.module').then( m => m.ResponderTicketPageModule)
+  },
+  {
+    path: 'encuesta-ticket',
+    loadChildren: () => import('./pages/encuesta-ticket/encuesta-ticket.module').then( m => m.EncuestaTicketPageModule)
   }
+
 ];
 
 @NgModule({

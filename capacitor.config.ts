@@ -16,6 +16,7 @@ const config: CapacitorConfig = {
       "showSpinner": false
     }
   }
+  
 };
 
 export default config;

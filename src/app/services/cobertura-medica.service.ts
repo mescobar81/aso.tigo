@@ -341,6 +341,7 @@ export class CoberturaMedicaService {
     });
 
   }
+  
   /**
    * convierte la representacion de cadena en formato file a partir de una url
    */

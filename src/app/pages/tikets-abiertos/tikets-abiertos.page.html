@@ -1,41 +1,47 @@
-<app-header title="mis tickets abiertos"></app-header>
-
+<ion-header class="ion-no-border" translucent>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button text="Atrás" defaultHref="/inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mis tickets abiertos</ion-title>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
-  <ion-grid *ngFor="let t of [1]">
+  <ion-grid *ngFor="let t of tickets; let indiceTicket= index">
     <div class="cabecera">
       <ion-row>
-        <ion-col class="ion-text-left" size="6">Asunto:exclusion seguro</ion-col>
-        <ion-col class="ion-text-right" size="6">#1234</ion-col>
+        <ion-col class="ion-text-left" size="10">Asunto: {{t.cabecera.asunto}}</ion-col>
+        <ion-col class="ion-text-right" size="2">#{{t.cabecera.nroticket}}</ion-col>
       </ion-row>
     </div>
-    <div class="detalle-ticket" *ngFor="let d of [1,2,3]">
+    <div class="detalle-ticket" *ngFor="let d of t.detalle; let indiceDetalle=index">
       <ion-row>
-        <ion-col size="6">Fecha:</ion-col>
-        <ion-col size="6">Enviado por: Socio</ion-col>
-        <ion-col size="12">Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta ullam nobis, expedita iste
-          fugit amet alias error magnam. Exercitationem unde sequi voluptatibus quidem possimus reprehenderit, dolore
-          provident porro quo perferendis?
-        </ion-col>
+        <ion-col size="6">Fecha:{{d.fecha}}</ion-col>
+        <ion-col size="6">Enviado por: {{d.usuario_responde}}</ion-col>
+        <ion-col size="12">{{d.comentario}}</ion-col>
         <ion-col size="12">Adjunto:</ion-col>
-        <ion-col size="10"></ion-col>
+        <ion-col size="10">{{d.adjunto | extraerCadena}}</ion-col>
 
         <ion-col class="ion-text-right" size="2">
-          <div class="btn-seleccionar">
-            <label for="archivo"><ion-icon size="large" name="document-attach" color="primary"></ion-icon></label>
+          <!-- <div class="btn-seleccionar">
+            <label for="archivo"><ion-icon size="large" name="document-attach" color="tertiary"></ion-icon></label>
             <input type="file" id="archivo">
-          </div>
+          </div> -->
+          <ion-icon size="large" name="document-attach" (click)="descargarArchivo(d.url, d.adjunto)" color="tertiary"></ion-icon>
         </ion-col>
 
       </ion-row>
+      <div class="container-buttons">
+        <ion-button color="success" (click)="responder(indiceTicket, indiceDetalle)" [hidden]="d.usuario_responde.toLowerCase() === 'operador' ? !(d.leido.toLowerCase() === 'n') ? true:false:true">
+          Responder
+        </ion-button>
+        <!-- <ion-button color="success" (click)="responder(indiceTicket, indiceDetalle)">
+          Responder
+        </ion-button> -->
+        <ion-button color="warning" (click)="cerrarTicket(indiceTicket, indiceDetalle)" [hidden]="d.usuario_responde.toLowerCase() === 'operador' ?  !(d.leido.toLowerCase() === 'n') ? true:false:true">
+          Cerrar ticket
+        </ion-button>
+      </div>
     </div>
   </ion-grid>
-
-  <div class="container-buttons">
-    <ion-button color="success">
-      Responder
-    </ion-button>
-    <ion-button color="warning">
-      Cerrar ticket
-    </ion-button>
-  </div>
 </ion-content>
