@@ -18,8 +18,10 @@ import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.com
 })
 export class SolicitudOrdenPage implements OnInit {
 
+  DECIMAL_SEPARATOR=".";
+  GROUP_SEPARATOR=",";
   onDebouncer:Subject<number> = new Subject();
-
+  onDebouncerSeparadorMiles:Subject<string> = new Subject();
   comercios: Comercio[] = [];
   formasPagos: FormasPago[] = [];
   cuotasMaximas: Number[] = [];
@@ -41,7 +43,7 @@ export class SolicitudOrdenPage implements OnInit {
   solicitudOrden: SolicitudOrden = {
     usuario: null,
     comercio: null,
-    montoSolicitado: 0,
+    montoSolicitado: '',
     cantidadCuotas: 0,
     cuotaMes: 0,
     rol: null,
@@ -55,10 +57,20 @@ export class SolicitudOrdenPage implements OnInit {
     this.init();
     this.onDebouncer
     .pipe(debounceTime(500))
-    .subscribe(montoSolicitado =>{
+    .subscribe((montoSolicitado:number) =>{
       const cuotaMensual = montoSolicitado / this.solicitudOrden.cantidadCuotas;
-      this.solicitudOrden.cuotaMes = parseInt(String(cuotaMensual));
-    })
+      this.solicitudOrden.cuotaMes = cuotaMensual;
+    });
+
+    this.onDebouncerSeparadorMiles
+    .pipe(debounceTime(300))
+    .subscribe((importe:string) =>{
+      //separa el importe usando el punto y vuelve a unir
+      //ver: para poder ver en el campo importe el separador de miles
+      let importeSinSeparador = importe.split('.').join("");
+      this.solicitudOrden.montoSolicitado = importeSinSeparador.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    });
+
   }
 
   async init() {
@@ -106,7 +118,7 @@ export class SolicitudOrdenPage implements OnInit {
      */
     this.nuevaOrden.nroSocio = parseInt(usuario.nroSocio);
     this.nuevaOrden.rol = usuario.rol.roles[0];
-    this.nuevaOrden.montoSolicitado = this.solicitudOrden.montoSolicitado;
+    this.nuevaOrden.montoSolicitado = parseInt(this.solicitudOrden.montoSolicitado);
     this.nuevaOrden.cantidadCuotas = this.solicitudOrden.cantidadCuotas;
     this.nuevaOrden.cuotaMes = this.solicitudOrden.cuotaMes;
 
@@ -125,15 +137,12 @@ export class SolicitudOrdenPage implements OnInit {
   }
 
   calcularCuotaMensual(event:any) {
-    const montoSolicitado = event.target.value;
+    const montoSolicitado = event.target.value.split('.').join("");
     if (!montoSolicitado) {
+      this.solicitudOrden.cuotaMes = 0;
       return;
     }
     this.onDebouncer.next(montoSolicitado);
-    /* setTimeout(() => {
-      const cuotaMensual = this.solicitudOrden.montoSolicitado / this.solicitudOrden.cantidadCuotas;
-      this.solicitudOrden.cuotaMes = parseInt(String(cuotaMensual));
-    }, 500) */
   }
 
   /**
@@ -144,7 +153,7 @@ export class SolicitudOrdenPage implements OnInit {
     if(!this.solicitudOrden.montoSolicitado){
       return;
     }
-    this.onDebouncer.next(this.solicitudOrden.montoSolicitado);
+    this.onDebouncer.next(parseInt(this.solicitudOrden.montoSolicitado));
   }
 
 
@@ -165,4 +174,31 @@ export class SolicitudOrdenPage implements OnInit {
       this.init();//inicializa los valores en los campos
     }
   }
+  formatNumber (num:any) {
+    if(!num.detail.value){
+      return;
+    }
+    this.onDebouncerSeparadorMiles.next(num.detail.value);
+}
+ /*  format(valString:any):any {
+    if (!valString) {
+        return '';
+    }
+    let val = valString.toString();
+    const parts = this.unFormat(val).split(this.DECIMAL_SEPARATOR);
+    return parts[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, this.GROUP_SEPARATOR) + (!parts[1] ? '' : this.DECIMAL_SEPARATOR + parts[1]);
+};
+
+unFormat(val) {
+  if (!val) {
+      return '';
+  }
+  val = val.replace(/^0+/, '');
+
+  if (this.GROUP_SEPARATOR === ',') {
+      return val.replace(/,/g, '');
+  } else {
+      return val.replace(/\./g, '');
+  }
+}; */
 }

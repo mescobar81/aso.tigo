@@ -1,5 +1,5 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
-import { ModalController, NavController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { LoadingController, ModalController, NavController } from '@ionic/angular';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener';
 import { Filesystem, Directory } from '@capacitor/filesystem'
 
@@ -8,6 +8,7 @@ import { LeerArchivoFromURLService } from 'src/app/services/leer-archivo-from-ur
 import { StorageService } from 'src/app/services/storage.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
+import { AlertPresentService } from 'src/app/services/alert-present.service';
 
 @Component({
   selector: 'app-tikets-abiertos',
@@ -18,19 +19,19 @@ export class TiketsAbiertosPage implements OnInit {
 
   tickets: Ticket[] = [];
   adjuntoNombre: string = '';
-  constructor(private render: Renderer2,
-    private fileOpener: FileOpener,
+  image = null;
+  constructor(private fileOpener: FileOpener,
     private navCtrl: NavController,
     private modalCtrl: ModalController,
     private storageService: StorageService,
+    private loadingCtrl: LoadingController,
     private ticketsAbiertoSvr: TicketService,
-    private leerArchivoFromUrlSvr: LeerArchivoFromURLService) { }
+    private leerArchivoFromUrlSvr: LeerArchivoFromURLService,
+    private alerPresentSvr: AlertPresentService) { }
 
   async ngOnInit() {
     const { documento } = await this.storageService.getUsuario();
     this.tickets = (await this.ticketsAbiertoSvr.obtenerTicketsAbierto(documento)).tickets;
-    console.log(this.tickets);
-
   }
 
   responder(indiceTicket: number, indiceDetalle: number) {
@@ -38,27 +39,42 @@ export class TiketsAbiertosPage implements OnInit {
     this.navCtrl.navigateRoot('responder-ticket');
   }
 
-  async descargarArchivo(url: string, nameFile: string) {
-
-    try {
-      const blob = await this.leerArchivoFromUrlSvr.getBlobFromUrl(url);
-      console.log(blob);
-      const base64 = await this.leerArchivoFromUrlSvr.convertBlobToBase64(blob) as string;
-      console.log(base64);
-      const saveFile = await Filesystem.writeFile({
-        path: nameFile.substr(nameFile.lastIndexOf('/') + 1),
-        data: base64,
-        directory: Directory.Documents
-      });
-      const path = saveFile.uri;
-      this.fileOpener.open(path, blob.type).then((result) => {
-        console.log('Archivo abierto');
-
-      });
-    } catch (error) {
-      console.log(JSON.stringify(error));
-      this.presentarModal(error.name, JSON.stringify(error.message), false);
+  descargarArchivo(url: string, nameFile: string) {
+    if (!nameFile) {
+      this.alerPresentSvr.presentAlert('Ticket Abierto','', 'Sin archivo adjunto para descargar', 'Aceptar');
+      return;
     }
+    nameFile = nameFile.substr(nameFile.lastIndexOf('/') + 1);
+    this.showLoading('Espere. Descargando archivo...');
+    this.leerArchivoFromUrlSvr.downloadFile(url, nameFile).then(async (response) => {
+      if (response.path) {
+        const read = await Filesystem.readFile({
+          path: nameFile,
+          directory: Directory.Documents
+        });
+        this.loadingCtrl.dismiss();//desactiva el loading
+        this.alerPresentSvr.presentAlert('Descarga de archivo', 'Almacenamiento interno',`Archivo descargado en la ruta: ${response.path}`, 'Aceptar');
+        this.image = `data:image/jpeg;base64,${read.data}`;
+      } else if (response.blob) {
+        const base64 = await this.leerArchivoFromUrlSvr.convertBlobToBase64(response.blob) as string;
+        const saveFile = await Filesystem.writeFile({
+          path: nameFile,
+          data: base64,
+          directory: Directory.Documents
+        });
+        this.loadingCtrl.dismiss();//desactiva el loading
+        const path = saveFile.uri;
+        this.fileOpener.open(path, response.blob.type).then((result) => {
+          console.log('Archivo abierto: ', result);
+
+        });
+      }
+
+    }).catch(error => {
+      console.log(JSON.stringify(error));
+      this.loadingCtrl.dismiss();//desactiva el loading
+      this.presentarModal(error.name, JSON.stringify(error.message), false);
+    });
 
   }
 
@@ -86,4 +102,17 @@ export class TiketsAbiertosPage implements OnInit {
 
     await modal.present();
   }
+
+  async showLoading(mensaje: string) {
+    const loading = await this.loadingCtrl.create({
+      message: mensaje,
+      //duration: 4000,
+      spinner: 'bubbles',
+      cssClass: 'custom-loading',
+    });
+
+    loading.present();
+  }
+
+  
 }

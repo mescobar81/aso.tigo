@@ -8,7 +8,7 @@ import { TiketsAbiertosPageRoutingModule } from './tikets-abiertos-routing.modul
 
 import { TiketsAbiertosPage } from './tikets-abiertos.page';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { PipeModule } from '../pipes/pipe.module';
+import { PipeModule } from '../../pipes/pipe.module';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener';
 
 @NgModule({

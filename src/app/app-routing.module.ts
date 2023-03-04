@@ -76,7 +76,7 @@ const routes: Routes = [
     canLoad:[AuthGuard]
   },
   {
-    path: 'inicio/cotizar-plan/:beneficio/:codigoRetorno',
+    path: 'inicio/cotizar-plan',
     loadChildren: () => import('./pages/cotizar-plan/cotizar-plan.module').then( m => m.CotizarPlanPageModule),
     canLoad:[AuthGuard]
   },
@@ -113,7 +113,8 @@ const routes: Routes = [
   {
     path: 'inicio/tikets-abiertos',
     loadChildren: () => import('./pages/tikets-abiertos/tikets-abiertos.module').then( m => m.TiketsAbiertosPageModule)
-  },  {
+  },
+  {
     path: 'responder-ticket',
     loadChildren: () => import('./pages/responder-ticket/responder-ticket.module').then( m => m.ResponderTicketPageModule)
   },

@@ -14,10 +14,12 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { ComponentsModule } from './components/components.module';
+import { SeparadorMilesDirective } from './directives/separador-miles.directive';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SeparadorMilesDirective
   ],
   imports: [
     BrowserModule,

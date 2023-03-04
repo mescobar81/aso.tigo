@@ -44,4 +44,7 @@
       </div>
     </div>
   </ion-grid>
+  <ion-thumbnail *ngIf="image != null">
+    <img [src]="image" />
+  </ion-thumbnail>
 </ion-content>

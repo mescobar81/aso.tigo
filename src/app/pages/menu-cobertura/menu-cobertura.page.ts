@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, ToastController } from '@ionic/angular';
 
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
@@ -7,6 +7,7 @@ import { Device } from '@awesome-cordova-plugins/device/ngx';
 import { CoberturaMedicaService } from 'src/app/services/cobertura-medica.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { environment } from 'src/environments/environment';
+import { ResponseValidaInscripcion } from 'src/app/interfaces/interface';
 
 const urlDescargaDocumento = environment.urlDescargaDocumento;
 
@@ -35,40 +36,41 @@ export class MenuCoberturaPage {
 
   async irCoberturaMedica() {
     const { nroSocio } = await this.storageSvr.getUsuario();
-    let { nroSolicitud,
+    /* let { nroSolicitud,
        beneficio,
         codigoRetorno,
-         descripcionRespuesta } = await this.coberturaMedicaService.validaInsrcipcion(nroSocio);
-         
-    await this.storageSvr.guardarNroSolicitud(nroSolicitud);
-    if (codigoRetorno == 0) {
+         descripcionRespuesta } = await this.coberturaMedicaService.validaInsrcipcion(nroSocio); */
+    const validaInscripcion:ResponseValidaInscripcion = await this.coberturaMedicaService.validaInsrcipcion(nroSocio);
+    await this.storageSvr.guardarValidaInscripcion(validaInscripcion);
+    await this.storageSvr.guardarNroSolicitud(validaInscripcion.nroSolicitud);
+    if (validaInscripcion.codigoRetorno == 0) {
       
-      this.navCtrl.navigateRoot(`inicio/validar-beneficio/${beneficio}`);
+      this.navCtrl.navigateRoot(`inicio/validar-beneficio/${validaInscripcion.beneficio}`);
 
     }
 
-    if (codigoRetorno == 99) {
-      this.presentToast('bottom', descripcionRespuesta);
+    if (validaInscripcion.codigoRetorno == 99) {
+      this.presentToast('bottom', validaInscripcion.descripcionRespuesta);
 
     }
 
-    if(codigoRetorno == 98){
-      this.presentToast('bottom', descripcionRespuesta);
+    if(validaInscripcion.codigoRetorno == 98){
+      this.presentToast('bottom', validaInscripcion.descripcionRespuesta);
 
     }
-    if(codigoRetorno == 97){
-      this.navCtrl.navigateRoot(`/inicio/cotizar-plan/${beneficio}/${codigoRetorno}`);
+    if(validaInscripcion.codigoRetorno == 97){
+      this.navCtrl.navigateRoot(`/inicio/cotizar-plan`);
     }
-    if(codigoRetorno == 96){
-      this.navCtrl.navigateRoot(`adjuntar-documento/${codigoRetorno}`);
-    }
-
-    if(codigoRetorno == 95){
-      this.presentToast('bottom', descripcionRespuesta);
+    if(validaInscripcion.codigoRetorno == 96){
+      this.navCtrl.navigateRoot(`adjuntar-documento/${validaInscripcion.codigoRetorno}`);
     }
 
-    if (codigoRetorno == 94) {
-      this.navCtrl.navigateRoot(`inscripcion-medica-rechazo/${descripcionRespuesta}/${codigoRetorno}`);
+    if(validaInscripcion.codigoRetorno == 95){
+      this.presentToast('bottom', validaInscripcion.descripcionRespuesta);
+    }
+
+    if (validaInscripcion.codigoRetorno == 94) {
+      this.navCtrl.navigateRoot(`inscripcion-medica-rechazo/${validaInscripcion.descripcionRespuesta}/${validaInscripcion.codigoRetorno}`);
     }
   }
 

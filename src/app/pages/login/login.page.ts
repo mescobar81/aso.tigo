@@ -66,7 +66,7 @@ export class LoginPage {
      * en el template, detalles visuales para el usuario
      */
     const nuevoUsuario: UsuarioRequest = {
-      documento: this.usuario.documento,
+      documento: this.usuario.documento.toString(),
       //encripta la clave usando librerias externas de javascript
       clave: CryptoJS.SHA256(this.usuario.clave).toString(CryptoJS.enc.Hex),
       device: {
@@ -80,8 +80,6 @@ export class LoginPage {
         idTokenFirebase:token
       }
     }
-    
-    console.log('NuevoUsuario: ', nuevoUsuario);
     
     this.authSvr.login(nuevoUsuario).then(response => {
       if (!response.usuario.valido) {

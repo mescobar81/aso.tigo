@@ -21,7 +21,6 @@ export class OrdenRechazadaPage implements OnInit {
 
   async marcarOrdenLeido(nroOrden:number){
     const usuario = await this.storageSvr.getUsuario();
-    const documento = usuario.documento;
     
     const valido = await this.solicitudOrdenSvr.marcarOrdenLeido(usuario.documento.toString(), nroOrden);
 

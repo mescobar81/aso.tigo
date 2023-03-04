@@ -63,7 +63,7 @@
                 </ion-col>
                 <ion-col class="ion-text-right" size="6">
                     <ion-text>
-                        <ion-label>{{movimientoBR?.cabecera?.saldoDisponible}}</ion-label>
+                        <ion-label>{{movimientoBR?.cabecera?.saldoDisponible | number: '2.'}}</ion-label>
                     </ion-text>
                 </ion-col>
             </ion-row>
@@ -87,7 +87,7 @@
         </ion-row>
         <ion-row>
             <ion-col size="6" class="contentgrid--cell">Total Consumo</ion-col>
-            <ion-col size="6" class="contentgrid--cell">{{d.total_consumo}}</ion-col>
+            <ion-col size="6" class="contentgrid--cell">{{d.total_consumo | number: '2.'}}</ion-col>
         </ion-row>
         <ion-row>
             <ion-col size="6" class="contentgrid--cell">Ahorro Consumo</ion-col>

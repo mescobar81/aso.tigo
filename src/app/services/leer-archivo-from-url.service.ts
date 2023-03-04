@@ -1,32 +1,20 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { Http, HttpDownloadFileResult } from '@capacitor-community/http';
 import { Injectable } from '@angular/core';
+import { Directory } from '@capacitor/filesystem';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LeerArchivoFromURLService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-   /**
-   * convierte la representacion de cadena en formato file a partir de una url
-   */
-  async getBlobFromUrl(url: string):Promise<Blob> {
-    /* const headers = new HttpHeaders({
-      'Acces-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest'
-    }); */
+  /**
+  * convierte la representacion de cadena en formato file a partir de una url
+  */
+  async getBlobFromUrl(url: string) {
     return new Promise((resolve, reject) => {
-      this.http.get(url, {responseType: 'blob'}).subscribe((res) => {
-        resolve(res);
-      }, (err) => {
-        reject(err);
-      });
-    });
-
-    
-    /* return new Promise((resolve, reject) => {
 
       let request = new XMLHttpRequest();
       request.open('GET', url, true);
@@ -37,11 +25,33 @@ export class LeerArchivoFromURLService {
       };
       request.onerror = reject;
       request.send();
+    });
+  }
+
+  async downloadFile(url: string, nameFile: string):Promise<HttpDownloadFileResult> {
+
+    const options = {
+      url: url,
+      filePath: nameFile,
+      fileDirectory: Directory.Documents,
+
+      method: 'GET',
+    };
+
+    return Http.downloadFile(options);
+   /*  return new Promise(async (resolve, reject) => {
+      try {
+        const response: HttpDownloadFileResult = await Http.downloadFile(options);
+        resolve(response);
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
     }); */
 
   }
 
-  convertBlobToBase64(blob: Blob){
+  convertBlobToBase64(blob: Blob): Promise<any>{
     return new Promise((resolve, reject) => {
       const reader = new FileReader;
       reader.onerror = reject;

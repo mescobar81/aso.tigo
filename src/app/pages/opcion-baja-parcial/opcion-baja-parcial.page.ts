@@ -147,7 +147,7 @@ export class OpcionBajaParcialPage implements OnInit {
         
       })*/
 
-      const {status, mensaje, nroSolicitud} = await this.coberturaMedicaService.enviarSolicitudBajaParcial(formData);
+      const {status, mensaje} = await this.coberturaMedicaService.enviarSolicitudBajaParcial(formData);
 
       if (status === 'success') {
         this.presentarModal('Baja Parcial', mensaje, true);

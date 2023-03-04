@@ -12,36 +12,36 @@ import { TicketService } from 'src/app/services/ticket.service';
 })
 export class ResponderTicketPage implements OnInit {
 
-  nombreArchivoAdjunto:string = '';
-  file:File;
+  nombreArchivoAdjunto: string = '';
+  file: File;
   ticket = {
-    nroTicket:'',
-    asunto:'',
-    detalle:{
-      fecha:'',
-      comentario:'',
-      usuarioResponde:''
+    nroTicket: '',
+    asunto: '',
+    detalle: {
+      fecha: '',
+      comentario: '',
+      usuarioResponde: ''
     }
   }
   nuevoTicket = {
-    documento:'',
-    nroreg:'',
-    nroticket:'',
-    rol:'',
-    codUsuario:'',
-    comentario:''
+    documento: '',
+    nroreg: '',
+    nroticket: '',
+    rol: '',
+    codUsuario: '',
+    comentario: ''
   };
-  constructor(private storageService:StorageService,
-              private ticketService:TicketService,
-              private navCtrl: NavController,
-              private modalCtrl:ModalController,
-              private alertController:AlertController
-    ) { }
+  constructor(private storageService: StorageService,
+    private ticketService: TicketService,
+    private navCtrl: NavController,
+    private modalCtrl: ModalController,
+    private alertController: AlertController
+  ) { }
 
   async ngOnInit() {
-    const {nroticket, asunto} = (await this.storageService.getTicket()).cabecera;
-    const {fecha, usuario_responde, nroreg, comentario} = await this.storageService.getDetalleTicket();
-    
+    const { nroticket, asunto } = (await this.storageService.getTicket()).cabecera;
+    const { fecha, usuario_responde, nroreg, comentario } = await this.storageService.getDetalleTicket();
+
     this.ticket.nroTicket = nroticket;
     this.ticket.asunto = asunto;
     this.ticket.detalle.fecha = fecha;
@@ -51,46 +51,48 @@ export class ResponderTicketPage implements OnInit {
     this.nuevoTicket.nroticket = nroticket;
   }
 
-  async responderTicket(fTicket:NgForm){
+  async responderTicket(fTicket: NgForm) {
 
-    const {rol, nroSocio, documento} = await this.storageService.getUsuario();
+    const { rol, nroSocio, documento } = await this.storageService.getUsuario();
     this.nuevoTicket.documento = documento.toString();
     this.nuevoTicket.rol = rol.roles[0];
     this.nuevoTicket.codUsuario = nroSocio;
     this.nuevoTicket.comentario = fTicket.value.comentario;
 
-    if(!this.file){
-      this.presentAlert();
-      return;
-    }
     const formData = new FormData();
-    formData.append('documento', this.nuevoTicket.documento);
-    formData.append('nroticket', this.nuevoTicket.nroticket);
-    formData.append('nroreg', this.nuevoTicket.nroreg);
-    formData.append('rol', this.nuevoTicket.rol)
-    formData.append('codUsuario', this.nuevoTicket.codUsuario);
-    formData.append('comentario', this.nuevoTicket.comentario);
-    formData.append('file', this.file, this.file.name);
+    if (!this.file) {
+      formData.append('documento', this.nuevoTicket.documento);
+      formData.append('nroticket', this.nuevoTicket.nroticket);
+      formData.append('nroreg', this.nuevoTicket.nroreg);
+      formData.append('rol', this.nuevoTicket.rol)
+      formData.append('codUsuario', this.nuevoTicket.codUsuario);
+      formData.append('comentario', this.nuevoTicket.comentario);
+    } else {
+      formData.append('documento', this.nuevoTicket.documento);
+      formData.append('nroticket', this.nuevoTicket.nroticket);
+      formData.append('nroreg', this.nuevoTicket.nroreg);
+      formData.append('rol', this.nuevoTicket.rol)
+      formData.append('codUsuario', this.nuevoTicket.codUsuario);
+      formData.append('comentario', this.nuevoTicket.comentario);
+      formData.append('file', this.file, this.file.name);
+    }
 
     try {
-      const {mensaje, status} = await this.ticketService.responderTicket(formData);
-      if(status === 'success'){
+      const { mensaje, status } = await this.ticketService.responderTicket(formData);
+      if (status === 'success') {
         this.presentarModal('Ticket leído exitosamente', mensaje, true);
         return;
       }
       this.presentarModal('Ticket leído con error', mensaje, false);
     } catch (error) {
       console.log(JSON.stringify(error));
-      this.presentarModal(error.name, JSON.stringify(error.message),false);
+      this.presentarModal(error.name, JSON.stringify(error.message), false);
     }
-    
+
   }
 
-  seleccionarArchivo(e:any){
-    console.log(e);
-    
+  seleccionarArchivo(e: any) {
     this.file = e.target.files[0];
-    console.log(this.file);
     this.nombreArchivoAdjunto = this.file.name;
   }
 
@@ -116,8 +118,8 @@ export class ResponderTicketPage implements OnInit {
     });
 
     await modal.present();
-    const {role} = await modal.onWillDismiss();
-    if(role === 'confirm'){
+    const { role } = await modal.onWillDismiss();
+    if (role === 'confirm') {
       this.navCtrl.navigateRoot('/inicio/tikets-abiertos');
     }
   }

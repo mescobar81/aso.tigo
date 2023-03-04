@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { ModalController, NavController, ToastController } from '@ionic/angular';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 
@@ -32,7 +31,10 @@ export class ConsultarBeneficioPage implements OnInit {
   }
   ];
 
-  beneficio: string = '';
+  validaInscripcion = {
+    beneficio:'',
+    codigoRetorno:0
+  }
   importeTotal: number = 0;
   grupoFamilia!: GrupoFamilia;
   formaPago!: FormasPago;
@@ -57,11 +59,12 @@ export class ConsultarBeneficioPage implements OnInit {
     private navCtrl: NavController,
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
-    private storageSrv: StorageService,
-    private activatedRoute: ActivatedRoute) { }
+    private storageSrv: StorageService) { }
 
   async ngOnInit() {
-    this.beneficio = this.activatedRoute.snapshot.params.beneficio;
+    const {beneficio, codigoRetorno} =  await this.storageSrv.getValidaInscripcion(); //this.activatedRoute.snapshot.params.beneficio;
+    this.validaInscripcion.codigoRetorno = codigoRetorno;
+    this.validaInscripcion.beneficio = beneficio;
     const { Planes } = await this.coberturaMedicaSrv.listarPlanes();
     this.planes = Planes;
 
@@ -71,7 +74,7 @@ export class ConsultarBeneficioPage implements OnInit {
 
   seleccionarPlan() {
 
-    this.listarGrupoFamiliarByPlan(this.beneficio, this.plan);
+    this.listarGrupoFamiliarByPlan(this.validaInscripcion.beneficio, this.plan);
     this.listarAdherentes(this.plan);
   }
 
@@ -167,7 +170,7 @@ export class ConsultarBeneficioPage implements OnInit {
     await modal.present();
     const {role} = await modal.onWillDismiss();
     if(role === 'confirm' && isCss) {
-      this.navCtrl.navigateRoot(`adjuntar-documento/${this.activatedRoute.snapshot.params.codigoRetorno}`);
+      this.navCtrl.navigateRoot(`adjuntar-documento/${this.validaInscripcion.codigoRetorno}`);
     }
   }
 

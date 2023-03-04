@@ -105,9 +105,10 @@
         <ion-item>
           <ion-label position="floating">Ingrese Monto:</ion-label>
           <ion-input name="montoSolicitado"
-                     type="number"
+                     type="text"
                      [(ngModel)]="solicitudOrden.montoSolicitado"
                      (ionInput)="calcularCuotaMensual($event)"
+                     (ionChange)="formatNumber($event)"
                      required>
           </ion-input>
         </ion-item>

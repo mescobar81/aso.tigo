@@ -56,56 +56,63 @@ export class CreaTicketPage implements OnInit {
     private popoverCtrl: PopoverController,
     private storageSrv: StorageService,
     private alertController: AlertController,
-    private modalCtrl:ModalController) { }
+    private modalCtrl: ModalController) { }
 
   ngOnInit() {
     this.init();
   }
 
   async enviarSolicitud(fSolicitud: NgForm) {
-    console.log(fSolicitud.value);
+
     const usuario = await this.storageSrv.getUsuario();
     if (!usuario) {
       return;
     }
 
-    if(fSolicitud.value.tipoSolicitud <= 0){
+    if (fSolicitud.value.tipoSolicitud <= 0) {
       this.presentAlert('Atención', 'Seleccione tipo de solicitud.', '');
       return;
     }
-    if(this.fotos.length === 0){
-      this.presentAlert('Atención', 'No hay archivos adjuntos. ¡Favor verifique!', '');
-      return;
+
+    const formData = new FormData();
+    if (this.fotos.length === 0) {
+      formData.append('documento', usuario.documento.toString());
+      formData.append('tipoSolicitud', fSolicitud.value.tipoSolicitud);
+      formData.append('asunto', fSolicitud.value.asunto);
+      formData.append('rol', usuario.rol.roles[0]);
+      formData.append('codUsuario', usuario.nroSocio);
+      formData.append('comentario', fSolicitud.value.comentario);
+      this.uploadFile(formData);//envia el form data al servidor
+    }else{
+      this.archivo.resolveLocalFilesystemUrl(this.image.path).then((fileEntry: FileEntry) => {
+        fileEntry.file(file => {
+  
+          const reader = new FileReader();
+          /**
+           * se crea un realReader para que se ejecute el onloadend
+           * ver: no funciona con plugins de capatictor/camera
+           */
+          const realReader = (reader as any)._realReader;
+          realReader.onloadend = (res: any) => {
+  
+            let blob = new Blob([new Uint8Array(res.target.result)], { type: file.type });
+  
+            const formData = new FormData();
+            formData.append('file', blob, file.name);
+            formData.append('documento', usuario.documento.toString());
+            formData.append('tipoSolicitud', fSolicitud.value.tipoSolicitud);
+            formData.append('asunto', fSolicitud.value.asunto);
+            formData.append('rol', usuario.rol.roles[0]);
+            formData.append('codUsuario', usuario.nroSocio);
+            formData.append('comentario', fSolicitud.value.comentario);
+            this.uploadFile(formData);//envia el form data al servidor
+          }
+          reader.readAsArrayBuffer(file);
+        })
+      });
     }
 
-    this.archivo.resolveLocalFilesystemUrl(this.image.path).then((fileEntry: FileEntry) => {
-      fileEntry.file(file => {
-
-        const reader = new FileReader();
-        /**
-         * se crea un realReader para que se ejecute el onloadend
-         * ver: no funciona con plugins de capatictor/camera
-         */
-        const realReader = (reader as any)._realReader;
-        realReader.onloadend = (res:any) => {
-
-          let blob = new Blob([ new Uint8Array(res.target.result)], { type: file.type });
-
-          const formData = new FormData();
-
-          formData.append('file', blob, file.name);
-          formData.append('documento', usuario.documento.toString());
-          formData.append('tipoSolicitud', fSolicitud.value.tipoSolicitud);
-          formData.append('asunto', fSolicitud.value.asunto);
-          formData.append('rol', usuario.rol.roles[0]);
-          formData.append('codUsuario', usuario.nroSocio);
-          formData.append('comentario', fSolicitud.value.comentario);
-
-          this.uploadFile(formData);//envia el form data al servidor
-        }
-        reader.readAsArrayBuffer(file);
-      })
-    });
+    
   }
 
   /**
@@ -113,20 +120,20 @@ export class CreaTicketPage implements OnInit {
    * @param formData valores de los datos
    */
   uploadFile(formData: FormData) {
-    this.ticketSrv.enviarSolicitud(formData).then(resp =>{
-      if(resp.status === 'success'){
+    this.ticketSrv.enviarSolicitud(formData).then(resp => {
+      if (resp.status === 'success') {
         this.presentarModal('Información', resp.mensaje, true);
-      }else if(resp.status === 'failure'){
+      } else if (resp.status === 'failure') {
         this.presentarModal('Error', resp.mensaje, false);
       }
-    }).catch(err =>{
+    }).catch(err => {
       this.presentarModal('ERROR', JSON.stringify(err), false)
       console.log(JSON.stringify(err));
     });
-    
+
   }
 
-  limpiarCampos(){
+  limpiarCampos() {
 
     this.nuevaSolicitud = {
       documento: '',
@@ -141,10 +148,10 @@ export class CreaTicketPage implements OnInit {
 
   }
 
-  async presentarModal(title:string, descripcion:string, isCss:boolean){
+  async presentarModal(title: string, descripcion: string, isCss: boolean) {
     const modal = await this.modalCtrl.create({
-      component:ModalInfoComponent,
-      componentProps:{
+      component: ModalInfoComponent,
+      componentProps: {
         descripcion,
         title,
         isCss
@@ -153,29 +160,29 @@ export class CreaTicketPage implements OnInit {
 
     await modal.present();
 
-    const {role} = await modal.onWillDismiss();
-    if(role === 'confirm'){
+    const { role } = await modal.onWillDismiss();
+    if (role === 'confirm') {
       this.limpiarCampos(); //limpia los campos del formulario
       this.init();//inicializa tipos de solicitud
     }
   }
 
-  async presentAlert(header:string, mensaje: string, status: string) {
+  async presentAlert(header: string, mensaje: string, status: string) {
     const alert = await this.alertController.create({
       header: header,
       message: mensaje,
       buttons: [{
-        text:'Aceptar',
-        role:'confirm',
-        handler:()=> {
+        text: 'Aceptar',
+        role: 'confirm',
+        handler: () => {
         },
       }
-    ]
+      ]
     });
 
-     await alert.present();
+    await alert.present();
   }
-  
+
   adjuntarDocumento() {
 
     this.fileOpener.showOpenWithDialog('Documentos', 'application/pdf')
@@ -184,7 +191,7 @@ export class CreaTicketPage implements OnInit {
 
 
   }
-  
+
   async tomarFoto() {
 
     const image = await Camera.getPhoto({
@@ -199,13 +206,13 @@ export class CreaTicketPage implements OnInit {
     }).catch(err => {
       console.log('Sin imagen seleccionada: ', JSON.stringify(err));
     });
-    
+
     // image.webPath will contain a path that can be set as an image src.
     // You can access the original file using image.path, which can be
     // passed to the Filesystem API to read the raw data of the image,
     // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
 
-    
+
     if (!image) { return };
 
     const img = window.Ionic.WebView.convertFileSrc(image.path);

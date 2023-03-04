@@ -182,7 +182,7 @@ export interface FormasPago {
 export interface SolicitudOrden{
     usuario?:Usuario;
     comercio?:Comercio;
-    montoSolicitado?:number;
+    montoSolicitado?:string;
     cantidadCuotas?:number;
     cuotaMes?:number;
     rol?:Rol;
