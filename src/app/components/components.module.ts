@@ -12,6 +12,7 @@ import { ModalInfoComponent } from './modal-info/modal-info.component';
 import { ModalRechazoSolicitudComponent } from './modal-rechazo-solicitud/modal-rechazo-solicitud.component';
 import { ModalNotificacionComponent } from './modal-notificacion/modal-notificacion.component';
 import { ModalMensajeriaComponent } from './modal-mensajeria/modal-mensajeria.component';
+import { ModalShowImageComponent } from './modal-show-image/modal-show-image.component';
 
 
 
@@ -24,7 +25,8 @@ import { ModalMensajeriaComponent } from './modal-mensajeria/modal-mensajeria.co
     ModalInfoComponent,
     ModalRechazoSolicitudComponent,
     ModalNotificacionComponent,
-    ModalMensajeriaComponent
+    ModalMensajeriaComponent,
+    ModalShowImageComponent
   ],
   exports: [
     HeaderComponent,
@@ -33,7 +35,8 @@ import { ModalMensajeriaComponent } from './modal-mensajeria/modal-mensajeria.co
     ModalInfoComponent,
     ModalRechazoSolicitudComponent,
     ModalNotificacionComponent,
-    ModalMensajeriaComponent
+    ModalMensajeriaComponent,
+    ModalShowImageComponent
   ],
   imports: [
     CommonModule,

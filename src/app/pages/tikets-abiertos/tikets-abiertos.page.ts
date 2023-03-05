@@ -9,6 +9,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 import { AlertPresentService } from 'src/app/services/alert-present.service';
+import { ModalShowImageComponent } from 'src/app/components/modal-show-image/modal-show-image.component';
 
 @Component({
   selector: 'app-tikets-abiertos',
@@ -19,7 +20,6 @@ export class TiketsAbiertosPage implements OnInit {
 
   tickets: Ticket[] = [];
   adjuntoNombre: string = '';
-  image = null;
   constructor(private fileOpener: FileOpener,
     private navCtrl: NavController,
     private modalCtrl: ModalController,
@@ -34,6 +34,9 @@ export class TiketsAbiertosPage implements OnInit {
     this.tickets = (await this.ticketsAbiertoSvr.obtenerTicketsAbierto(documento)).tickets;
   }
 
+  /**
+   * navega a la pantalla responder ticket y guarda el ticket detalle
+   */
   responder(indiceTicket: number, indiceDetalle: number) {
     this.guardarTicketDetalle(indiceTicket, indiceDetalle);
     this.navCtrl.navigateRoot('responder-ticket');
@@ -41,7 +44,7 @@ export class TiketsAbiertosPage implements OnInit {
 
   descargarArchivo(url: string, nameFile: string) {
     if (!nameFile) {
-      this.alerPresentSvr.presentAlert('Ticket Abierto','', 'Sin archivo adjunto para descargar', 'Aceptar');
+      this.alerPresentSvr.presentAlert('Ticket Abierto', '', 'Sin archivo adjunto para descargar', 'Aceptar');
       return;
     }
     nameFile = nameFile.substr(nameFile.lastIndexOf('/') + 1);
@@ -52,9 +55,17 @@ export class TiketsAbiertosPage implements OnInit {
           path: nameFile,
           directory: Directory.Documents
         });
+
         this.loadingCtrl.dismiss();//desactiva el loading
-        this.alerPresentSvr.presentAlert('Descarga de archivo', 'Almacenamiento interno',`Archivo descargado en la ruta: ${response.path}`, 'Aceptar');
-        this.image = `data:image/jpeg;base64,${read.data}`;
+        const extensionArchivo = nameFile.substr(nameFile.lastIndexOf('.') + 1);
+        if(extensionArchivo == 'pdf'){
+          //`data:application/pdf,${read.data}`;
+          this.alerPresentSvr.presentAlert('Descarga de archivo', 'Almacenamiento interno', `Archivo descargado en la ruta: ${response.path}`, 'Aceptar');
+        }else{
+          const image = `data:image/jpeg;base64,${read.data}`;
+          this.mostrarArchivoDescargado(image, response.path);
+        }
+        
       } else if (response.blob) {
         const base64 = await this.leerArchivoFromUrlSvr.convertBlobToBase64(response.blob) as string;
         const saveFile = await Filesystem.writeFile({
@@ -114,5 +125,18 @@ export class TiketsAbiertosPage implements OnInit {
     loading.present();
   }
 
-  
+  async mostrarArchivoDescargado(image:any, ruta:string){
+    const modal = await this.modalCtrl.create({
+      component: ModalShowImageComponent,
+      componentProps:{
+        image
+      }
+    });
+
+    modal.present();
+    const {role} = await modal.onDidDismiss();
+    if(role == 'cerrar'){
+      this.alerPresentSvr.presentAlert('Descarga de archivo', 'Almacenamiento interno', `Archivo descargado en la ruta: ${ruta}`, 'Aceptar');
+    }
+  }
 }

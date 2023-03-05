@@ -153,6 +153,7 @@ export class SolicitudOrdenPage implements OnInit {
     if(!this.solicitudOrden.montoSolicitado){
       return;
     }
+    this.solicitudOrden.montoSolicitado = this.solicitudOrden.montoSolicitado.split('.').join("");
     this.onDebouncer.next(parseInt(this.solicitudOrden.montoSolicitado));
   }
 

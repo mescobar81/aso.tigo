@@ -1,0 +1,13 @@
+<ion-header class="ion-no-border" translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" color="secondary" (click)="cerrar()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="image" *ngIf="image != null">
+    <ion-img [src]="image"></ion-img>
+  </div>
+</ion-content>
