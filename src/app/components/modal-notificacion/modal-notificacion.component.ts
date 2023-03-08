@@ -15,7 +15,7 @@ export class ModalNotificacionComponent implements OnInit {
   ngOnInit() {}
 
   cerrarModal(){
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss(null, 'cerrar');
   }
 
 }

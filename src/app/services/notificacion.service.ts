@@ -9,7 +9,6 @@ import {
 } from '@capacitor/push-notifications';
 
 import { StorageService } from './storage.service';
-import { ModalNotificacionComponent } from '../components/modal-notificacion/modal-notificacion.component';
 import { ModalMensajeriaComponent } from '../components/modal-mensajeria/modal-mensajeria.component';
 
 @Injectable({
@@ -72,17 +71,20 @@ export class NotificacionService {
           return;
         }
 
-        const {pantallaAbrir, mensaje} = notification.data;
+        const notificacionRecibida = JSON.parse(notification.data.data);
+  
+        const {pantallaAbrir, mensaje} = notificacionRecibida.notificacion;
+        
         if(usuario.rol.roles[0].toLowerCase() === 'presidente' || usuario.rol.roles[0].toLowerCase() === 'tesorero'){
-          this.openModal(notification);//abre un modal y luego llama a pantalla rechazar orden
+          this.navCtrl.navigateRoot('/inicio/aprobar-rechazar-orden');
         }else if(usuario.rol.roles[0].toLowerCase() === 'socio'){
-          if(pantallaAbrir === 'HOME'){
+          if(pantallaAbrir == 'HOME'){
             this.navCtrl.navigateRoot('/inicio');
-          }else if(pantallaAbrir.toString().toLowerCase() === 'cotizar_plan_seguro_medico'){
+          }else if(pantallaAbrir == 'COTIZAR_PLAN_SEGURO_MEDICO'){
             this.navCtrl.navigateRoot('inicio/cotizar-plan');
-          }else if(pantallaAbrir.toString().toLowerCase() === 'mis-tickets'){
+          }else if(pantallaAbrir == 'MIS_TICKETS'){
             this.navCtrl.navigateRoot('inicio/tikets-abiertos');
-          }else if(pantallaAbrir.toString().toLowerCase() === 'rechazo_asismed'){
+          }else if(pantallaAbrir == 'RECHAZO_ASISMED'){
             this.openModalMensajeria(mensaje.descripcionCorta);
           }
         }
@@ -97,43 +99,25 @@ export class NotificacionService {
           this.navCtrl.navigateRoot('/login');
           return;
         }
-        
-        const {pantallaAbrir, mensaje} = notification.notification.data;
+        const notificacionRecibida = JSON.parse(notification.notification.data.data);
+
+        const {pantallaAbrir, mensaje} = notificacionRecibida.notificacion;
+
         if(usuario.rol.roles[0].toLowerCase() === 'presidente' || usuario.rol.roles[0].toLowerCase() === 'tesorero'){
-          this.openModal(notification.notification);//abre un modal y luego llama a pantalla rechazar orden
+          this.navCtrl.navigateRoot('/inicio/aprobar-rechazar-orden');
         }else if(usuario.rol.roles[0].toLowerCase() === 'socio'){
-          if(pantallaAbrir === 'HOME'){
+          if(pantallaAbrir == 'HOME'){
             this.navCtrl.navigateRoot('/inicio');
-          }else if(pantallaAbrir.toString().toLowerCase() === 'cotizar_plan_seguro_medico'){
+          }else if(pantallaAbrir == 'COTIZAR_PLAN_SEGURO_MEDICO'){
             this.navCtrl.navigateRoot('inicio/cotizar-plan');
-          }else if(pantallaAbrir.toString().toLowerCase() === 'mis-tickets'){
+          }else if(pantallaAbrir == 'MIS_TICKETS'){
             this.navCtrl.navigateRoot('inicio/tikets-abiertos');
-          }else if(pantallaAbrir.toString().toLowerCase() === 'rechazo_asismed'){
+          }else if(pantallaAbrir == 'RECHAZO_ASISMED'){
             this.openModalMensajeria(mensaje.descripcionCorta);
           }
         }
       }
     );
-  }
-
-  /**
-   * abre el modal de notificaciones para mostar el mensaje al usuario
-   * @param notification 
-   */
-  async openModal(notification:PushNotificationSchema){
-
-    const modal = await this.modalCtrl.create({
-      component: ModalNotificacionComponent,
-      componentProps:{
-        notification
-      }
-    });
-
-    await modal.present();
-    const {role} = await modal.onWillDismiss();
-    if(role === 'cancel'){
-      this.navCtrl.navigateRoot('/inicio/aprobar-rechazar-orden');
-    }
   }
 
   async openModalMensajeria(mensaje:any){
