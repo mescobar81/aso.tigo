@@ -62,7 +62,7 @@ export class TiketsAbiertosPage implements OnInit {
           //`data:application/pdf,${read.data}`;
           this.alerPresentSvr.presentAlert('Descarga de archivo', 'Almacenamiento interno', `Archivo descargado en la ruta: ${response.path}`, 'Aceptar');
         }else{
-          const image = `data:image/jpeg;base64,${read.data}`;
+          const image = `data:image/${extensionArchivo};base64,${read.data}`;
           this.mostrarArchivoDescargado(image, response.path);
         }
         

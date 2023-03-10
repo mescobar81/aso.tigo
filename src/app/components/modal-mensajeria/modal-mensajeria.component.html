@@ -4,9 +4,6 @@
   </ion-toolbar>
   <ion-toolbar color="primary">
     <ion-title class="ion-text-capitalize ion-text-center">Grupo Telecel - ASOTIGO</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="cancel()"><ion-icon slot="start" name="close"></ion-icon></ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
@@ -14,4 +11,7 @@
     <ion-label>Mensaje Asismed</ion-label>
   </ion-item>
   <ion-textarea [autoGrow]="true" [value]="mensaje"></ion-textarea>
+  <ion-buttons slot="end">
+    <ion-button (click)="cancel()" class="contentgrid_btn" expand="block">Cerrar</ion-button>
+  </ion-buttons>
 </ion-content>

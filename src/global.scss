@@ -70,14 +70,14 @@
     white-space: normal !important; 
 } */
 
-.sc-ion-alert-ios{
-    white-space: normal !important; 
-    padding-top: 2px;
+.alert-radio-label.sc-ion-alert-md,
+.alert-radio-label.sc-ion-alert-ios{
+    white-space: normal !important;
 }
 
-.sc-ion-alert-md{
-    white-space: normal !important;
-    padding-top: 2px;
+.alert-tappable.alert-radio{
+    height: auto;
+    contain: content;
 }
 
 ion-loading.custom-loading {

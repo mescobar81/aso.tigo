@@ -1,8 +1,6 @@
 <ion-header class="ion-no-border" translucent>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button fill="clear" color="secondary" (click)="cerrar()">Cerrar</ion-button>
-    </ion-buttons>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">Archivo Adjunto</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -10,4 +8,7 @@
   <div class="image" *ngIf="image != null">
     <ion-img [src]="image"></ion-img>
   </div>
+
+  <ion-button (click)="cerrar()" class="contentgrid_btn" expand="block">Cerrar</ion-button>
+
 </ion-content>
