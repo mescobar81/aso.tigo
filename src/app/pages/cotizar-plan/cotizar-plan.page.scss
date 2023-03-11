@@ -25,6 +25,21 @@
     text-align: right;
 }
 
+.flex {
+  display         : flex;
+  background-color: #001F5F;
+  border-radius   : 6px;
+  width           : 120px;
+  justify-content : center;
+}
+
+.flex__cantidad {
+  width     : 30px;
+  height    : 30px;
+  margin-top: 15px;
+  color     : white;
+}
+
 .file-select {
     position: relative;
     display: inline-block;
@@ -54,4 +69,8 @@
   
   #src-file1::before {
     content: 'Adjuntar Documento';
+  }
+
+  ion-select{
+    --placeholder-opacity : 2;
   }

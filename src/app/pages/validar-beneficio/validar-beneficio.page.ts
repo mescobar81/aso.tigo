@@ -13,8 +13,7 @@ import { StorageService } from 'src/app/services/storage.service';
 export class ValidarBeneficioPage {
 
   title:string = 'Validar Beneficio';
-  constructor(private activatedRoute: ActivatedRoute,
-    private navCtrl: NavController,
+  constructor(private navCtrl: NavController,
     private coberturaMedicaSrv:CoberturaMedicaService,
     private storageSrv: StorageService,
     private modalCtrl: ModalController) { }

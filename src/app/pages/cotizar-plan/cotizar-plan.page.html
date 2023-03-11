@@ -27,7 +27,7 @@
 
   <ion-item>
     <ion-label>Posee Beneficio:</ion-label>
-    <ion-title>{{beneficio}}</ion-title>
+    <ion-title>{{validaInscripcion.beneficio}}</ion-title>
   </ion-item>
   
   <form #fCotizar="ngForm" (ngSubmit)="enviarCotizacion(fCotizar)">
@@ -35,14 +35,12 @@
     <ion-item-divider>
       <ion-label>Seleccionar Plan:</ion-label>  
     </ion-item-divider>
-
+    <ion-label class="ion-text-wrap">{{etiquetaPlanFamiliar}}</ion-label>
     <ion-item>
-      <ion-select (ionChange)="seleccionarPlan()"
-                  interface="popover"
-                  name="plan"
-                  [(ngModel)]="plan"
+      <ion-select #planFamiliar (ionChange)="seleccionarPlan()"
                   required>
-        <ion-select-option *ngFor="let p of planes"
+                  <ion-label>Plan Familiar</ion-label>
+        <ion-select-option  *ngFor="let p of planes"
                            [value]="p">{{p.descPlan}}</ion-select-option>
       </ion-select>
     </ion-item>
@@ -51,30 +49,34 @@
     <ion-item-divider>
       <ion-label>Seleccionar grupo familiar:</ion-label>
     </ion-item-divider>
+    <ion-label class="ion-text-wrap">{{etiquetaGrupoFamiliar}}</ion-label>
     <ion-item>
-      <ion-select interface="popover"
+      <ion-select #grupoFamiliar
+                  (ionChange)="SeleccionarGrupoFamiliar()"
                   name="grupoFamilia"
                   [(ngModel)]="grupoFamilia"
                   required>
+                  <ion-label>Grupo Familiar</ion-label>
         <ion-select-option *ngFor="let gf of gruposFamilia" 
                            [value]="gf">{{gf.DescripSevi}}
         </ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item-divider>
-      <ion-button slot="end" 
+      <!-- <ion-button slot="end" 
                   color="secondary"
                   (click)="agregarAdherente()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
+      </ion-button> -->
       <ion-label>Agregar beneficiarios/adherentes:</ion-label>
     </ion-item-divider>
+    <ion-label class="ion-text-wrap">{{etiquetaBeneficiarioAdherente}}</ion-label>
     <ion-item>
-
-      <ion-select interface="popover"
+      <ion-select #beneficiarioAdherente 
+                  (ionChange)="seleccionarBeneficiarioAdherente()"
                   name="adherente"
-                  [(ngModel)]="adherente"
-                  required>
+                  [(ngModel)]="adherente">
+                  <ion-label>Beneficiarios/Adherentes</ion-label>
         <ion-select-option *ngFor="let b of adherenteBeneficiarios"
                             [value]="b">{{b.DescripSevi}}
         </ion-select-option>
@@ -92,11 +94,28 @@
 
     <ion-grid *ngIf="adherentes.length > 0">
     <ion-row *ngFor="let a of adherentes; let i=index;">
-      <ion-col size="6">{{a.descripServi}}</ion-col>
-      <ion-col size="2">
+      <ion-col size="5">
+        {{a.descripServi}}
+        <div class="flex">
+          <div>
+            <ion-button color="medium" (click)="decrementarValor(i)">
+              -
+            </ion-button>
+          </div>
+          <div class="flex__cantidad">
+            <ion-input type="text" id="{{i}}" value="1"></ion-input>
+          </div>
+          <div>
+            <ion-button color="medium" (click)="incrementarValor(i)">
+              +
+            </ion-button>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
        {{a.monto | currency:'PYG':'symbol-narrow':'1.2-2'}}
         </ion-col>
-        <ion-col size="2">
+        <ion-col size="3">
             <ion-chip color="danger"
                       outline="false"
                       (click)="eliminarAdherente(i)">
@@ -133,8 +152,7 @@
         </ion-item>
         <ion-item lines="none">
 
-          <ion-select interface="popover"
-                      name="formaPago"
+          <ion-select name="formaPago"
                       [(ngModel)]="formaPago"
                       required>
             <ion-select-option *ngFor="let fp of formasPago" 
@@ -151,8 +169,7 @@
                     class="btn__contizar"
                     type="submit"
                     expand="block"
-                    (click)="enviarCotizacion(fCotizar)"
-                    [disabled]="fCotizar.invalid">
+                    (click)="enviarCotizacion(fCotizar)">
           Cotizar
         </ion-button>
        <!--  <ion-button class="btn__adjuntar"  expand="block">
