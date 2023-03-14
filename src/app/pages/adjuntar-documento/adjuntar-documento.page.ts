@@ -5,6 +5,7 @@ import { Camera, CameraResultType, Photo } from '@capacitor/camera';
 import { ModalController, NavController, ToastController } from '@ionic/angular';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 import { CoberturaMedicaService } from 'src/app/services/cobertura-medica.service';
+import { LeerArchivoFromURLService } from 'src/app/services/leer-archivo-from-url.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 declare var window: any;
@@ -18,7 +19,7 @@ export class AdjuntarDocumentoPage implements OnInit {
 
   image: Photo;
   adjuntos: any[] = [];
-  adjuntados: string[] = [];
+  adjuntados: any[] = [];
   file: File;
   mensaje:string = '';
   status:string = '';
@@ -29,6 +30,7 @@ export class AdjuntarDocumentoPage implements OnInit {
   constructor(private archivo: File,
     private modalCtrl: ModalController,
     private coberturaMedicaSrv: CoberturaMedicaService,
+    private leerArchivo:LeerArchivoFromURLService,
     private toastCtrl: ToastController,
     private activatedRoute: ActivatedRoute,
     private navCtrl: NavController,
@@ -70,8 +72,11 @@ export class AdjuntarDocumentoPage implements OnInit {
 
   seleccionarArchivo(event: any) {
 
-    this.file = event.target.files[0];
-    this.adjuntados.push(event.target.files[0].name);//para mostrar los nombres de archivo al usuario
+    //this.file = event.target.files[0];
+    //const img = window.Ionic.WebView.convertFileSrc(this.file);
+    //const img = this.leerArchivo.convertBlobToBase64(this.file);
+
+    this.adjuntados.push(event.target.files[0].mame);//para mostrar los nombres de archivo al usuario
     this.adjuntos.push({
       blob: this.file,
       name: event.target.files[0].name
@@ -135,8 +140,8 @@ export class AdjuntarDocumentoPage implements OnInit {
 
   async enviarAsismed() {
 
-    if(this.adjuntados.length === 0) {
-      this.presentToast('bottom', 'Favor ingrsar archivos adjuntos');
+    if(this.adjuntados.length == 0) {
+      this.presentToast('bottom', 'Favor ingrsar archivos adjuntos antes de enviar');
       return;
     }
 
@@ -156,16 +161,17 @@ export class AdjuntarDocumentoPage implements OnInit {
       
     }
         
-    //llamamos a este metodo para enviar un archivos adjuntos
+    //llamamos a este metodo para enviar archivos adjuntos
     //en caso que el usuario haya presionado enviar a asismed
     this.subirAdjunto();
   }
 
-//envia adjuntos sin guardar
+//no envia ningun dato al servidor, nave a la pantalla menu cobertura si 
+//no hay ningun adjunto
   async subirAdjunto() {
 
     if(this.adjuntos.length == 0) {
-      this.presentToast('bottom', 'Favor ingresar archivos adjuntos');
+      this.navCtrl.navigateRoot('inicio/menu-cobertura');
       return;
     }
     

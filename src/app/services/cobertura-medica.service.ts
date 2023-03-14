@@ -136,20 +136,16 @@ export class CoberturaMedicaService {
 
     return new Promise<ResponseStatusMessage>((resolve, reject) => {
       this.http.post(`${urlBase}/cotizar`, cotizar)
-        .subscribe({
-          next: (resp: ResponseStatusMessage) => {
+        .subscribe((resp:ResponseStatusMessage) => {
             if (resp.status == 'success') {
               resolve(resp);
             } else {
               resolve(resp);
             }
-          },
-          error: (err: any) => {
+          }, err => {
             console.log(JSON.stringify(err));
-
             reject(err);
-          }
-        });
+          })
     });
   }
 

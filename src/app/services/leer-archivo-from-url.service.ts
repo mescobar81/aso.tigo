@@ -51,7 +51,7 @@ export class LeerArchivoFromURLService {
 
   }
 
-  convertBlobToBase64(blob: Blob): Promise<any>{
+  convertBlobToBase64(blob: any): Promise<any>{
     return new Promise((resolve, reject) => {
       const reader = new FileReader;
       reader.onerror = reject;

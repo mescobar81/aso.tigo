@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController, NavController, ToastController } from '@ionic/angular';
+import { IonSelect, ModalController, NavController, ToastController } from '@ionic/angular';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 import { Adherente, FormasPago, NuevoGrupoFamiliar } from 'src/app/interfaces/interface';
 import { CoberturaMedicaService } from 'src/app/services/cobertura-medica.service';
@@ -15,6 +15,7 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class CotizarAdherentePage implements OnInit {
 
+  @ViewChild('grupoFamilia') grupoFamilia:IonSelect;
   titulo:String = "";
   cantidad:number = 1;
   importeTotal:number = 0;
@@ -28,7 +29,7 @@ export class CotizarAdherentePage implements OnInit {
   formaPago!:FormasPago;
   gruposFamiliar:NuevoGrupoFamiliar[] =  [];
   adherentes:Adherente[] = [];
-  adherentesAgregado:Adherente[] = [];
+  adherentesAgregado:any[] = [];
   adherenteAuxiliar = [];
   codigoSegmento:string = '';
   nroSolicitud:number = 0;
@@ -70,6 +71,8 @@ export class CotizarAdherentePage implements OnInit {
   }
 
   seleccionarGrupoFamiliar(e:any){
+    //actualiza el importe base del grupo familia
+    this.actualizarImporteTotal();
     this.grupoFamiliar = e.detail.value;
   }
 
@@ -98,6 +101,25 @@ export class CotizarAdherentePage implements OnInit {
     
     const {nroSocio, nombre} = await this.storageService.getUsuario();
 
+    const adherentesAEnviar = [];
+
+    this.adherentesAgregado.forEach(a =>{
+       if(a.cantidadAdherente > 1){
+          for(let i = 0; i < a.cantidadAdherente; i++){
+            adherentesAEnviar.push({
+              codigo:a.codigo,
+              Monto:a.Monto,
+              DescripSevi:a.DescripSevi,
+            });
+          }
+       }else{
+        adherentesAEnviar.push({
+          codigo:a.codigo,
+          Monto:a.Monto,
+          DescripSevi:a.DescripSevi,
+        });
+       }
+    });
     const cotizacion = {
       nroSocio: Number(nroSocio),
       nombre,
@@ -110,7 +132,7 @@ export class CotizarAdherentePage implements OnInit {
       NuevoDescripSeviGrupoFamilia:this.grupoFamiliar.DescripSevi,
       NuevoSegmentoGrupoFamilia:this.grupoFamiliar.Nuevosegmento,
       NuevomontoGrupoFamilia:this.grupoFamiliar.Monto,
-      adherentes:this.adherentesAgregado,
+      adherentes:adherentesAEnviar,
       conyugue:this.conyugue,
       hijo:this.hijo
     };
@@ -130,29 +152,30 @@ export class CotizarAdherentePage implements OnInit {
   }
 
   agregarAdherente(e:any){
-    this.adherenteAuxiliar = [];
+
     this.adherentesAgregado = [];
-    this.importeTotal = 0;
-    
     e.detail.value.forEach((a) =>{
       let adherenteAgregado = {
         codigo:a.codigo,
         Monto:a.Monto,
+        montoBase:a.Monto,
         DescripSevi:a.DescripSevi,
+        cantidadAdhrente:1
       }
       this.adherentesAgregado.push(adherenteAgregado);
     });
-
-    this.adherentesAgregado.forEach(a =>{
+    console.log('AdherentesAgregado:', this.adherentesAgregado);
+    this.actualizarImporteTotal();
+    /* this.adherentesAgregado.forEach(a =>{
       this.adherenteAuxiliar.push({Monto:a.Monto});
       this.importeTotal += a.Monto;
-    });
+    }); */
 
   }
 
   incrementarValor(indice:number){
     let inputComponente:any = document.getElementById(`${indice}`);
-    let montoInicial = this.adherenteAuxiliar[indice].Monto;
+    let montoInicial = this.adherentesAgregado[indice].montoBase; //this.adherenteAuxiliar[indice].Monto;
 
     let montoIncrementado = this.adherentesAgregado[indice].Monto;
     for(let i = 0; i < this.adherentesAgregado.length; i++){
@@ -162,10 +185,12 @@ export class CotizarAdherentePage implements OnInit {
         inputComponente.value = cantidad;
         montoIncrementado+=montoInicial;
         this.adherentesAgregado[indice].Monto = montoIncrementado;
-        this.importeTotal += montoInicial;
+        this.adherentesAgregado[indice].cantidadAdhrente = cantidad;
         break;
       }
     }
+
+    this.actualizarImporteTotal();
   }
 
   decrementarValor(indice:number) {
@@ -174,7 +199,7 @@ export class CotizarAdherentePage implements OnInit {
     if( inputComponente.value <= 1){
       return;
     }
-    let montoInicial = this.adherenteAuxiliar[indice].Monto;
+    let montoInicial = this.adherentesAgregado[indice].montoBase; //this.adherenteAuxiliar[indice].Monto;
 
     let montoDecrementado = this.adherentesAgregado[indice].Monto;
 
@@ -186,11 +211,25 @@ export class CotizarAdherentePage implements OnInit {
         montoDecrementado-=montoInicial;
         //actualiza el monto en el arreglo de adherentes
         this.adherentesAgregado[indice].Monto = montoDecrementado;
-        //actualiza el monto mientras se presiona en los botonnes
-        this.importeTotal -= montoInicial;
+        this.adherentesAgregado[indice].cantidadAdhrente = cantidad;
         break;
       }
     }
+
+    this.actualizarImporteTotal();
+  }
+
+  eliminarAdherente(indice:number){
+    this.adherentesAgregado.splice(indice, 1);
+    this.actualizarImporteTotal();
+  }
+
+  actualizarImporteTotal(){
+    //actualizamos el importe base al importe total mas los montos agregados del adherente
+    this.importeTotal = this.grupoFamilia.value.Monto;
+    this.adherentesAgregado.forEach(a =>{
+      this.importeTotal += a.monto;
+    });
   }
 
   async presentarModal(title: string, descripcion: string, isCss: boolean) {

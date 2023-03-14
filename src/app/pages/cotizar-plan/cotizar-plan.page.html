@@ -72,8 +72,9 @@
     </ion-item-divider>
     <ion-label class="ion-text-wrap">{{etiquetaBeneficiarioAdherente}}</ion-label>
     <ion-item>
-      <ion-select #beneficiarioAdherente 
-                  (ionChange)="seleccionarBeneficiarioAdherente()"
+      <ion-select #beneficiarioAdherente
+                  [multiple]="true"
+                  (ionChange)="seleccionarBeneficiarioAdherente($event)"
                   name="adherente"
                   [(ngModel)]="adherente">
                   <ion-label>Beneficiarios/Adherentes</ion-label>
@@ -115,14 +116,14 @@
       <ion-col size="4">
        {{a.monto | currency:'PYG':'symbol-narrow':'1.2-2'}}
         </ion-col>
-        <ion-col size="3">
+        <!-- <ion-col size="3">
             <ion-chip color="danger"
                       outline="false"
                       (click)="eliminarAdherente(i)">
               <ion-icon name="trash"></ion-icon>
               <ion-label>Eliminar</ion-label>
             </ion-chip>          
-          </ion-col>
+          </ion-col> -->
     </ion-row>
   </ion-grid>
 
@@ -168,8 +169,7 @@
         <ion-button
                     class="btn__contizar"
                     type="submit"
-                    expand="block"
-                    (click)="enviarCotizacion(fCotizar)">
+                    expand="block">
           Cotizar
         </ion-button>
        <!--  <ion-button class="btn__adjuntar"  expand="block">

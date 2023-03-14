@@ -80,6 +80,15 @@
     contain: content;
 }
 
+.alert-checkbox-label.sc-ion-alert-md,
+.alert-checkbox-label.sc-ion-alert-ios{
+    white-space: normal !important;
+}
+
+.alert-tappable.alert-checkbox{
+    height: auto;
+    contain: content;
+}
 ion-loading.custom-loading {
     --background: #e3edff;
     --spinner-color: #1c6dff;

@@ -21,7 +21,6 @@ export class ConsultarBeneficioPage implements OnInit {
   etiquetaGrupoFamiliar:string = '';
   etiquetaPlanFamiliar:string = '';
   etiquetaBeneficiarioAdherente:string = '';
-  adherentesAuxiliar:any[] = [];
   items: PopoverItem[] = [{
     id: 1,
     title: 'Cámara',
@@ -69,9 +68,7 @@ export class ConsultarBeneficioPage implements OnInit {
     const {beneficio, codigoRetorno} =  await this.storageSrv.getValidaInscripcion(); //this.activatedRoute.snapshot.params.beneficio;
     this.validaInscripcion.codigoRetorno = codigoRetorno;
     this.validaInscripcion.beneficio = beneficio;
-    const { Planes } = await this.coberturaMedicaSrv.listarPlanes();
-    this.planes = Planes;
-
+    this.planes = (await this.coberturaMedicaSrv.listarPlanes()).Planes;
     const { FormasPago } = await this.solicitudOrdenSvr.listarFormasDePagos();
     this.formasPago = FormasPago;
   }
@@ -92,49 +89,32 @@ export class ConsultarBeneficioPage implements OnInit {
 
   SeleccionarGrupoFamiliar(){
     this.etiquetaGrupoFamiliar = this.grupoFamiliar.value.DescripSevi;
+    this.actualizarImporteTotal();
     console.log('IMPORTE GRUPO FAMILIA:', this.grupoFamilia.Monto);
-    
-    this.importeTotal = this.grupoFamilia.Monto;
     this.etiquetaBeneficiarioAdherente = '';
   }
   async listarAdherentes(plan: Plane) {
     this.adherenteBeneficiarios =  (await this.coberturaMedicaSrv.listarAdherentes(plan.idplan)).Adherente;
   }
 
-  seleccionarBeneficiarioAdherente(){
-    this.etiquetaBeneficiarioAdherente = this.beneficiarioAdherente.value.DescripSevi;
-    const importeBeneficiarioAdherente = this.beneficiarioAdherente.value.Monto;
-    this.importeTotal += importeBeneficiarioAdherente;
-
-    this.adherentes.push({
-      codigo:this.adherente.codigo,
-      monto: this.adherente.Monto,
-      descripServi: this.adherente.DescripSevi
-    });
-
-    this.adherentes.forEach(a =>{
-      this.adherentesAuxiliar.push({
-        codigo: a.codigo,
-        monto: a.monto,
-        descripServi: a.descripServi
+  seleccionarBeneficiarioAdherente(e:any){
+    this.adherentes = [];
+    e.detail.value.forEach(a =>{
+      this.adherentes.push({
+        codigo:a.codigo,
+        monto: a.Monto,
+        descripServi: a.DescripSevi,
+        montoBase:a.Monto,
+        cantidadAdherente:1
       });
     });
-    console.log(this.adherentesAuxiliar);
     
-  }
-  agregarAdherente() {
-    if (!this.adherente.codigo) {
-      return;
-    }
-    //agrega los datos del adherente para mostrar en la grilla
-    this.adherentes.push({
-      codigo:this.adherente.codigo,
-      monto: this.adherente.Monto,
-      descripServi: this.adherente.DescripSevi
-    });
-    //actualiza el importe total
-    this.importeTotal = this.actualizarImporteTotal();
+    console.log('Adherentes:', this.adherentes);
 
+    this.etiquetaBeneficiarioAdherente = this.beneficiarioAdherente.value.DescripSevi;
+    this.actualizarImporteTotal();
+
+    
   }
 
   decrementarValor(indice:number){
@@ -143,7 +123,7 @@ export class ConsultarBeneficioPage implements OnInit {
     if( inputComponente.value <= 1){
       return;
     }
-    const montoInicial = this.adherentesAuxiliar[indice].monto;
+    const montoInicial = this.adherentes[indice].montoBase; //this.adherentesAuxiliar[indice].monto;
     console.log('MONTO INICIAL:',montoInicial);
     
     let montoDecrementado = this.adherentes[indice].monto;
@@ -157,20 +137,21 @@ export class ConsultarBeneficioPage implements OnInit {
         montoDecrementado-=montoInicial;
         //actualiza el monto en el arreglo de adherentes
         this.adherentes[indice].monto = montoDecrementado;
-        //actualiza el monto mientras se presiona en los botonnes
-        this.importeTotal -= montoInicial;
+        this.adherentes[indice].cantidadAdherente = cantidad;
         break;
       }
     }
+    //actualiza el importe total
+    this.actualizarImporteTotal();
   }
 
   incrementarValor(indice:number){
     let inputComponente:any = document.getElementById(`${indice}`);
-    const montoInicial = this.adherentesAuxiliar[indice].monto;
+    const montoInicial = this.adherentes[indice].montoBase; //this.adherentesAuxiliar[indice].monto;
     console.log('MONTO INICIAL:',montoInicial);
     let montoIncrementado = this.adherentes[indice].monto;
-
     console.log('MONTO INCREMENTADO:', montoIncrementado);
+
     for(let i = 0; i < this.adherentes.length; i++){
       if(i === parseInt(inputComponente.id)){
         let cantidad = inputComponente.value;
@@ -178,10 +159,11 @@ export class ConsultarBeneficioPage implements OnInit {
         inputComponente.value = cantidad;
         montoIncrementado+=montoInicial;
         this.adherentes[indice].monto = montoIncrementado;
-        this.importeTotal += montoInicial;
+        this.adherentes[indice].cantidadAdherente = cantidad;
         break;
       }
     }
+    this.actualizarImporteTotal();
   }
 
   eliminarAdherente(index: number) {
@@ -189,7 +171,7 @@ export class ConsultarBeneficioPage implements OnInit {
     this.adherentes.splice(index, 1);
     this.etiquetaBeneficiarioAdherente = '';
     //actualiza el importe total despues de eliminar un adherente
-    this.importeTotal = this.grupoFamiliar.value.Monto;
+    this.actualizarImporteTotal();
 
   }
 
@@ -213,10 +195,19 @@ export class ConsultarBeneficioPage implements OnInit {
     const nroSolicitud = await this.storageSrv.getNroSolicitud();
     let adherentes = [];
     this.adherentes.forEach((a: any) => {
-      adherentes.push({
-        codigo: a.codigo,
-        monto: a.monto
-      });
+      if(a.cantidadAdherente > 1){
+        for(let i = 1; i <= a.cantidadAdherente; i++){
+          adherentes.push({ 
+            codigo:a.codigo,
+            monto:a.monto
+          });
+        }
+      }else{
+        adherentes.push({
+          codigo: a.codigo,
+          monto: a.monto
+        });
+      }
     });
 
     const cotizar = {
@@ -229,26 +220,24 @@ export class ConsultarBeneficioPage implements OnInit {
       montoGrupoFamilia: this.grupoFamilia.Monto,
       adherentes: adherentes
     }
-
-    console.log(cotizar);
-    
-
-     const { status, mensaje } = await this.coberturaMedicaSrv.enviarCotizacion(cotizar);
-    if (status === 'success') {
-      this.presentarModal('Solicitud de cotización', mensaje, true);
-    } else {
-      this.presentarModal('Solicitud de cotización', mensaje, false);
-    }
-
+  
+    this.coberturaMedicaSrv.enviarCotizacion(cotizar).then(res =>{
+      if (res.status == 'success') {
+        this.presentarModal('Solicitud de cotización', res.mensaje, true);
+      } else {
+        this.presentarModal('Solicitud de cotización', res.mensaje, false);
+      }
+    });
   }
 
-  actualizarImporteTotal(): number {
-    this.importeTotal = 0;
+  actualizarImporteTotal() {
+    //actualiza el importe inicial del grupo familia seleccionado
+    this.importeTotal = this.grupoFamiliar.value.Monto;
+
+    //actualiza el importe base del grupo familia mas el monto del arreglo adherentes
     this.adherentes.forEach((a: any) => {
       this.importeTotal += a.monto
     });
-
-    return this.importeTotal;
   }
 
   async presentarModal(title: string, descripcion: string, isCss: boolean) {
@@ -263,7 +252,7 @@ export class ConsultarBeneficioPage implements OnInit {
 
     await modal.present();
     const {role} = await modal.onWillDismiss();
-    if(role === 'confirm' && isCss) {
+    if(role == 'confirm' && isCss) {
       this.navCtrl.navigateRoot(`adjuntar-documento/${this.validaInscripcion.codigoRetorno}`);
     }
   }

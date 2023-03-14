@@ -28,16 +28,15 @@
 
         <ion-row>
           <ion-col size="12">
-            <ion-list>
-              <ion-select okText="Aceptar"
+            <ion-item>
+              <ion-select #grupoFamilia okText="Aceptar"
                         name="grupoFamiliar"
-                        (ionChange)="seleccionarGrupoFamiliar($event)"
-                        placeholder="Seleccionar grupo familiar"
-                        >
+                        (ionChange)="seleccionarGrupoFamiliar($event)">
+                        <ion-label>Grupo Familiar</ion-label>
               <ion-select-option *ngFor="let b of gruposFamiliar" [value]="b">{{b.DescripSevi}}
               </ion-select-option>
             </ion-select>
-            </ion-list>
+            </ion-item>
           </ion-col>
         </ion-row>
 
@@ -81,19 +80,17 @@
         </ion-item>
         <ion-row>
           <ion-col size="12">
-            <ion-list>
-              <ion-item>
-                <ion-select [multiple]="true"
-                            name="adherente"
-                            (ionChange)="agregarAdherente($event)"
-                            placeholder="Seleccionar adherentes"
-                            >
-                  <ion-select-option *ngFor="let a of adherentes"
-                                     [value]="a"
-                  >{{a.DescripSevi}}</ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-list>
+            <ion-item>
+              <ion-select [multiple]="true"
+                          name="adherente"
+                          (ionChange)="agregarAdherente($event)"
+                          >
+                          <ion-label>Adherentes</ion-label>
+                <ion-select-option *ngFor="let a of adherentes"
+                                   [value]="a"
+                >{{a.DescripSevi}}</ion-select-option>
+              </ion-select>
+            </ion-item>
           </ion-col>
         </ion-row>
       </ion-item-group>
@@ -124,6 +121,14 @@
           </div>
         </ion-col>
         <ion-col class="ion-text-right contentgrid--cell" size="4">{{a.Monto | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-col>
+        <!-- <ion-col size="3">
+          <ion-chip color="danger"
+                    outline="false"
+                    (click)="eliminarAdherente(i)">
+            <ion-icon name="trash"></ion-icon>
+            <ion-label>Eliminar</ion-label>
+          </ion-chip>          
+        </ion-col> -->
       </ion-row>
     </ion-grid>
     <ion-grid>

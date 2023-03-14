@@ -40,9 +40,11 @@ export class MenuCoberturaPage {
        beneficio,
         codigoRetorno,
          descripcionRespuesta } = await this.coberturaMedicaService.validaInsrcipcion(nroSocio); */
-    const validaInscripcion:ResponseValidaInscripcion = await this.coberturaMedicaService.validaInsrcipcion(nroSocio);
+    let validaInscripcion:ResponseValidaInscripcion = await this.coberturaMedicaService.validaInsrcipcion(nroSocio);
     await this.storageSvr.guardarValidaInscripcion(validaInscripcion);
     await this.storageSvr.guardarNroSolicitud(validaInscripcion.nroSolicitud);
+    console.log(validaInscripcion);
+    
     if (validaInscripcion.codigoRetorno == 0) {
       
       this.navCtrl.navigateRoot(`inicio/validar-beneficio/${validaInscripcion.beneficio}`);
@@ -89,7 +91,7 @@ export class MenuCoberturaPage {
     }
     await this.storageSvr.guardarDatosDeBeneficiarioAdherente(beneficiario);
     await this.storageSvr.guardarNroSolicitud(nroSolicitud);
-    
+    //codigoRetorno = 0;
     if(codigoRetorno == 0){
       this.navCtrl.navigateRoot(`cotizar-adherente/${codigoRetorno}`);
     }
