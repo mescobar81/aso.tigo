@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { File, FileEntry } from '@awesome-cordova-plugins/file/ngx';
 import { Camera, CameraResultType, Photo } from '@capacitor/camera';
-import { ModalController, NavController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 import { CoberturaMedicaService } from 'src/app/services/cobertura-medica.service';
-import { LeerArchivoFromURLService } from 'src/app/services/leer-archivo-from-url.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 declare var window: any;
@@ -19,22 +18,25 @@ export class AdjuntarDocumentoPage implements OnInit {
 
   image: Photo;
   adjuntos: any[] = [];
-  adjuntados: any[] = [];
+  mostrarAdjuntos: any[] = [];
   file: File;
-  mensaje:string = '';
-  status:string = '';
+  mensaje: string = '';
+  status: string = '';
   dato = {
-    nroSolicitud:'',
-    nombre:''
+    nroSolicitud: '',
+    nombre: ''
   }
+  backButton = null;
   constructor(private archivo: File,
-    private modalCtrl: ModalController,
     private coberturaMedicaSrv: CoberturaMedicaService,
-    private leerArchivo:LeerArchivoFromURLService,
+    private platform:Platform,
+    private modalCtrl: ModalController,
+    private storageSrv: StorageService,
     private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
     private activatedRoute: ActivatedRoute,
-    private navCtrl: NavController,
-    private storageSrv: StorageService) { }
+    private loadingCtrl: LoadingController,
+    private navCtrl: NavController,){}
 
   async ngOnInit() {
     const codigoRetorno = this.activatedRoute.snapshot.params.codigoRetorno;
@@ -42,46 +44,67 @@ export class AdjuntarDocumentoPage implements OnInit {
     this.dato.nroSolicitud = nroSolicitud;
     //ver: codigo 94 para saber si la solicitud es rechazada por la clinica medica
     //solo para recuperacion de documentos adjuntos
-    if(codigoRetorno == 94){
-      const {status, mensaje, ArchivoAdjunto} = await this.coberturaMedicaSrv.recuperarAdjuntos(Number(nroSolicitud));
+    if (codigoRetorno == 94) {
+      const { status, mensaje, ArchivoAdjunto } = await this.coberturaMedicaSrv.recuperarAdjuntos(Number(nroSolicitud));
 
-      if(status === 'success'){
+      if (status === 'success') {
         try {
-          if(ArchivoAdjunto.length > 0){
-            ArchivoAdjunto.forEach(async a =>{
+          if (ArchivoAdjunto.length > 0) {
+            ArchivoAdjunto.forEach(async a => {
               const cadenaExtraidaInicial = a.adjunto.substring(7);
               let arregloCadena = cadenaExtraidaInicial.split('/');
 
-              this.adjuntados.push(arregloCadena[4]);//en la posicion 4 cargamos el nombre del archivo
-              
+              this.mostrarAdjuntos.push(arregloCadena[4]);//en la posicion 4 cargamos el nombre del archivo
+
             });
           } else {
             this.presentToast('bottom', 'Sin archivos adjuntos');
-          }         
-          
+          }
+
         } catch (error) {
           console.log(JSON.stringify(error));
           this.presentarModal('Recuperación de adjuntos', JSON.stringify(JSON.stringify(error)), false);
         }
       } else {
-        this.presentarModal('Adjunto Recuperado', mensaje, false);
+        this.presentarModal('Recuperación de adjuntos', mensaje, false);
       }
-      
+
     }
   }
 
-  seleccionarArchivo(event: any) {
+  ionViewDidEnter() {
+    this.backButton = this.platform.backButton.subscribeWithPriority(9999, () => {
+    });
+    }
 
-    //this.file = event.target.files[0];
-    //const img = window.Ionic.WebView.convertFileSrc(this.file);
-    //const img = this.leerArchivo.convertBlobToBase64(this.file);
+    /**
+     * desactiva la navegacion del boton atras fisico del dispositivo
+     */
+    ionViewWillLeave() {
+        this.backButton.unsubscribe();
+    }
 
-    this.adjuntados.push(event.target.files[0].mame);//para mostrar los nombres de archivo al usuario
-    this.adjuntos.push({
-      blob: this.file,
-      name: event.target.files[0].name
-    });//para el envio de archivos blob al servicio
+  seleccionarArchivo(event:any) {
+    const fileSeleccionado:any = event.target.files[0];
     
+    const reader = new FileReader();
+    const realReader = (reader as any)._realReader;
+    realReader.onloadend = (res:any) => {
+      console.log(res.target.result);
+      
+      let blob = new Blob([new Uint8Array(res.target.result)], {type:fileSeleccionado.type});
+      this.adjuntos.push({
+        blob: blob,
+        name: fileSeleccionado.name
+      });//para el envio de archivos blob al servicio
+
+    }
+    
+    reader.readAsArrayBuffer(fileSeleccionado);
+
+    console.log('Adjuntos', this.adjuntos);
+    this.mostrarAdjuntos.push(fileSeleccionado.name);//para mostrar los nombres de archivo al usuario en la vista
+    console.log('Mostrar adjuntos', this.mostrarAdjuntos);
   }
 
   async tomarFoto() {
@@ -108,8 +131,9 @@ export class AdjuntarDocumentoPage implements OnInit {
     if (!image) { return };
 
     const img = window.Ionic.WebView.convertFileSrc(image.path);
+
     this.image = image;//actualiza la referencia a image
-    this.adjuntados.push(image.path.substring(54));
+
 
     //TO DO: pones validacion para verificar si es dispositivo o web
 
@@ -135,72 +159,85 @@ export class AdjuntarDocumentoPage implements OnInit {
         reader.readAsArrayBuffer(file);
       });
     });
+
+    const nameFile = image.path.substr(image.path.lastIndexOf('/') + 1);
+    this.mostrarAdjuntos.push(nameFile);
   }
 
 
   async enviarAsismed() {
 
-    if(this.adjuntados.length == 0) {
+    if (this.adjuntos.length == 0) {
       this.presentToast('bottom', 'Favor ingrsar archivos adjuntos antes de enviar');
       return;
     }
 
     this.dato.nombre = (await this.storageSrv.getUsuario()).nombre;
-    
-    try {
-      const {status, mensaje} = await this.coberturaMedicaSrv.enviarAsismed(this.dato);
 
-    if(status === 'success'){
-      await this.presentarModal('Solicitud Asismed', mensaje, true);
-    }else{
-      await this.presentarModal('Solicitud Asismed', mensaje, false);
-    }
+    try {
+
+      const { status, mensaje } = await this.coberturaMedicaSrv.enviarAsismed(this.dato);
+
+      if (status === 'success') {
+        
+        await this.presentarModal('Solicitud Asismed', mensaje, true);
+      } else {
+        await this.presentarModal('Solicitud Asismed', mensaje, false);
+      }
     } catch (error) {
       console.log(JSON.stringify(error));
       this.presentarModal('Solicitud de envio', JSON.stringify(error), false);
-      
+
     }
-        
-    //llamamos a este metodo para enviar archivos adjuntos
-    //en caso que el usuario haya presionado enviar a asismed
-    this.subirAdjunto();
   }
 
-//no envia ningun dato al servidor, nave a la pantalla menu cobertura si 
-//no hay ningun adjunto
+  //no envia ningun dato al servidor, nave a la pantalla menu cobertura si 
+  //no hay ningun adjunto
   async subirAdjunto() {
 
-    if(this.adjuntos.length == 0) {
+    if (this.adjuntos.length == 0) {
       this.navCtrl.navigateRoot('inicio/menu-cobertura');
       return;
     }
+    console.log(this.adjuntos);
     
     try {
-      this.adjuntos.forEach(async (file: any) => {
-        
-        let formData = new FormData();
-        formData.append('file', file.blob, file.name);
-        formData.append('nroSolicitud', this.dato.nroSolicitud);
-        
-        const { status, mensaje } = await this.coberturaMedicaSrv.subirAdjunto(formData);
-        if (status === 'success') {
-          await this.presentToast('bottom', mensaje);
-        }else{
-          await this.presentToast('bottom', mensaje);
-        }
-      });
+      this.showLoading('Espere. Enviando archivos adjuntos...');
+      //para indicar cuantas peticiones se hace al servidor para mostrar el mensaje satisfactorio una vez 
+      //que haya culminado la cantidad llamadas.
+      let contadorDeAdjuntos = 0;
 
+      for(let i = 0; i < this.adjuntos.length; i++) {
+        ++contadorDeAdjuntos;
+        let formData = new FormData();
+        let blob = this.adjuntos[i].blob;
+        let fileName = this.adjuntos[i].name;
+
+        formData.append('file', blob, fileName);
+        formData.append('nroSolicitud', this.dato.nroSolicitud);
+        const { status, mensaje} = await this.coberturaMedicaSrv.subirAdjunto(formData);
+
+        if(contadorDeAdjuntos == this.adjuntos.length){
+          if (status == 'success') {
+            this.presentAlert('Envío de archivos', '', mensaje, ['Aceptar'], false);
+          } else {
+            this.presentAlert('Envío de archivos', '', mensaje, ['Aceptar'], true);
+          }
+          break;
+        }
+      }
     } catch (error) {
+      this.loadingCtrl.dismiss();
       console.log(JSON.stringify(error));
       this.presentarModal('Archivos adjuntos', error, false);
     }
-    this.limpiarDatos();
-    this.navCtrl.navigateRoot('inicio/menu-cobertura');
+    this.loadingCtrl.dismiss();
   }
 
 
-  eliminarAdjunto(index:number){
-    this.adjuntados.splice(index, 1);
+  eliminarAdjunto(index: number) {
+    this.mostrarAdjuntos.splice(index, 1);
+    this.adjuntos.splice(index, 1);
   }
 
   async presentToast(position: 'top' | 'middle' | 'bottom', message: string) {
@@ -208,8 +245,8 @@ export class AdjuntarDocumentoPage implements OnInit {
       message: message,
       duration: 2200,
       position: position,
-      icon:'information-circle',
-      cssClass:'custom-toast'
+      icon: 'information-circle',
+      cssClass: 'custom-toast'
     });
 
     await toast.present();
@@ -226,10 +263,43 @@ export class AdjuntarDocumentoPage implements OnInit {
     });
 
     await modal.present();
+    const { role } = await modal.onWillDismiss();
+    if (role == 'confirm' && isCss) {
+      //llamamos a este metodo para enviar archivos adjuntos
+      this.subirAdjunto();
+    }
   }
 
-  limpiarDatos(){
-    this.adjuntados = [];
-    this.adjuntos = [];
+  async showLoading(mensaje: string) {
+    const loading = await this.loadingCtrl.create({
+      message: mensaje,
+      //duration: 4000,
+      spinner: 'bubbles',
+      cssClass: 'custom-loading',
+    });
+
+    loading.present();
+  }
+
+  async presentAlert(header:string,subHeader:string, message:string, buttons:string[], isError:boolean) {
+    this.loadingCtrl.dismiss();
+    const alert = await this.alertCtrl.create({
+      header: header,
+      subHeader: subHeader,
+      message: message,
+      buttons: [
+        {
+          text: buttons[0],
+          role:'confirm',
+          handler: () => {
+            if(!isError){
+              this.navCtrl.navigateRoot('inicio/menu-cobertura');
+            }
+          }
+        }
+      ],
+    });
+
+    await alert.present();  
   }
 }

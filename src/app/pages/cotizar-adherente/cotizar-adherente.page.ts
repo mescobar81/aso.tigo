@@ -19,6 +19,7 @@ export class CotizarAdherentePage implements OnInit {
   titulo:String = "";
   cantidad:number = 1;
   importeTotal:number = 0;
+  montoGrupoFamiliar:number = 0;
   formasPago: FormasPago[] = [];
   grupoFamiliar:NuevoGrupoFamiliar = {
     Nuevocodigo:0,
@@ -74,6 +75,7 @@ export class CotizarAdherentePage implements OnInit {
     //actualiza el importe base del grupo familia
     this.actualizarImporteTotal();
     this.grupoFamiliar = e.detail.value;
+    this.montoGrupoFamiliar = e.detail.value.Monto;
   }
 
   seleccionarConyugue(e:any){
@@ -228,7 +230,7 @@ export class CotizarAdherentePage implements OnInit {
     //actualizamos el importe base al importe total mas los montos agregados del adherente
     this.importeTotal = this.grupoFamilia.value.Monto;
     this.adherentesAgregado.forEach(a =>{
-      this.importeTotal += a.monto;
+      this.importeTotal += a.Monto;
     });
   }
 

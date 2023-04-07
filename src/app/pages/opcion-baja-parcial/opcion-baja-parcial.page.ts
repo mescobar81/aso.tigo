@@ -94,10 +94,7 @@ export class OpcionBajaParcialPage implements OnInit {
   }
 
   async enviarSolicitud() {
-   if(!this.grupoFamiliar){
-      this.presentToast('bottom', '¡Incluir integrante grupo familiar!');
-      return;
-    }
+
     if (this.solicitudAdjuntados.length === 0) {
       this.presentToast('bottom', '¡Agregue solicitud de baja antes de enviar!');
       return;
@@ -115,12 +112,14 @@ export class OpcionBajaParcialPage implements OnInit {
     const json = {
       "SegmentoGrupoFamilia": codsegmento,
       "codigoGrupoFamilia": codigo,
-      "NuevocodigoGrupoFamilia": 0,
-      "NuevoSegmentoGrupoFamilia": 'GFA',
+      "NuevocodigoGrupoFamilia": this.grupoFamiliar.Nuevocodigo,
+      "NuevoSegmentoGrupoFamilia": 'NFA',
       "conyugue":this.conyugue,
       "hijo":this.hijo,
       "adherentes": this.adherentesExcluido
     };
+    
+    console.log(json);
     
     formData.append('file', this.blob, this.solicitudAdjuntados[0].name);
     formData.append('nroSolicitud', nroSolicitud);
@@ -147,13 +146,13 @@ export class OpcionBajaParcialPage implements OnInit {
         
       })*/
 
-      const {status, mensaje} = await this.coberturaMedicaService.enviarSolicitudBajaParcial(formData);
+      /* const {status, mensaje} = await this.coberturaMedicaService.enviarSolicitudBajaParcial(formData);
 
       if (status === 'success') {
         this.presentarModal('Baja Parcial', mensaje, true);
       } else {
         this.presentarModal('Baja Parcial', mensaje, false);
-      }
+      } */
     } catch (error) {
       this.presentarModal('Baja Parcial', JSON.stringify(error), false);
     }

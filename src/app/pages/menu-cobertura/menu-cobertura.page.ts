@@ -44,7 +44,7 @@ export class MenuCoberturaPage {
     await this.storageSvr.guardarValidaInscripcion(validaInscripcion);
     await this.storageSvr.guardarNroSolicitud(validaInscripcion.nroSolicitud);
     console.log(validaInscripcion);
-    
+    //validaInscripcion.codigoRetorno = 96;
     if (validaInscripcion.codigoRetorno == 0) {
       
       this.navCtrl.navigateRoot(`inicio/validar-beneficio/${validaInscripcion.beneficio}`);

@@ -119,7 +119,7 @@ export class ResponderTicketPage implements OnInit {
 
     await modal.present();
     const { role } = await modal.onWillDismiss();
-    if (role === 'confirm') {
+    if (role == 'confirm') {
       this.navCtrl.navigateRoot('/inicio/tikets-abiertos');
     }
   }

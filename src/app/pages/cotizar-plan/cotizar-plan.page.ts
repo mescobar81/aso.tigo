@@ -42,6 +42,7 @@ export class ConsultarBeneficioPage implements OnInit {
     codigoRetorno:0
   }
   importeTotal: number = 0;
+  montoGrupoFamiliar:number = 0;
   grupoFamilia!: GrupoFamilia;
   formaPago!: FormasPago;
 
@@ -74,12 +75,12 @@ export class ConsultarBeneficioPage implements OnInit {
   }
 
   seleccionarPlan() {
+    this.adherenteBeneficiarios = [];
+    this.gruposFamilia =  [];
     const plan:Plane = this.planFamiliar.value;
-    console.log(plan);
+    this.listarAdherentes(plan);
     this.etiquetaPlanFamiliar = plan.descPlan;
     this.etiquetaGrupoFamiliar = '';
-    this.listarGrupoFamiliarByPlan(this.validaInscripcion.beneficio, plan);
-    this.listarAdherentes(plan);
   }
 
   async listarGrupoFamiliarByPlan(beneficio: string, plan: Plane) {
@@ -88,11 +89,20 @@ export class ConsultarBeneficioPage implements OnInit {
   }
 
   SeleccionarGrupoFamiliar(){
+    console.log('GrupoFamiliar');
+    if(!this.planFamiliar.value){
+      return;
+    }
+
+    if(this.gruposFamilia.length == 0){
+      this.listarGrupoFamiliarByPlan(this.validaInscripcion.beneficio,  this.planFamiliar.value);
+    }
+    this.montoGrupoFamiliar = this.grupoFamilia?.Monto;
     this.etiquetaGrupoFamiliar = this.grupoFamiliar.value.DescripSevi;
     this.actualizarImporteTotal();
-    console.log('IMPORTE GRUPO FAMILIA:', this.grupoFamilia.Monto);
     this.etiquetaBeneficiarioAdherente = '';
   }
+
   async listarAdherentes(plan: Plane) {
     this.adherenteBeneficiarios =  (await this.coberturaMedicaSrv.listarAdherentes(plan.idplan)).Adherente;
   }

@@ -10,16 +10,19 @@ import {
 
 import { StorageService } from './storage.service';
 import { ModalMensajeriaComponent } from '../components/modal-mensajeria/modal-mensajeria.component';
+import { CoberturaMedicaService } from './cobertura-medica.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificacionService {
 
+  
   constructor(private platform: Platform,
               private navCtrl: NavController,
               private modalCtrl: ModalController,
-              private storageSrv: StorageService) { 
+              private storageSrv: StorageService,
+              private coberturaMedicaSvr:CoberturaMedicaService) { 
     this.init();
     
   }
@@ -74,13 +77,15 @@ export class NotificacionService {
         const notificacionRecibida = JSON.parse(notification.data.data);
   
         const {pantallaAbrir, mensaje} = notificacionRecibida.notificacion;
-        
         if(usuario.rol.roles[0].toLowerCase() === 'presidente' || usuario.rol.roles[0].toLowerCase() === 'tesorero'){
           this.navCtrl.navigateRoot('/inicio/aprobar-rechazar-orden');
         }else if(usuario.rol.roles[0].toLowerCase() === 'socio'){
           if(pantallaAbrir == 'HOME'){
             this.navCtrl.navigateRoot('/inicio');
           }else if(pantallaAbrir == 'COTIZAR_PLAN_SEGURO_MEDICO'){
+            const validaInscripcion = await this.coberturaMedicaSvr.validaInsrcipcion(usuario.nroSocio);
+            this.storageSrv.guardarValidaInscripcion(validaInscripcion);
+            this.storageSrv.guardarNroSolicitud(validaInscripcion.nroSolicitud);
             this.navCtrl.navigateRoot('inicio/cotizar-plan');
           }else if(pantallaAbrir == 'MIS_TICKETS'){
             this.navCtrl.navigateRoot('inicio/tikets-abiertos');
@@ -109,6 +114,9 @@ export class NotificacionService {
           if(pantallaAbrir == 'HOME'){
             this.navCtrl.navigateRoot('/inicio');
           }else if(pantallaAbrir == 'COTIZAR_PLAN_SEGURO_MEDICO'){
+            const validaInscripcion = await this.coberturaMedicaSvr.validaInsrcipcion(usuario.nroSocio);
+            this.storageSrv.guardarValidaInscripcion(validaInscripcion);
+            this.storageSrv.guardarNroSolicitud(validaInscripcion.nroSolicitud);
             this.navCtrl.navigateRoot('inicio/cotizar-plan');
           }else if(pantallaAbrir == 'MIS_TICKETS'){
             this.navCtrl.navigateRoot('inicio/tikets-abiertos');
