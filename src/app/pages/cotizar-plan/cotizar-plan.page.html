@@ -52,14 +52,14 @@
     <ion-label class="ion-text-wrap">{{etiquetaGrupoFamiliar}}</ion-label>
     <ion-item-divider color="success">
       <div>
-        <ion-label class="ion-text-wrap">{{montoGrupoFamiliar | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-label>
+        <ion-label class="ion-text-end">{{montoGrupoFamiliar | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-label>
       </div>
     </ion-item-divider>
 
-
+    <!-- (ionFocus)="SeleccionarGrupoFamiliar()" -->
     <ion-item>
       <ion-select #grupoFamiliar
-                  (ionFocus)="SeleccionarGrupoFamiliar()"
+                  (ionChange)="SeleccionarGrupoFamiliar()"
                   name="grupoFamilia"
                   [(ngModel)]="grupoFamilia"
                   required>

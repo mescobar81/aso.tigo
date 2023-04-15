@@ -31,6 +31,7 @@
             <ion-item>
               <ion-select #grupoFamilia okText="Aceptar"
                         name="grupoFamiliar"
+                        [(ngModel)]="grupoFamiliar"
                         (ionChange)="seleccionarGrupoFamiliar($event)">
                         <ion-label>Grupo Familiar</ion-label>
               <ion-select-option *ngFor="let b of gruposFamiliar" [value]="b">{{b.DescripSevi}}

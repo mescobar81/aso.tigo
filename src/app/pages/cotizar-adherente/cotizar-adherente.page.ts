@@ -96,6 +96,11 @@ export class CotizarAdherentePage implements OnInit {
 
   async cotizar(fCotizar:NgForm){
 
+    if(this.importeTotal == 0){
+      this.presentToast('bottom', '¡Favor!. Seleccionar Grupo familiar y/o Adherente');
+      return;
+    }
+
     if(fCotizar.invalid){
       this.presentToast('bottom', '¡Favor!. Seleccionar forma de pago');
       return;
@@ -106,6 +111,8 @@ export class CotizarAdherentePage implements OnInit {
     const adherentesAEnviar = [];
 
     this.adherentesAgregado.forEach(a =>{
+      console.log(a.cantidadAdherente);
+      
        if(a.cantidadAdherente > 1){
           for(let i = 0; i < a.cantidadAdherente; i++){
             adherentesAEnviar.push({
@@ -139,6 +146,8 @@ export class CotizarAdherentePage implements OnInit {
       hijo:this.hijo
     };
 
+    console.log('Cotizacion', cotizacion);
+    
     try {
       const {mensaje, status, nroSolicitud} = await this.coberturaMedicaSvr.enviarCotizacionAdhrente(cotizacion);
     if(status == 'success'){
@@ -162,16 +171,12 @@ export class CotizarAdherentePage implements OnInit {
         Monto:a.Monto,
         montoBase:a.Monto,
         DescripSevi:a.DescripSevi,
-        cantidadAdhrente:1
+        cantidadAdherente:1
       }
       this.adherentesAgregado.push(adherenteAgregado);
     });
     console.log('AdherentesAgregado:', this.adherentesAgregado);
     this.actualizarImporteTotal();
-    /* this.adherentesAgregado.forEach(a =>{
-      this.adherenteAuxiliar.push({Monto:a.Monto});
-      this.importeTotal += a.Monto;
-    }); */
 
   }
 
@@ -187,7 +192,7 @@ export class CotizarAdherentePage implements OnInit {
         inputComponente.value = cantidad;
         montoIncrementado+=montoInicial;
         this.adherentesAgregado[indice].Monto = montoIncrementado;
-        this.adherentesAgregado[indice].cantidadAdhrente = cantidad;
+        this.adherentesAgregado[indice].cantidadAdherente = cantidad;
         break;
       }
     }
@@ -213,7 +218,7 @@ export class CotizarAdherentePage implements OnInit {
         montoDecrementado-=montoInicial;
         //actualiza el monto en el arreglo de adherentes
         this.adherentesAgregado[indice].Monto = montoDecrementado;
-        this.adherentesAgregado[indice].cantidadAdhrente = cantidad;
+        this.adherentesAgregado[indice].cantidadAdherente = cantidad;
         break;
       }
     }
@@ -228,7 +233,7 @@ export class CotizarAdherentePage implements OnInit {
 
   actualizarImporteTotal(){
     //actualizamos el importe base al importe total mas los montos agregados del adherente
-    this.importeTotal = this.grupoFamilia.value.Monto;
+    this.importeTotal = this.grupoFamiliar.Monto;
     this.adherentesAgregado.forEach(a =>{
       this.importeTotal += a.Monto;
     });

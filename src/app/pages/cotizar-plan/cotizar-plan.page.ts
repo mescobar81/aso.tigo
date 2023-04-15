@@ -21,6 +21,8 @@ export class ConsultarBeneficioPage implements OnInit {
   etiquetaGrupoFamiliar:string = '';
   etiquetaPlanFamiliar:string = '';
   etiquetaBeneficiarioAdherente:string = '';
+  beneficio:string = '';
+  plan:Plane = null;
   items: PopoverItem[] = [{
     id: 1,
     title: 'Cámara',
@@ -67,6 +69,7 @@ export class ConsultarBeneficioPage implements OnInit {
 
   async ngOnInit() {
     const {beneficio, codigoRetorno} =  await this.storageSrv.getValidaInscripcion(); //this.activatedRoute.snapshot.params.beneficio;
+    this.beneficio = beneficio;
     this.validaInscripcion.codigoRetorno = codigoRetorno;
     this.validaInscripcion.beneficio = beneficio;
     this.planes = (await this.coberturaMedicaSrv.listarPlanes()).Planes;
@@ -74,28 +77,30 @@ export class ConsultarBeneficioPage implements OnInit {
     this.formasPago = FormasPago;
   }
 
-  seleccionarPlan() {
+  async seleccionarPlan() {
     this.adherenteBeneficiarios = [];
     this.gruposFamilia =  [];
-    const plan:Plane = this.planFamiliar.value;
-    this.listarAdherentes(plan);
-    this.etiquetaPlanFamiliar = plan.descPlan;
+    this.plan = this.planFamiliar.value;
+    this.gruposFamilia = (await this.coberturaMedicaSrv.listarGrupoFamiliarByPlan(this.beneficio, this.plan.idplan)).GrupoFamilia;
+    this.adherenteBeneficiarios =  (await this.coberturaMedicaSrv.listarAdherentes(this.plan.idplan)).Adherente;
+    //this.listarAdherentes(plan);
+    this.etiquetaPlanFamiliar = this.plan.descPlan;
     this.etiquetaGrupoFamiliar = '';
   }
 
   async listarGrupoFamiliarByPlan(beneficio: string, plan: Plane) {
-    this.gruposFamilia = (await this.coberturaMedicaSrv.listarGrupoFamiliarByPlan(beneficio, plan.idplan)).GrupoFamilia;
-    console.log('GRUPO FAMILIAR:', this.gruposFamilia);
+    /* this.gruposFamilia = (await this.coberturaMedicaSrv.listarGrupoFamiliarByPlan(beneficio, plan.idplan)).GrupoFamilia;
+    console.log('GRUPO FAMILIAR:', this.gruposFamilia); */
   }
 
-  SeleccionarGrupoFamiliar(){
+  async SeleccionarGrupoFamiliar(){
     console.log('GrupoFamiliar');
     if(!this.planFamiliar.value){
       return;
     }
 
     if(this.gruposFamilia.length == 0){
-      this.listarGrupoFamiliarByPlan(this.validaInscripcion.beneficio,  this.planFamiliar.value);
+      this.gruposFamilia = (await this.coberturaMedicaSrv.listarGrupoFamiliarByPlan(this.beneficio, this.plan.idplan)).GrupoFamilia;
     }
     this.montoGrupoFamiliar = this.grupoFamilia?.Monto;
     this.etiquetaGrupoFamiliar = this.grupoFamiliar.value.DescripSevi;
@@ -242,7 +247,7 @@ export class ConsultarBeneficioPage implements OnInit {
 
   actualizarImporteTotal() {
     //actualiza el importe inicial del grupo familia seleccionado
-    this.importeTotal = this.grupoFamiliar.value.Monto;
+    this.importeTotal = this.grupoFamilia?.Monto;
 
     //actualiza el importe base del grupo familia mas el monto del arreglo adherentes
     this.adherentes.forEach((a: any) => {

@@ -21,7 +21,12 @@ export class OpcionBajaParcialPage implements OnInit {
   adherentesExcluido: any[] = [];
   solicitudAdjuntados: any[] = [];
   gruposFamiliar: NuevoGrupoFamiliar[] = [];
-  grupoFamiliar?: NuevoGrupoFamiliar;
+  grupoFamiliar: NuevoGrupoFamiliar = {
+    Nuevocodigo:0,
+    Monto:0,
+    DescripSevi:'',
+    Nuevosegmento:''
+  };
   conyugue: string = 'N';
   hijo: string = 'N';
   blob!: any;
@@ -95,32 +100,33 @@ export class OpcionBajaParcialPage implements OnInit {
 
   async enviarSolicitud() {
 
-    if (this.solicitudAdjuntados.length === 0) {
-      this.presentToast('bottom', '¡Agregue solicitud de baja antes de enviar!');
+    if (this.adherentesExcluido.length == 0 && !this.grupoFamiliar.Nuevocodigo) {
+      this.presentToast('bottom', '¡Seleccione grupo familiar o adherente!');
       return;
     }
-    if (this.adherentesExcluido.length === 0) {
-      this.presentToast('bottom', '¡Seleccione al menos un adherente!');
+
+    if (this.solicitudAdjuntados.length === 0) {
+      this.presentToast('bottom', '¡Agregue solicitud de baja antes de enviar!');
       return;
     }
 
     const { nroSolicitud } = await this.storageService.getValidacionBaja();
     const { nroSocio, nombre } = await this.storageService.getUsuario();
     const { codigo, codsegmento } = await this.storageService.getValidacionBaja();
-    const formData = new FormData();
+
 
     const json = {
       "SegmentoGrupoFamilia": codsegmento,
       "codigoGrupoFamilia": codigo,
       "NuevocodigoGrupoFamilia": this.grupoFamiliar.Nuevocodigo,
-      "NuevoSegmentoGrupoFamilia": 'NFA',
+      "NuevoSegmentoGrupoFamilia": this.grupoFamiliar.Nuevosegmento,
       "conyugue":this.conyugue,
       "hijo":this.hijo,
       "adherentes": this.adherentesExcluido
     };
     
     console.log(json);
-    
+    const formData = new FormData();
     formData.append('file', this.blob, this.solicitudAdjuntados[0].name);
     formData.append('nroSolicitud', nroSolicitud);
     formData.append('nroSocio', nroSocio);
@@ -146,13 +152,13 @@ export class OpcionBajaParcialPage implements OnInit {
         
       })*/
 
-      /* const {status, mensaje} = await this.coberturaMedicaService.enviarSolicitudBajaParcial(formData);
+      const {status, mensaje} = await this.coberturaMedicaService.enviarSolicitudBajaParcial(formData);
 
       if (status === 'success') {
         this.presentarModal('Baja Parcial', mensaje, true);
       } else {
         this.presentarModal('Baja Parcial', mensaje, false);
-      } */
+      }
     } catch (error) {
       this.presentarModal('Baja Parcial', JSON.stringify(error), false);
     }

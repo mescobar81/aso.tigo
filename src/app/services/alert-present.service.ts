@@ -17,8 +17,5 @@ export class AlertPresentService {
     });
 
     await alert.present();
-    const {role} = await alert.onWillDismiss();
-    console.log(role);
-    
   }
 }

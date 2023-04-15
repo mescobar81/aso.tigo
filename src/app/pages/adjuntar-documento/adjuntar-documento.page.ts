@@ -42,9 +42,11 @@ export class AdjuntarDocumentoPage implements OnInit {
     const codigoRetorno = this.activatedRoute.snapshot.params.codigoRetorno;
     const nroSolicitud = await this.storageSrv.getNroSolicitud();
     this.dato.nroSolicitud = nroSolicitud;
-    //ver: codigo 94 para saber si la solicitud es rechazada por la clinica medica
+    console.log('CodigoRetorno adjuntar documento:', codigoRetorno);
+    
+    //ver: codigo 96 para saber si la solicitud es rechazada por la clinica medica
     //solo para recuperacion de documentos adjuntos
-    if (codigoRetorno == 94) {
+    if (codigoRetorno == 96) {
       const { status, mensaje, ArchivoAdjunto } = await this.coberturaMedicaSrv.recuperarAdjuntos(Number(nroSolicitud));
 
       if (status === 'success') {

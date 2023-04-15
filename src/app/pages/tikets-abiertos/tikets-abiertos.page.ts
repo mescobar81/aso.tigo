@@ -51,21 +51,19 @@ export class TiketsAbiertosPage implements OnInit {
     this.showLoading('Espere. Descargando archivo...');
     this.leerArchivoFromUrlSvr.downloadFile(url, nameFile).then(async (response) => {
       if (response.path) {
-        const read = await Filesystem.readFile({
-          path: nameFile,
-          directory: Directory.Documents
-        });
-
         this.loadingCtrl.dismiss();//desactiva el loading
         const extensionArchivo = nameFile.substr(nameFile.lastIndexOf('.') + 1);
         if(extensionArchivo == 'pdf'){
           //`data:application/pdf,${read.data}`;
           this.alerPresentSvr.presentAlert('Descarga de archivo', 'Almacenamiento interno', `Archivo descargado en la ruta: ${response.path}`, 'Aceptar');
         }else{
+          const read = await Filesystem.readFile({
+            path: nameFile,
+            directory: Directory.Documents
+          });
           const image = `data:image/${extensionArchivo};base64,${read.data}`;
           this.mostrarArchivoDescargado(image, response.path);
         }
-        
       } else if (response.blob) {
         const base64 = await this.leerArchivoFromUrlSvr.convertBlobToBase64(response.blob) as string;
         const saveFile = await Filesystem.writeFile({
@@ -73,20 +71,20 @@ export class TiketsAbiertosPage implements OnInit {
           data: base64,
           directory: Directory.Documents
         });
-        this.loadingCtrl.dismiss();//desactiva el loading
+        
         const path = saveFile.uri;
         this.fileOpener.open(path, response.blob.type).then((result) => {
           console.log('Archivo abierto: ', result);
 
         });
+        this.loadingCtrl.dismiss();//desactiva el loading
       }
-
     }).catch(error => {
       console.log(JSON.stringify(error));
       this.loadingCtrl.dismiss();//desactiva el loading
       this.presentarModal(error.name, JSON.stringify(error.message), false);
     });
-
+    
   }
 
   cerrarTicket(indiceTicket: number, indiceDetalle: number) {
