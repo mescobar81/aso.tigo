@@ -88,13 +88,8 @@ export class ConsultarBeneficioPage implements OnInit {
     this.etiquetaGrupoFamiliar = '';
   }
 
-  async listarGrupoFamiliarByPlan(beneficio: string, plan: Plane) {
-    /* this.gruposFamilia = (await this.coberturaMedicaSrv.listarGrupoFamiliarByPlan(beneficio, plan.idplan)).GrupoFamilia;
-    console.log('GRUPO FAMILIAR:', this.gruposFamilia); */
-  }
-
   async SeleccionarGrupoFamiliar(){
-    console.log('GrupoFamiliar');
+
     if(!this.planFamiliar.value){
       return;
     }
@@ -123,8 +118,6 @@ export class ConsultarBeneficioPage implements OnInit {
         cantidadAdherente:1
       });
     });
-    
-    console.log('Adherentes:', this.adherentes);
 
     this.etiquetaBeneficiarioAdherente = this.beneficiarioAdherente.value.DescripSevi;
     this.actualizarImporteTotal();
@@ -139,10 +132,8 @@ export class ConsultarBeneficioPage implements OnInit {
       return;
     }
     const montoInicial = this.adherentes[indice].montoBase; //this.adherentesAuxiliar[indice].monto;
-    console.log('MONTO INICIAL:',montoInicial);
     
     let montoDecrementado = this.adherentes[indice].monto;
-    console.log('MONTO DECREMENTADO:', montoDecrementado);
     
     for(let i = 0; i < this.adherentes.length; i++){
       if(i === parseInt(inputComponente.id)){
@@ -163,9 +154,7 @@ export class ConsultarBeneficioPage implements OnInit {
   incrementarValor(indice:number){
     let inputComponente:any = document.getElementById(`${indice}`);
     const montoInicial = this.adherentes[indice].montoBase; //this.adherentesAuxiliar[indice].monto;
-    console.log('MONTO INICIAL:',montoInicial);
     let montoIncrementado = this.adherentes[indice].monto;
-    console.log('MONTO INCREMENTADO:', montoIncrementado);
 
     for(let i = 0; i < this.adherentes.length; i++){
       if(i === parseInt(inputComponente.id)){

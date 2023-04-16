@@ -42,7 +42,6 @@ export class AdjuntarDocumentoPage implements OnInit {
     const codigoRetorno = this.activatedRoute.snapshot.params.codigoRetorno;
     const nroSolicitud = await this.storageSrv.getNroSolicitud();
     this.dato.nroSolicitud = nroSolicitud;
-    console.log('CodigoRetorno adjuntar documento:', codigoRetorno);
     
     //ver: codigo 96 para saber si la solicitud es rechazada por la clinica medica
     //solo para recuperacion de documentos adjuntos
@@ -60,7 +59,7 @@ export class AdjuntarDocumentoPage implements OnInit {
 
             });
           } else {
-            this.presentToast('bottom', 'Sin archivos adjuntos');
+            this.presentToast('bottom', 'No dispones de Archivos adjuntos');
           }
 
         } catch (error) {
@@ -88,12 +87,10 @@ export class AdjuntarDocumentoPage implements OnInit {
 
   seleccionarArchivo(event:any) {
     const fileSeleccionado:any = event.target.files[0];
-    
+    this.actualizarMostrarAdjuntos(fileSeleccionado.name);
     const reader = new FileReader();
     const realReader = (reader as any)._realReader;
     realReader.onloadend = (res:any) => {
-      console.log(res.target.result);
-      
       let blob = new Blob([new Uint8Array(res.target.result)], {type:fileSeleccionado.type});
       this.adjuntos.push({
         blob: blob,
@@ -104,11 +101,16 @@ export class AdjuntarDocumentoPage implements OnInit {
     
     reader.readAsArrayBuffer(fileSeleccionado);
 
-    console.log('Adjuntos', this.adjuntos);
-    this.mostrarAdjuntos.push(fileSeleccionado.name);//para mostrar los nombres de archivo al usuario en la vista
-    console.log('Mostrar adjuntos', this.mostrarAdjuntos);
+    //this.mostrarAdjuntos.push(fileSeleccionado.name);//para mostrar los nombres de archivo al usuario en la vista
+ 
   }
 
+  //para mostrar los nombres de archivo al usuario en la vista
+  actualizarMostrarAdjuntos(fileSeleccionado:string){
+    this.mostrarAdjuntos.push({
+      name:fileSeleccionado
+    });
+  }
   async tomarFoto() {
 
     const image = await Camera.getPhoto({
@@ -163,7 +165,8 @@ export class AdjuntarDocumentoPage implements OnInit {
     });
 
     const nameFile = image.path.substr(image.path.lastIndexOf('/') + 1);
-    this.mostrarAdjuntos.push(nameFile);
+    this.actualizarMostrarAdjuntos(nameFile);
+    //this.mostrarAdjuntos.push(nameFile);
   }
 
 
@@ -201,7 +204,6 @@ export class AdjuntarDocumentoPage implements OnInit {
       this.navCtrl.navigateRoot('inicio/menu-cobertura');
       return;
     }
-    console.log(this.adjuntos);
     
     try {
       this.showLoading('Espere. Enviando archivos adjuntos...');

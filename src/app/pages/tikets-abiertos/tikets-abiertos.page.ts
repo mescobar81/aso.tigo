@@ -75,7 +75,6 @@ export class TiketsAbiertosPage implements OnInit {
         const path = saveFile.uri;
         this.fileOpener.open(path, response.blob.type).then((result) => {
           console.log('Archivo abierto: ', result);
-
         });
         this.loadingCtrl.dismiss();//desactiva el loading
       }

@@ -125,7 +125,6 @@ export class OpcionBajaParcialPage implements OnInit {
       "adherentes": this.adherentesExcluido
     };
     
-    console.log(json);
     const formData = new FormData();
     formData.append('file', this.blob, this.solicitudAdjuntados[0].name);
     formData.append('nroSolicitud', nroSolicitud);

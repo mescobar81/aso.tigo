@@ -48,8 +48,6 @@ export class EncuestaTicketPage implements OnInit {
       this.presentAlert();
       return;
     }
-
-    console.log(this.ticket);
     
     try {
       const { mensaje, status } = await this.ticketService.cerrarTicket(this.ticket);

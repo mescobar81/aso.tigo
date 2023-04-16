@@ -127,7 +127,6 @@ export class SolicitudOrdenPage implements OnInit {
     this.nuevaOrden.montoSolicitado = parseInt(this.solicitudOrden.montoSolicitado);
     this.nuevaOrden.cantidadCuotas = this.solicitudOrden.cantidadCuotas;
     this.nuevaOrden.cuotaMes = this.importeCuota;
-    console.log(this.nuevaOrden);
     
     const response: ResponseSolicitudOrden = await this.solicitudOrdenSvr.enviarSolicitudOrden(this.nuevaOrden);
 

@@ -111,8 +111,6 @@ export class CotizarAdherentePage implements OnInit {
     const adherentesAEnviar = [];
 
     this.adherentesAgregado.forEach(a =>{
-      console.log(a.cantidadAdherente);
-      
        if(a.cantidadAdherente > 1){
           for(let i = 0; i < a.cantidadAdherente; i++){
             adherentesAEnviar.push({
@@ -145,8 +143,6 @@ export class CotizarAdherentePage implements OnInit {
       conyugue:this.conyugue,
       hijo:this.hijo
     };
-
-    console.log('Cotizacion', cotizacion);
     
     try {
       const {mensaje, status, nroSolicitud} = await this.coberturaMedicaSvr.enviarCotizacionAdhrente(cotizacion);
@@ -175,7 +171,7 @@ export class CotizarAdherentePage implements OnInit {
       }
       this.adherentesAgregado.push(adherenteAgregado);
     });
-    console.log('AdherentesAgregado:', this.adherentesAgregado);
+    //actualizamos el importe
     this.actualizarImporteTotal();
 
   }
