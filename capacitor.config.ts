@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'py.com.sysasotigos.asociados',
+  appId: 'py.sysasotigo.asociados',
   appName: 'AsoTigo Asociados',
   webDir:'www',
   bundledWebRuntime: false,
