@@ -61,9 +61,11 @@ export class SolicitudOrdenPage implements OnInit {
     this.onDebouncer
     .pipe(debounceTime(500))
     .subscribe((montoSolicitado:number) =>{
-      const cuotaMensual = montoSolicitado / this.solicitudOrden.cantidadCuotas;
-      this.solicitudOrden.cuotaMes = cuotaMensual;
-      this.importeCuota = Math.round(cuotaMensual);//redondea el importe a entero
+      if(this.solicitudOrden.cantidadCuotas > 0){
+        const cuotaMensual = montoSolicitado / this.solicitudOrden.cantidadCuotas;
+        this.solicitudOrden.cuotaMes = Math.round(cuotaMensual);//redondea el importe a entero
+        this.importeCuota = this.solicitudOrden.cuotaMes;
+      }
     });
 
     this.onDebouncerSeparadorMiles
@@ -72,7 +74,7 @@ export class SolicitudOrdenPage implements OnInit {
       //separa el importe usando el punto y vuelve a unir
       //ver: para poder ver en el campo importe el separador de miles
       let importeSinSeparador = importe; //importe.split(',').join("");
-      this.importeFormateado = importeSinSeparador.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+      this.importeFormateado = importeSinSeparador.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
       
     });
 
@@ -144,6 +146,7 @@ export class SolicitudOrdenPage implements OnInit {
 
   calcularCuotaMensual(event:any) {
     const montoSolicitado = event.target.value; //.split(',').join("");
+
     if (!montoSolicitado) {
       this.solicitudOrden.cuotaMes = 0;
       return;
@@ -160,7 +163,7 @@ export class SolicitudOrdenPage implements OnInit {
       return;
     }
     //this.solicitudOrden.montoSolicitado = this.solicitudOrden.montoSolicitado.split(',').join("");
-    this.onDebouncer.next(parseInt(this.solicitudOrden.montoSolicitado));
+    this.onDebouncer.next(+this.solicitudOrden.montoSolicitado);
   }
 
 

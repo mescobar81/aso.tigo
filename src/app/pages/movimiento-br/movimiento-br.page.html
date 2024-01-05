@@ -6,7 +6,7 @@
             <ion-col size="12">
                 <ion-item>
                     <ion-label>Seleccionar Fecha</ion-label>
-                    <ion-select class="custom-options" interface="popover" (ionChange)="seleccionar($event)">
+                    <ion-select class="custom-options" (ionChange)="seleccionar($event)">
                         <ion-select-option [value]="c" *ngFor="let c of ciclos">{{c.anho}} - {{getMesEnLetras(c.mes)}}
                         </ion-select-option>
                     </ion-select>

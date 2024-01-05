@@ -105,7 +105,6 @@
         <ion-item>
           <ion-label position="stacked">Nro. Cuotas:</ion-label>
           <ion-select class="fixed__opcion"
-                      interface="popover"
                       name="cantidadCuotas"
                       (ionChange)="recalcularCuotaMensual()"
                       [(ngModel)]="solicitudOrden.cantidadCuotas"
@@ -125,7 +124,7 @@
           <ion-label position="floating">Cuota Mensual:</ion-label>
           <ion-input type="text"
                      name="cuotaMes"
-                     [ngModel]="solicitudOrden.cuotaMes | currency:'PYG':'symbol-narrow'"
+                     [ngModel]="solicitudOrden.cuotaMes"
                      (ngModelChange)="solicitudOrden.cuotaMes=$event"
                      readonly="true"
                      required
