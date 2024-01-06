@@ -124,7 +124,8 @@
           <ion-label position="floating">Cuota Mensual:</ion-label>
           <ion-input type="text"
                      name="cuotaMes"
-                     [ngModel]="solicitudOrden.cuotaMes"
+                     [ngModel]="importeCuotaMesConSeparadorMiles"
+                    
                      (ngModelChange)="solicitudOrden.cuotaMes=$event"
                      readonly="true"
                      required
@@ -133,7 +134,7 @@
         </ion-item>
       </ion-col>
     </ion-row>
-
+    <!-- [ngModel]="solicitudOrden.cuotaMes" -->
     <ion-row>
       <ion-col size="12">
           <ion-button class="content__button"

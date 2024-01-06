@@ -23,6 +23,7 @@ export class SolicitudOrdenPage implements OnInit {
   @ViewChild('importeMonto') importeMonto:IonInput;
   importeFormateado:string = '';
   importeCuota:number = 0;
+  importeCuotaMesConSeparadorMiles:string = '';
   onDebouncer:Subject<number> = new Subject();
   onDebouncerSeparadorMiles:Subject<string> = new Subject();
   comercios: Comercio[] = [];
@@ -65,6 +66,7 @@ export class SolicitudOrdenPage implements OnInit {
         const cuotaMensual = montoSolicitado / this.solicitudOrden.cantidadCuotas;
         this.solicitudOrden.cuotaMes = Math.round(cuotaMensual);//redondea el importe a entero
         this.importeCuota = this.solicitudOrden.cuotaMes;
+        this.importeCuotaMesConSeparadorMiles = this.solicitudOrden.cuotaMes.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
       }
     });
 
@@ -73,8 +75,8 @@ export class SolicitudOrdenPage implements OnInit {
     .subscribe((importe:string) =>{
       //separa el importe usando el punto y vuelve a unir
       //ver: para poder ver en el campo importe el separador de miles
-      let importeSinSeparador = importe; //importe.split(',').join("");
-      this.importeFormateado = importeSinSeparador.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+
+      this.importeFormateado = importe.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
       
     });
 
@@ -129,6 +131,7 @@ export class SolicitudOrdenPage implements OnInit {
     this.nuevaOrden.montoSolicitado = parseInt(this.solicitudOrden.montoSolicitado);
     this.nuevaOrden.cantidadCuotas = this.solicitudOrden.cantidadCuotas;
     this.nuevaOrden.cuotaMes = this.importeCuota;
+    console.log(this.nuevaOrden);
     
     const response: ResponseSolicitudOrden = await this.solicitudOrdenSvr.enviarSolicitudOrden(this.nuevaOrden);
 

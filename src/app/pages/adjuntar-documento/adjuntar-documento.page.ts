@@ -48,15 +48,16 @@ export class AdjuntarDocumentoPage implements OnInit {
     if (codigoRetorno == 96) {
       const { status, mensaje, ArchivoAdjunto } = await this.coberturaMedicaSrv.recuperarAdjuntos(Number(nroSolicitud));
 
+      
       if (status === 'success') {
         try {
           if (ArchivoAdjunto.length > 0) {
             ArchivoAdjunto.forEach(async a => {
               const cadenaExtraidaInicial = a.adjunto.substring(7);
-              let arregloCadena = cadenaExtraidaInicial.split('/');
-
-              this.mostrarAdjuntos.push(arregloCadena[4]);//en la posicion 4 cargamos el nombre del archivo
-
+              let arregloCadena:any[] = cadenaExtraidaInicial.split('/');
+              this.mostrarAdjuntos.push({
+                name:arregloCadena[4]
+              });//en la posicion 4 cargamos el nombre del archivo
             });
           } else {
             this.presentToast('bottom', 'No dispones de Archivos adjuntos');

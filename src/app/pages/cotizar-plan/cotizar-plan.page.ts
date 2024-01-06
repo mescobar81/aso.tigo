@@ -43,8 +43,11 @@ export class ConsultarBeneficioPage implements OnInit {
     beneficio:'',
     codigoRetorno:0
   }
+  //para mostrar el importe con separador de miles, solo a modo visual para el usuario
+  importeTotalConSeparadorMiles:string = '0';
+
   importeTotal: number = 0;
-  montoGrupoFamiliar:number = 0;
+  montoGrupoFamiliar:string = '0';
   grupoFamilia!: GrupoFamilia;
   formaPago!: FormasPago;
 
@@ -97,7 +100,7 @@ export class ConsultarBeneficioPage implements OnInit {
     if(this.gruposFamilia.length == 0){
       this.gruposFamilia = (await this.coberturaMedicaSrv.listarGrupoFamiliarByPlan(this.beneficio, this.plan.idplan)).GrupoFamilia;
     }
-    this.montoGrupoFamiliar = this.grupoFamilia?.Monto;
+    this.montoGrupoFamiliar = this.grupoFamilia?.Monto.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
     this.etiquetaGrupoFamiliar = this.grupoFamiliar.value.DescripSevi;
     this.actualizarImporteTotal();
     this.etiquetaBeneficiarioAdherente = '';
@@ -112,6 +115,7 @@ export class ConsultarBeneficioPage implements OnInit {
     e.detail.value.forEach(a =>{
       this.adherentes.push({
         codigo:a.codigo,
+        montoConSeparadorMiles:a.Monto.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."),
         monto: a.Monto,
         descripServi: a.DescripSevi,
         montoBase:a.Monto,
@@ -144,6 +148,7 @@ export class ConsultarBeneficioPage implements OnInit {
         //actualiza el monto en el arreglo de adherentes
         this.adherentes[indice].monto = montoDecrementado;
         this.adherentes[indice].cantidadAdherente = cantidad;
+        this.adherentes[indice].montoConSeparadorMiles = montoDecrementado.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
         break;
       }
     }
@@ -164,6 +169,7 @@ export class ConsultarBeneficioPage implements OnInit {
         montoIncrementado+=montoInicial;
         this.adherentes[indice].monto = montoIncrementado;
         this.adherentes[indice].cantidadAdherente = cantidad;
+        this.adherentes[indice].montoConSeparadorMiles = montoIncrementado.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
         break;
       }
     }
@@ -242,6 +248,8 @@ export class ConsultarBeneficioPage implements OnInit {
     this.adherentes.forEach((a: any) => {
       this.importeTotal += a.monto
     });
+
+    this.importeTotalConSeparadorMiles = this.importeTotal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
 
   async presentarModal(title: string, descripcion: string, isCss: boolean) {

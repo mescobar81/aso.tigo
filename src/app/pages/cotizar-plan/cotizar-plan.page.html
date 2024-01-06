@@ -45,12 +45,11 @@
       </ion-select>
     </ion-item>
 
-
-    
-    <ion-label class="ion-text-wrap">{{etiquetaGrupoFamiliar}}</ion-label>
     <ion-item-divider color="success">
       <div>
-        <ion-label class="ion-text-end" style="font-size:20px;font-weight: 600;">{{montoGrupoFamiliar | currency:'':'':'1.0-2'}}</ion-label>
+        <ion-label class="ion-text-wrap">{{etiquetaGrupoFamiliar}}</ion-label>
+        <ion-label class="ion-text-end" style="font-size:20px;font-weight: 600;">{{montoGrupoFamiliar}}</ion-label>
+        <!-- <ion-label class="ion-text-end" style="font-size:20px;font-weight: 600;">{{montoGrupoFamiliar | currency:'':'':'1.0-2'}}</ion-label> -->
       </div>
     </ion-item-divider>
 
@@ -122,7 +121,7 @@
         </div>
       </ion-col>
       <ion-col size="5" class="ion-text-right">
-       {{a.monto}}
+       {{a.montoConSeparadorMiles}}
        <!-- {{a.monto | currency:'PYG':'symbol-narrow':'1.2-2'}} -->
         </ion-col>
         <!-- <ion-col size="3">
@@ -149,8 +148,8 @@
         <ion-item-group>
             <ion-item-divider color="success">
               <div class="item-divider__importeTotal">
-                <!-- <ion-label style="font-size:20px;font-weight:600">{{importeTotal}}</ion-label> -->
-                <ion-label style="font-size:20px;font-weight:600">{{importeTotal | currency:'':'':'1.0-2'}}</ion-label>
+                <ion-label style="font-size:20px;font-weight:600">{{importeTotalConSeparadorMiles}}</ion-label>
+                <!-- <ion-label style="font-size:20px;font-weight:600">{{importeTotal | currency:'':'':'1.0-2'}}</ion-label> -->
               </div>
             </ion-item-divider>
         </ion-item-group>
