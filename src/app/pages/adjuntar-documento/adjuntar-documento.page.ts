@@ -87,6 +87,9 @@ export class AdjuntarDocumentoPage implements OnInit {
     }
 
   seleccionarArchivo(event:any) {
+    if(!event.target.files[0]){
+      return;
+    }
     const fileSeleccionado:any = event.target.files[0];
     this.actualizarMostrarAdjuntos(fileSeleccionado.name);
     const reader = new FileReader();
@@ -165,7 +168,7 @@ export class AdjuntarDocumentoPage implements OnInit {
       });
     });
 
-    const nameFile = image.path.substr(image.path.lastIndexOf('/') + 1);
+    const nameFile = image.path.substring(image.path.lastIndexOf('/') + 1);
     this.actualizarMostrarAdjuntos(nameFile);
     //this.mostrarAdjuntos.push(nameFile);
   }

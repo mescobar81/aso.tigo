@@ -93,12 +93,10 @@
                      type="number"
                      [(ngModel)]="solicitudOrden.montoSolicitado"
                      (ionInput)="calcularCuotaMensual($event)"
-                     (ionChange)="formatNumber($event)"
                      required>
           </ion-input>
         </ion-item>
       </ion-col>
-
     </ion-row>
     <ion-row>
       <ion-col size="12">

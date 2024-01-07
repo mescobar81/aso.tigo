@@ -18,14 +18,14 @@ import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.com
 })
 export class SolicitudOrdenPage implements OnInit {
 
-  DECIMAL_SEPARATOR=".";
-  GROUP_SEPARATOR=",";
-  @ViewChild('importeMonto') importeMonto:IonInput;
-  importeFormateado:string = '';
-  importeCuota:number = 0;
-  importeCuotaMesConSeparadorMiles:string = '';
-  onDebouncer:Subject<number> = new Subject();
-  onDebouncerSeparadorMiles:Subject<string> = new Subject();
+  DECIMAL_SEPARATOR = ".";
+  GROUP_SEPARATOR = ",";
+  @ViewChild('importeMonto') importeMonto: IonInput;
+  importeFormateado: string = '';
+  importeCuota: number = 0;
+  importeCuotaMesConSeparadorMiles: string = '';
+  onDebouncer: Subject<number> = new Subject();
+  onDebouncerSeparadorMiles: Subject<string> = new Subject();
   comercios: Comercio[] = [];
   formasPagos: FormasPago[] = [];
   cuotasMaximas: Number[] = [];
@@ -33,7 +33,7 @@ export class SolicitudOrdenPage implements OnInit {
     nombre: 'Asunción'
   }
 
-  montoSolicitado:number = 0;
+  montoSolicitado: number = 0;
   nuevaOrden: OrdenSolicitada = {
     nroSocio: 0,
     codComercio: 0,
@@ -60,25 +60,33 @@ export class SolicitudOrdenPage implements OnInit {
   async ngOnInit() {
     this.init();
     this.onDebouncer
-    .pipe(debounceTime(500))
-    .subscribe((montoSolicitado:number) =>{
-      if(this.solicitudOrden.cantidadCuotas > 0){
-        const cuotaMensual = montoSolicitado / this.solicitudOrden.cantidadCuotas;
-        this.solicitudOrden.cuotaMes = Math.round(cuotaMensual);//redondea el importe a entero
-        this.importeCuota = this.solicitudOrden.cuotaMes;
-        this.importeCuotaMesConSeparadorMiles = this.solicitudOrden.cuotaMes.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-      }
-    });
+      .pipe(debounceTime(500))
+      .subscribe((montoSolicitado: number) => {
+
+        if (!montoSolicitado) {
+          this.solicitudOrden.cuotaMes = 0;
+          return;
+        }
+
+        if (this.solicitudOrden.cantidadCuotas > 0) {
+          const cuotaMensual = montoSolicitado / this.solicitudOrden.cantidadCuotas;
+          this.solicitudOrden.cuotaMes = Math.round(cuotaMensual);//redondea el importe a entero
+          this.importeCuota = this.solicitudOrden.cuotaMes;
+          this.importeCuotaMesConSeparadorMiles = this.solicitudOrden.cuotaMes.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        }
+      });
 
     this.onDebouncerSeparadorMiles
-    .pipe(debounceTime(100))
-    .subscribe((importe:string) =>{
-      //separa el importe usando el punto y vuelve a unir
-      //ver: para poder ver en el campo importe el separador de miles
-
-      this.importeFormateado = importe.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-      
-    });
+      .pipe(debounceTime(100))
+      .subscribe((importe: string) => {
+        //separa el importe usando el punto y vuelve a unir
+        //ver: para poder ver en el campo importe el separador de miles
+        if (!importe || importe === undefined) {
+          this.importeFormateado = "";
+          return;
+        }
+        this.importeFormateado = importe.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      });
 
   }
 
@@ -131,8 +139,7 @@ export class SolicitudOrdenPage implements OnInit {
     this.nuevaOrden.montoSolicitado = parseInt(this.solicitudOrden.montoSolicitado);
     this.nuevaOrden.cantidadCuotas = this.solicitudOrden.cantidadCuotas;
     this.nuevaOrden.cuotaMes = this.importeCuota;
-    console.log(this.nuevaOrden);
-    
+
     const response: ResponseSolicitudOrden = await this.solicitudOrdenSvr.enviarSolicitudOrden(this.nuevaOrden);
 
     if (response.codigoRespuesta == '00') {
@@ -147,22 +154,23 @@ export class SolicitudOrdenPage implements OnInit {
     }
   }
 
-  calcularCuotaMensual(event:any) {
+  calcularCuotaMensual(event: any) {
     const montoSolicitado = event.target.value; //.split(',').join("");
 
-    if (!montoSolicitado) {
+    /* if (!montoSolicitado) {
       this.solicitudOrden.cuotaMes = 0;
       return;
-    }
+    } */
     this.onDebouncer.next(montoSolicitado);
+    this.formatNumber(event);
   }
 
   /**
    * vuelve a calcular la cuota mensual si cambia el valor de la cuota en el combo
    * @returns 
    */
-  recalcularCuotaMensual(){
-    if(!this.solicitudOrden.montoSolicitado){
+  recalcularCuotaMensual() {
+    if (!this.solicitudOrden.montoSolicitado) {
       return;
     }
     //this.solicitudOrden.montoSolicitado = this.solicitudOrden.montoSolicitado.split(',').join("");
@@ -187,33 +195,32 @@ export class SolicitudOrdenPage implements OnInit {
       this.init();//inicializa los valores en los campos
     }
   }
-  formatNumber (num:any) {
-    if(!num.detail.value){
+  formatNumber(event: any) {
+    /* if(!event.detail.value || event.detail.value == ''){
       this.importeFormateado = '';
       return;
-    }
-    
-    this.onDebouncerSeparadorMiles.next(num.detail.value);
-}
- /*  format(valString:any):any {
-    if (!valString) {
-        return '';
-    }
-    let val = valString.toString();
-    const parts = this.unFormat(val).split(this.DECIMAL_SEPARATOR);
-    return parts[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, this.GROUP_SEPARATOR) + (!parts[1] ? '' : this.DECIMAL_SEPARATOR + parts[1]);
-};
-
-unFormat(val) {
-  if (!val) {
-      return '';
+    } */
+    this.onDebouncerSeparadorMiles.next(event.detail.value);
   }
-  val = val.replace(/^0+/, '');
-
-  if (this.GROUP_SEPARATOR === ',') {
-      return val.replace(/,/g, '');
-  } else {
-      return val.replace(/\./g, '');
-  }
-}; */
+  /*  format(valString:any):any {
+     if (!valString) {
+         return '';
+     }
+     let val = valString.toString();
+     const parts = this.unFormat(val).split(this.DECIMAL_SEPARATOR);
+     return parts[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, this.GROUP_SEPARATOR) + (!parts[1] ? '' : this.DECIMAL_SEPARATOR + parts[1]);
+ };
+ 
+ unFormat(val) {
+   if (!val) {
+       return '';
+   }
+   val = val.replace(/^0+/, '');
+ 
+   if (this.GROUP_SEPARATOR === ',') {
+       return val.replace(/,/g, '');
+   } else {
+       return val.replace(/\./g, '');
+   }
+ }; */
 }
