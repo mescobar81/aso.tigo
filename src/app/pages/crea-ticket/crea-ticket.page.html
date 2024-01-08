@@ -3,13 +3,14 @@
 <ion-content class="ion-padding">
   <form #fSolicitud="ngForm" (ngSubmit)="enviarSolicitud(fSolicitud)">
     <ion-list>
+      <ion-label>Tipo Solicitud</ion-label>
       <ion-item>
-        <ion-label>Tipo Solicitud</ion-label>
+        
         <ion-select okText="Aceptar"
                   name="tipoSolicitud"
                   [ngModel]="nuevaSolicitud.tipoSolicitud"
                   (ngModel)="$event">
-          <ion-select-option *ngFor="let t of tiposSolicitud" [value]="t.id" required>{{t.descripcion}}</ion-select-option>
+          <ion-select-option class="ion-text-wrap" *ngFor="let t of tiposSolicitud" [value]="t.id" required>{{t.descripcion}}</ion-select-option>
         </ion-select>
       </ion-item>
     </ion-list>
