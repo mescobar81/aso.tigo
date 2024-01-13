@@ -13,6 +13,7 @@ import { ModalRechazoSolicitudComponent } from './modal-rechazo-solicitud/modal-
 import { ModalNotificacionComponent } from './modal-notificacion/modal-notificacion.component';
 import { ModalMensajeriaComponent } from './modal-mensajeria/modal-mensajeria.component';
 import { ModalShowImageComponent } from './modal-show-image/modal-show-image.component';
+import { PipeModule } from '../pipes/pipe.module';
 
 
 
@@ -42,7 +43,8 @@ import { ModalShowImageComponent } from './modal-show-image/modal-show-image.com
     CommonModule,
     IonicModule,
     FormsModule,
-    MesAbiertoPageRoutingModule
+    MesAbiertoPageRoutingModule,
+    PipeModule
   ]
 })
 export class ComponentsModule { }

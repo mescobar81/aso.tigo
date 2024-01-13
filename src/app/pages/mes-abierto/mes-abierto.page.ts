@@ -11,8 +11,6 @@ import { ExtractoMesService } from 'src/app/services/extracto-mes.service';
 export class MesAbiertoPage implements OnInit {
 
   extratoMesAbierto!:ResponseMesAbierto;
-  totalDescuento:string = '';
-  capitalAportado:string = '';
   detalle:Detalle[] = [];
   constructor(private extractoMesSvr:ExtractoMesService) {
    }
@@ -23,17 +21,7 @@ export class MesAbiertoPage implements OnInit {
 
   async listarExtractoMes(){
     this.extratoMesAbierto = await this.extractoMesSvr.getMesAbierto();
-    this.totalDescuento = this.extratoMesAbierto.cabecera?.totalDescuento.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-    this.capitalAportado = this.extratoMesAbierto.cabecera?.integrado.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-    this.extratoMesAbierto.detalle.forEach(e =>{
-      this.detalle.push({
-        cuota: e.cuota,
-        monto: e.monto.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."),
-        saldo: e.saldo.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."),
-        comentario: e.comentario,
-        nroDoc: e.nroDoc
-      });
-    });
+    this.detalle = this.extratoMesAbierto.detalle;
   }
 
 }

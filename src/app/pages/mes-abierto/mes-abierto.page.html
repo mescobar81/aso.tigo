@@ -19,7 +19,7 @@
                 </ion-col>
                 <ion-col size="6" class="ion-text-right">
                     <ion-text>
-                        {{totalDescuento}}
+                        {{extratoMesAbierto?.cabecera.totalDescuento | formatoSeparadorMiles}}
                     </ion-text>
                 </ion-col>
             </ion-row>
@@ -31,7 +31,7 @@
                 </ion-col>
                 <ion-col size="6" class="ion-text-right">
                     <ion-text>
-                        {{extratoMesAbierto?.cabecera.integrado}}
+                        {{extratoMesAbierto?.cabecera.integrado | formatoSeparadorMiles}}
                     </ion-text>
                 </ion-col>
             </ion-row>

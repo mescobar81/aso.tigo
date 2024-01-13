@@ -10,6 +10,12 @@ import { ExtractoMesService } from 'src/app/services/extracto-mes.service';
 })
 export class MesCerradoPage implements OnInit {
 
+  descuento:string = '';
+  capitalAportado:string = '';
+  liquidacion:string = '';
+  aporteMes:string = '';
+  totalMes:string = '';
+  saldoPendiente:string = '';
   detalle:Detalle[] = [];
   mesCerrado!:ResponseMesCerrado;
   ciclos:Ciclo[] = [];
@@ -27,11 +33,8 @@ export class MesCerradoPage implements OnInit {
       mes:event.detail.value.mes,
       anho:event.detail.value.anho
     };
-    
-    await this.extractoSrv.getMesCerrado(params).then(mesCerrado =>{
-      this.mesCerrado = mesCerrado;
-      this.detalle = mesCerrado.detalle;
-    });
+    this.mesCerrado =  await this.extractoSrv.getMesCerrado(params);
+    this.detalle = this.mesCerrado.detalle;
   }
 
   /**
