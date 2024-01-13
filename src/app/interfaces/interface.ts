@@ -114,10 +114,10 @@ export interface Cabecera {
 export interface Detalle {
     nroDoc?:     string;
     cuota?:      string;
-    monto?:      number;
-    saldo?:      number;
+    monto?:      string;
+    saldo?:      string;
     comentario?: string;
-    interes?:    number;
+    interes?:    string;
 }
 
 
