@@ -88,8 +88,12 @@
       <ion-col size="12">
         
         <ion-item>
-          <ion-label class="importeFormateado" color="success" position="floating">{{importeFormateado}}</ion-label>
-          <ion-input class="montoSolicitado" #importeMonto name="montoSolicitado"
+          <ion-label class="importeFormateado" color="success">{{importeFormateado | formatoSeparadorMiles}}</ion-label>
+          <ion-input #importeMonto
+                    label=""
+                    labelPlacement="floating"
+                    class="montoSolicitado" 
+                    name="montoSolicitado"
                      type="number"
                      [(ngModel)]="solicitudOrden.montoSolicitado"
                      (ionInput)="calcularCuotaMensual($event)"
@@ -101,8 +105,10 @@
     <ion-row>
       <ion-col size="12">
         <ion-item>
-          <ion-label position="stacked">Nro. Cuotas:</ion-label>
+          <!-- <ion-label position="stacked">Nro. Cuotas:</ion-label> -->
           <ion-select class="fixed__opcion"
+                      label="Nro. Cuotas"
+                      label-placement="floating"
                       name="cantidadCuotas"
                       (ionChange)="recalcularCuotaMensual()"
                       [(ngModel)]="solicitudOrden.cantidadCuotas"
@@ -119,11 +125,12 @@
     <ion-row>
       <ion-col size="12">
         <ion-item>
-          <ion-label position="floating">Cuota Mensual:</ion-label>
           <ion-input type="text"
                      name="cuotaMes"
-                     [ngModel]="importeCuotaMesConSeparadorMiles"
-                    
+                     label="Cuota Mensual"
+                     label-placement="floating"
+                     [ngModel]="importeCuotaMesConSeparadorMiles | formatoSeparadorMiles"
+                     
                      (ngModelChange)="solicitudOrden.cuotaMes=$event"
                      readonly="true"
                      required

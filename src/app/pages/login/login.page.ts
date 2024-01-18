@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
-import { MenuController, ModalController, NavController, ToastController } from '@ionic/angular';
+import { LoadingController, MenuController, ModalController, NavController, ToastController } from '@ionic/angular';
 import * as CryptoJS from 'crypto-js';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 
@@ -43,7 +43,8 @@ export class LoginPage {
     private device: Device,
     private alertSvr: AlertPresentService,
     private modalCtrl: ModalController,
-    private toastCtrl: ToastController) { 
+    private toastCtrl: ToastController,
+    private loadingCtrl:LoadingController) { 
       this.notificationService.init();
       
     }
@@ -80,7 +81,7 @@ export class LoginPage {
         idTokenFirebase:token
       }
     }
-    
+    this.showLoading('Aguarde. Ingresando...');
     this.authSvr.login(nuevoUsuario).then(response => {
       if (!response.usuario.valido) {
         this.alertSvr.presentAlert("Atención", "", response.usuario.mensaje, "Aceptar");
@@ -89,12 +90,13 @@ export class LoginPage {
         this.navCtrl.navigateRoot('inicio');//llama a la pantalla incio
         this.menuCtrl.open('first');//llama al menu
       }
+      this.loadingCtrl.dismiss();
     }).catch(err => {
       console.log('ERROR: ', JSON.stringify(err));
       this.presentarModal('ERROR',err.message,false);
+      this.loadingCtrl.dismiss();
     });
-
-
+    
   }
 
   async presentToast(position: 'top' | 'middle' | 'bottom') {
@@ -130,5 +132,16 @@ export class LoginPage {
     });
 
     await modal.present();
+  }
+
+  async showLoading(mensaje: string) {
+    const loading = await this.loadingCtrl.create({
+      message: mensaje,
+      //duration: 4000,
+      spinner: 'bubbles',
+      cssClass: 'custom-loading',
+    });
+
+    loading.present();
   }
 }

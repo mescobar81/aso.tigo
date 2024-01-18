@@ -5,8 +5,8 @@
     <ion-row>
       <ion-col size="12">
         <ion-item>
-          <ion-label>Seleccionar ciclo</ion-label>
-          <ion-select (ionChange)="seleccionarCiclo($event)">
+          <ion-select label="Seleccionar Ciclo"
+                      (ionChange)="seleccionarCiclo($event)">
             <ion-select-option class="color-option" *ngFor="let c of ciclos" [value]="c">
               {{c.anho}} - {{getMesEnLetras(c.mes)}}
             </ion-select-option>

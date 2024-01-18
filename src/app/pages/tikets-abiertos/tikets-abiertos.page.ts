@@ -30,8 +30,10 @@ export class TiketsAbiertosPage implements OnInit {
     private alerPresentSvr: AlertPresentService) { }
 
   async ngOnInit() {
+
     const { documento } = await this.storageService.getUsuario();
     this.tickets = (await this.ticketsAbiertoSvr.obtenerTicketsAbierto(documento)).tickets;
+
   }
 
   /**
@@ -136,4 +138,5 @@ export class TiketsAbiertosPage implements OnInit {
       this.alerPresentSvr.presentAlert('Descarga de archivo', 'Almacenamiento interno', `Archivo descargado en la ruta: ${ruta}`, 'Aceptar');
     }
   }
+  
 }

@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FormatoSeparadorMilesPipe implements PipeTransform {
 
-  transform(value: number): string {
+  transform(value: string): string {
     return value?.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   }
 }

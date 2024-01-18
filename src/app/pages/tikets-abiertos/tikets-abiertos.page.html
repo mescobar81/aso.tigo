@@ -32,16 +32,18 @@
 
       </ion-row>
       <div class="container-buttons">
-        <ion-button color="success" (click)="responder(indiceTicket, indiceDetalle)" [hidden]="d.usuario_responde.toLowerCase() === 'operador' ? !(d.leido.toLowerCase() === 'n') ? true:false:true">
+        <ion-button color="success" (click)="responder(indiceTicket, indiceDetalle)" [class]="d.usuario_responde.toLowerCase() === 'operador' ? !(d.leido.toLowerCase() === 'n') ? 'ion-hide':'':'ion-hide'">
           Responder
         </ion-button>
         <!-- <ion-button color="success" (click)="responder(indiceTicket, indiceDetalle)">
           Responder
         </ion-button> -->
-        <ion-button color="warning" (click)="cerrarTicket(indiceTicket, indiceDetalle)" [hidden]="d.usuario_responde.toLowerCase() === 'operador' ?  !(d.leido.toLowerCase() === 'n') ? true:false:true">
+        <ion-button color="warning" (click)="cerrarTicket(indiceTicket, indiceDetalle)" [class]="d.usuario_responde.toLowerCase() === 'operador' ?  !(d.leido.toLowerCase() === 'n') ? 'ion-hide':'':'ion-hide'">
           Cerrar ticket
         </ion-button>
       </div>
     </div>
   </ion-grid>
+
 </ion-content>
+

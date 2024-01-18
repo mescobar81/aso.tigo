@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Ciclo, DetalleBR, ResponseMovimientoBR } from 'src/app/interfaces/interface';
 import { ExtractoMesService } from 'src/app/services/extracto-mes.service';
 import { MovimientoBRService } from 'src/app/services/movimiento-br.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 
 
 @Component({
@@ -16,7 +16,8 @@ export class MovimientoBrPage implements OnInit {
   movimientoBR?: ResponseMovimientoBR;
   detalle: DetalleBR[] = [];
   ciclos: Ciclo[] = [];
-  constructor(private movimientoSvr: MovimientoBRService,
+  constructor(private loadingCtrl:LoadingController,
+             private movimientoSvr: MovimientoBRService,
              private ciclosSvr: ExtractoMesService,
              private alertController:AlertController) { }
 
@@ -30,7 +31,7 @@ export class MovimientoBrPage implements OnInit {
     this.movimientoBR = {};//limpiamos siempre para no mostrar el anterior registro
     this.detalle = [];//limpiamos siempre para no mostrar los anteriores registros
     const { mes, anho } = e.detail.value;
-
+    this.showLoading('Aguarde. Cargando...');
     this.movimientoSvr.listarMovimientoBR(mes, anho).then(resp => {
       if (resp.detalle.length > 0) {
         this.movimientoBR = resp;
@@ -38,6 +39,7 @@ export class MovimientoBrPage implements OnInit {
       } else {
         this.presentAlert();
       }
+      this.loadingCtrl.dismiss();
     });
   }
 
@@ -89,5 +91,14 @@ export class MovimientoBrPage implements OnInit {
       }
     }
   }
+  async showLoading(mensaje: string) {
+    const loading = await this.loadingCtrl.create({
+      message: mensaje,
+      //duration: 4000,
+      spinner: 'bubbles',
+      cssClass: 'custom-loading',
+    });
 
+    loading.present();
+  }
 }

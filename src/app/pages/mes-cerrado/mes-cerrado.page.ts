@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 
 import { Ciclo, Detalle, ResponseMesCerrado } from 'src/app/interfaces/interface';
 import { ExtractoMesService } from 'src/app/services/extracto-mes.service';
@@ -9,17 +10,11 @@ import { ExtractoMesService } from 'src/app/services/extracto-mes.service';
   styleUrls: ['./mes-cerrado.page.scss'],
 })
 export class MesCerradoPage implements OnInit {
-
-  descuento:string = '';
-  capitalAportado:string = '';
-  liquidacion:string = '';
-  aporteMes:string = '';
-  totalMes:string = '';
-  saldoPendiente:string = '';
   detalle:Detalle[] = [];
   mesCerrado!:ResponseMesCerrado;
   ciclos:Ciclo[] = [];
-  constructor(private extractoSrv:ExtractoMesService) { }
+  constructor(private loadingCtrl:LoadingController,
+              private extractoSrv:ExtractoMesService) { }
 
   ngOnInit() {
     this.extractoSrv.getCiclosCerrados().subscribe(resp =>{
@@ -28,6 +23,7 @@ export class MesCerradoPage implements OnInit {
   }
 
   async seleccionarCiclo(event:any){
+    this.showLoading('Aguarde. Cargando...');
     this.detalle = [];
     const params = {
       mes:event.detail.value.mes,
@@ -35,6 +31,7 @@ export class MesCerradoPage implements OnInit {
     };
     this.mesCerrado =  await this.extractoSrv.getMesCerrado(params);
     this.detalle = this.mesCerrado.detalle;
+    this.loadingCtrl.dismiss();
   }
 
   /**
@@ -74,5 +71,15 @@ export class MesCerradoPage implements OnInit {
         break;
       }
     }
+  }
+  async showLoading(mensaje: string) {
+    const loading = await this.loadingCtrl.create({
+      message: mensaje,
+      //duration: 4000,
+      spinner: 'bubbles',
+      cssClass: 'custom-loading',
+    });
+
+    loading.present();
   }
 }

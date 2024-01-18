@@ -3,12 +3,12 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  {
+  /* {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'bienvenido',
     pathMatch: 'full'
   },
-  
+   */
   {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
@@ -121,7 +121,12 @@ const routes: Routes = [
   {
     path: 'encuesta-ticket',
     loadChildren: () => import('./pages/encuesta-ticket/encuesta-ticket.module').then( m => m.EncuestaTicketPageModule)
+  },
+  {
+    path: 'bienvenido',
+    loadChildren: () => import('./pages/bienvenido/bienvenido.module').then( m => m.BienvenidoPageModule)
   }
+
 
 ];
 

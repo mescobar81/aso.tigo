@@ -8,6 +8,7 @@ import { SolicitudOrdenPageRoutingModule } from './solicitud-orden-routing.modul
 
 import { SolicitudOrdenPage } from './solicitud-orden.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { PipeModule } from 'src/app/pipes/pipe.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ComponentsModule } from 'src/app/components/components.module';
     FormsModule,
     IonicModule,
     SolicitudOrdenPageRoutingModule,
-    ComponentsModule
+    ComponentsModule,
+    PipeModule
   ],
   declarations: [SolicitudOrdenPage]
 })

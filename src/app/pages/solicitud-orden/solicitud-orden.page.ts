@@ -72,7 +72,7 @@ export class SolicitudOrdenPage implements OnInit {
           const cuotaMensual = montoSolicitado / this.solicitudOrden.cantidadCuotas;
           this.solicitudOrden.cuotaMes = Math.round(cuotaMensual);//redondea el importe a entero
           this.importeCuota = this.solicitudOrden.cuotaMes;
-          this.importeCuotaMesConSeparadorMiles = this.solicitudOrden.cuotaMes.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+          this.importeCuotaMesConSeparadorMiles = this.solicitudOrden.cuotaMes.toString();
         }
       });
 
@@ -85,7 +85,7 @@ export class SolicitudOrdenPage implements OnInit {
           this.importeFormateado = "";
           return;
         }
-        this.importeFormateado = importe.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        this.importeFormateado = importe;
       });
 
   }
@@ -96,6 +96,7 @@ export class SolicitudOrdenPage implements OnInit {
     this.nuevaOrden = {};
     this.solicitudOrden = {};
     this.importeFormateado = '';
+    this.importeCuotaMesConSeparadorMiles = '';
   }
 
   seleccionarComercio() {
@@ -202,25 +203,4 @@ export class SolicitudOrdenPage implements OnInit {
     } */
     this.onDebouncerSeparadorMiles.next(event.detail.value);
   }
-  /*  format(valString:any):any {
-     if (!valString) {
-         return '';
-     }
-     let val = valString.toString();
-     const parts = this.unFormat(val).split(this.DECIMAL_SEPARATOR);
-     return parts[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, this.GROUP_SEPARATOR) + (!parts[1] ? '' : this.DECIMAL_SEPARATOR + parts[1]);
- };
- 
- unFormat(val) {
-   if (!val) {
-       return '';
-   }
-   val = val.replace(/^0+/, '');
- 
-   if (this.GROUP_SEPARATOR === ',') {
-       return val.replace(/,/g, '');
-   } else {
-       return val.replace(/\./g, '');
-   }
- }; */
 }

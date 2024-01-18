@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Device } from '@awesome-cordova-plugins/device/ngx';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { NavController } from '@ionic/angular';
-import { StorageService } from 'src/app/services/storage.service';
 import { environment } from 'src/environments/environment';
 
 const urlDescargaDocumento = environment.urlDescargaDocumento;

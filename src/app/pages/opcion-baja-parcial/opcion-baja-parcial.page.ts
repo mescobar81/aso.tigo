@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { File } from '@awesome-cordova-plugins/file/ngx';
-import { ModalController, NavController, ToastController } from '@ionic/angular';
+import { LoadingController, ModalController, NavController, ToastController } from '@ionic/angular';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 import { CoberturaMedicaService } from 'src/app/services/cobertura-medica.service';
 import { StorageService } from 'src/app/services/storage.service';
@@ -34,14 +34,16 @@ export class OpcionBajaParcialPage implements OnInit {
     private navCtrl: NavController,
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
+    private loadingCtrl: LoadingController,
     private coberturaMedicaService: CoberturaMedicaService) { }
 
   async ngOnInit() {
     const { Nomserv } = await this.storageService.getValidacionBaja();
     const { nroSocio } = await this.storageService.getUsuario();
-
+    await this.showLoading('Aguarde. Cargando...');
     this.nomserv = Nomserv;
     this.adherente = await this.coberturaMedicaService.listarAdherenteBySocio(nroSocio);
+    
     const { codigo, codsegmento, idplan, beneficio, Popcion } = await this.storageService.getValidacionBaja();
     this.gruposFamiliar = (await this.coberturaMedicaService.getNuevoGrupoFamiliar(codigo, codsegmento, idplan, beneficio, Popcion)).NuevoGrupoFamilia;
 
@@ -49,7 +51,7 @@ export class OpcionBajaParcialPage implements OnInit {
 
     let adherenteSinEspacio: any = quitarEspacio.replace('Adherente Socio', 'AdherenteSocio');
     this.adherente = JSON.parse(adherenteSinEspacio);
-
+    await this.loadingCtrl.dismiss();//desactiva el loading
   }
 
   seleccionarConyugue(e: any) {
@@ -191,5 +193,16 @@ export class OpcionBajaParcialPage implements OnInit {
     });
 
     await toast.present();
+  }
+
+  async showLoading(mensaje: string) {
+    const loading = await this.loadingCtrl.create({
+      message: mensaje,
+      //duration: 4000,
+      spinner: 'bubbles',
+      cssClass: 'custom-loading',
+    });
+
+    loading.present();
   }
 }

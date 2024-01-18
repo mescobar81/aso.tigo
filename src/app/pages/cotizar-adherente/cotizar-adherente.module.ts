@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { CotizarAdherentePageRoutingModule } from './cotizar-adherente-routing.module';
 
 import { CotizarAdherentePage } from './cotizar-adherente.page';
+import { PipeModule } from 'src/app/pipes/pipe.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CotizarAdherentePageRoutingModule
+    CotizarAdherentePageRoutingModule,
+    PipeModule
   ],
   declarations: [CotizarAdherentePage]
 })

@@ -1,7 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'py.sysasotigo.asociados',
+  appId: 'py.sysasotigo.asociados', //ios
+  //appId: 'py.com.sysasotigo.asociados', //android
   appName: 'AsoTigo Asociados',
   webDir:'www',
   bundledWebRuntime: false,
@@ -11,8 +12,9 @@ const config: CapacitorConfig = {
       presentationOptions: ["badge", "sound", "alert"],
     },
     "SplashScreen": {
-      "launchAutoHide": false,
-      "showSpinner": false
+      launchShowDuration: 0,
+      backgroundColor: '#ffffffff',
+      launchAutoHide: false,
     }
   }
   

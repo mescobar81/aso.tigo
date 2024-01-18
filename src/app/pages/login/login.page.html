@@ -14,16 +14,19 @@
         <ion-col size="12">
           <ion-list>
             <ion-item>
-              <ion-label position="floating">Nro. Documento</ion-label>
-              <ion-input name="documento" type="number" 
+              <ion-input label="Nro. Documento"
+                         labelPlacement="floating"
+                         name="documento" 
+                         type="number" 
                          [(ngModel)]="usuario.documento"
                          autocomplete="on"
                          required></ion-input>
               <ion-icon slot="start" name="people"></ion-icon>
             </ion-item>
             <ion-item>
-              <ion-label position="floating">Clave</ion-label>
-              <ion-input name="clave" [type]="typeInput" [(ngModel)]="usuario.clave" required></ion-input>
+              <ion-input label="Clave"
+                        labelPlacement="floating"
+                        name="clave" [type]="typeInput" [(ngModel)]="usuario.clave" required></ion-input>
               <ion-icon slot="start" 
                         [name]="nameIcon"
                         (click)="toggleShow()"></ion-icon>
@@ -35,11 +38,11 @@
         <ion-col size="12">
           <ion-list>
             <ion-item lines="none">
-              <ion-label slot="end">Recordar</ion-label>
               <ion-toggle color="primary"
+                          labelPlacement="start"
                           name="recordarSesion"
                           [(ngModel)]="usuario.recordarSesion"
-                          slot="end">
+                          >Recordar
               </ion-toggle>
             </ion-item>
         </ion-list>

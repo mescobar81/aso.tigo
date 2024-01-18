@@ -85,7 +85,7 @@
   <ion-list class="list">
     <ion-item class="list__item"  *ngFor="let a of adherente.AdherenteSocio;let i=index">
       <ion-label class="ion-text-wrap">{{a.DescripSevi}}</ion-label>
-      <ion-checkbox class="list__item__checked" slot="start" (ionChange)="excluirAdherente($event)" [value]="a"></ion-checkbox>
+      <ion-checkbox aria-label="Listado de Beneficiarios" class="list__item__checked" slot="start" (ionChange)="excluirAdherente($event)" [value]="a"></ion-checkbox>
     </ion-item>
   </ion-list>
   <ion-grid>

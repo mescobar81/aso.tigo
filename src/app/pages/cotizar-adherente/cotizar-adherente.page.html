@@ -45,7 +45,7 @@
           <ion-col size="12">{{grupoFamiliar?.DescripSevi}}</ion-col>
           <ion-col size="12">
             <div class="item-divider__importeTotal">
-              <ion-label class="ion-text-wrap">{{montoGrupoFamiliar | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-label>
+              <ion-label class="ion-text-wrap">{{montoGrupoFamiliar | formatoSeparadorMiles}}</ion-label>
             </div>
           </ion-col>
         </ion-row>
@@ -126,7 +126,7 @@
             </div>
           </div>
         </ion-col>
-        <ion-col class="ion-text-right contentgrid--cell" size="4">{{a.Monto | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-col>
+        <ion-col class="ion-text-right contentgrid--cell" size="4">{{a.Monto | formatoSeparadorMiles}}</ion-col>
         <!-- <ion-col size="3">
           <ion-chip color="danger"
                     outline="false"
@@ -140,7 +140,7 @@
     <ion-grid>
       <ion-row>
         <ion-col size="6">Total:</ion-col>
-        <ion-col class="ion-text-right ion-text-right--color" size="6">{{importeTotal | currency:'PYG':'symbol-narrow':'1.2-2'}}</ion-col>
+        <ion-col class="ion-text-right ion-text-right--color" size="6">{{importeTotal | formatoSeparadorMiles}}</ion-col>
       </ion-row>
     </ion-grid>
     <ion-grid>

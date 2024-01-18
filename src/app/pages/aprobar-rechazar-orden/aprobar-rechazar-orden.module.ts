@@ -8,6 +8,7 @@ import { AprobarRechazarOrdenPageRoutingModule } from './aprobar-rechazar-orden-
 
 import { AprobarRechazarOrdenPage } from './aprobar-rechazar-orden.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { PipeModule } from 'src/app/pipes/pipe.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ComponentsModule } from 'src/app/components/components.module';
     FormsModule,
     IonicModule,
     AprobarRechazarOrdenPageRoutingModule,
-    ComponentsModule
+    ComponentsModule,
+    PipeModule
   ],
   declarations: [AprobarRechazarOrdenPage]
 })
