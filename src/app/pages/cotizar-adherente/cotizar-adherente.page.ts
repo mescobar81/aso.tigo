@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { IonSelect, ModalController, NavController, ToastController } from '@ionic/angular';
+import { IonSelect, LoadingController, ModalController, NavController, ToastController } from '@ionic/angular';
 import { ModalInfoComponent } from 'src/app/components/modal-info/modal-info.component';
 import { Adherente, FormasPago, NuevoGrupoFamiliar } from 'src/app/interfaces/interface';
 import { CoberturaMedicaService } from 'src/app/services/cobertura-medica.service';
@@ -42,6 +42,7 @@ export class CotizarAdherentePage implements OnInit {
     private navCtrl: NavController,
     private modalCtrl:ModalController,
     private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController,
     private formaPagoSvr:SolicitudOrdenService,
     private storageService:StorageService) {
    }
@@ -143,16 +144,19 @@ export class CotizarAdherentePage implements OnInit {
       conyugue:this.conyugue,
       hijo:this.hijo
     };
-    
+    this.showLoading('Aguarde. Procesando...');
     try {
       const {mensaje, status, nroSolicitud} = await this.coberturaMedicaSvr.enviarCotizacionAdhrente(cotizacion);
     if(status == 'success'){
+      this.loadingCtrl.dismiss();
       await this.storageService.guardarNroSolicitud(parseInt(nroSolicitud));
       this.presentarModal('Cotización', mensaje, true);
     }else{
+      this.loadingCtrl.dismiss();
       this.presentarModal('Cotización', mensaje, false);
     }
     } catch (error) {
+      this.loadingCtrl.dismiss();
       console.log(JSON.stringify(error));
       this.presentarModal('Cotizar Adherente', error, false);
     }
@@ -262,5 +266,16 @@ export class CotizarAdherentePage implements OnInit {
     });
 
     await toast.present();
+  }
+
+  async showLoading(mensaje: string) {
+    const loading = await this.loadingCtrl.create({
+      message: mensaje,
+      //duration: 4000,
+      spinner: 'bubbles',
+      cssClass: 'custom-loading',
+    });
+
+    loading.present();
   }
 }

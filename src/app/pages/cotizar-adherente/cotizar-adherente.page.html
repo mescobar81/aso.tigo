@@ -18,22 +18,15 @@
         <ion-item-divider>
 
         </ion-item-divider>
-
-
-        <ion-row>
-          <ion-col size="12">
-            <ion-label>Incluir integrantes Grupo Familiar:</ion-label>
-          </ion-col>
-        </ion-row>
-
         <ion-row>
           <ion-col size="12">
             <ion-item>
-              <ion-select #grupoFamilia okText="Aceptar"
+              <ion-select #grupoFamilia
+                        label="Incluir integrantes Grupo Familiar:"
+                        okText="Aceptar"
                         name="grupoFamiliar"
                         [(ngModel)]="grupoFamiliar"
                         (ionChange)="seleccionarGrupoFamiliar($event)">
-                        <ion-label>Grupo Familiar</ion-label>
               <ion-select-option *ngFor="let b of gruposFamiliar" [value]="b">{{b.DescripSevi}}
               </ion-select-option>
             </ion-select>
@@ -45,7 +38,7 @@
           <ion-col size="12">{{grupoFamiliar?.DescripSevi}}</ion-col>
           <ion-col size="12">
             <div class="item-divider__importeTotal">
-              <ion-label class="ion-text-wrap">{{montoGrupoFamiliar | formatoSeparadorMiles}}</ion-label>
+              <ion-label class="ion-text-wrap">{{montoGrupoFamiliar.toString()| formatoSeparadorMiles}}</ion-label>
             </div>
           </ion-col>
         </ion-row>
@@ -78,20 +71,15 @@
         </ion-row>
 
         <ion-item>
-          <ion-row>
-            <ion-col size="12">
-            </ion-col>
-            <ion-label>Agregar Beneficiarios/Adherentes:</ion-label>
-          </ion-row>
         </ion-item>
         <ion-row>
           <ion-col size="12">
             <ion-item>
               <ion-select [multiple]="true"
+                          label="Agregar Beneficiarios/Adherentes:"
                           name="adherente"
                           (ionChange)="agregarAdherente($event)"
                           >
-                          <ion-label>Adherentes</ion-label>
                 <ion-select-option *ngFor="let a of adherentes"
                                    [value]="a"
                 >{{a.DescripSevi}}</ion-select-option>
@@ -140,17 +128,15 @@
     <ion-grid>
       <ion-row>
         <ion-col size="6">Total:</ion-col>
-        <ion-col class="ion-text-right ion-text-right--color" size="6">{{importeTotal | formatoSeparadorMiles}}</ion-col>
+        <ion-col class="ion-text-right ion-text-right--color" size="6">{{importeTotal.toString() | formatoSeparadorMiles}}</ion-col>
       </ion-row>
     </ion-grid>
     <ion-grid>
       <ion-row>
-        <ion-col size="4">Forma de pago:</ion-col>
         <ion-col size="8">
           <ion-list>
             <ion-item>
-              <ion-label>Seleccione forma de pago</ion-label>
-              <ion-select
+              <ion-select label="Seleccionar Forma de Pago"
                           name="formaPago"
                          [(ngModel)]="formaPago"
                          required>

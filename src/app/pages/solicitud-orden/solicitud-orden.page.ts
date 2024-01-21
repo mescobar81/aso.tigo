@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { IonInput, ModalController } from '@ionic/angular';
+import { IonInput, LoadingController, ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -54,6 +54,7 @@ export class SolicitudOrdenPage implements OnInit {
     formaPago: null
   };
   constructor(private solicitudOrdenSvr: SolicitudOrdenService,
+    private loadingCtrl:LoadingController,
     private storageSvr: StorageService,
     private modalCtrl: ModalController) { }
 
@@ -141,27 +142,24 @@ export class SolicitudOrdenPage implements OnInit {
     this.nuevaOrden.cantidadCuotas = this.solicitudOrden.cantidadCuotas;
     this.nuevaOrden.cuotaMes = this.importeCuota;
 
+    this.showLoading('Aguarde. Procesando...');
     const response: ResponseSolicitudOrden = await this.solicitudOrdenSvr.enviarSolicitudOrden(this.nuevaOrden);
 
     if (response.codigoRespuesta == '00') {
-
+      this.loadingCtrl.dismiss();
       this.presentarModal('', response.descripcionRespuesta, true);
 
     } else if (response.codigoRespuesta == '99') {
-
+      this.loadingCtrl.dismiss();
       this.presentarModal('Solicitud Órden', response.descripcionRespuesta, false);
     } else {
+      this.loadingCtrl.dismiss();
       this.presentarModal('Información', response.mensaje, false);
     }
   }
 
   calcularCuotaMensual(event: any) {
     const montoSolicitado = event.target.value; //.split(',').join("");
-
-    /* if (!montoSolicitado) {
-      this.solicitudOrden.cuotaMes = 0;
-      return;
-    } */
     this.onDebouncer.next(montoSolicitado);
     this.formatNumber(event);
   }
@@ -202,5 +200,16 @@ export class SolicitudOrdenPage implements OnInit {
       return;
     } */
     this.onDebouncerSeparadorMiles.next(event.detail.value);
+  }
+
+  async showLoading(mensaje: string) {
+    const loading = await this.loadingCtrl.create({
+      message: mensaje,
+      //duration: 4000,
+      spinner: 'bubbles',
+      cssClass: 'custom-loading',
+    });
+
+    loading.present();
   }
 }

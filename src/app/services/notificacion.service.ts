@@ -6,7 +6,7 @@ import {
   PushNotificationSchema,
   PushNotifications,
   Token
-} from '@capacitor/push-notifications';
+}  from '@capacitor/push-notifications';
 
 import { StorageService } from './storage.service';
 import { ModalMensajeriaComponent } from '../components/modal-mensajeria/modal-mensajeria.component';
@@ -30,9 +30,26 @@ export class NotificacionService {
   /**
    * inicializa los servicios del pushNotifications
    */
-  init(){
-
+  async init(){
     if(this.platform.is('capacitor')){
+
+      let permStatus = await PushNotifications.checkPermissions();
+      
+        if (permStatus.receive === 'prompt') {
+          permStatus = await PushNotifications.requestPermissions();
+        }
+      
+        if (permStatus.receive !== 'granted') {
+          console.log(JSON.stringify('User denied permissions!'));
+          throw new Error('User denied permissions!');
+        }
+      
+        await PushNotifications.register();
+        this.addListeners();
+    }else{
+      console.log('PushNotification --> No estas ejecutando la aplicación en un dispositivo móvil');
+    }
+    /*if(this.platform.is('capacitor')){
       PushNotifications.requestPermissions().then(result => {
         if(result.receive === 'granted'){
           //registramos permisos para recibir notificaciones
@@ -45,7 +62,7 @@ export class NotificacionService {
       });
     }else{
       console.log('PushNotification --> No estas ejecutando la aplicación en un dispositivo móvil');
-    }
+    }*/
   }
 
    addListeners(){
