@@ -14,8 +14,9 @@
       <ion-col size="12">
         <ion-item>
           <ion-icon slot="start" name="people"></ion-icon>
-          <ion-label position="floating">Nro. Documento:</ion-label>
         <ion-input type="text"
+                   label="Nro. Documento:"
+                   labelPlacement="floating"
                    name="documento"
                    [(ngModel)]="cambioClave.documento"
                    required></ion-input>
@@ -28,8 +29,9 @@
         
         <ion-item>
           <ion-icon slot="start" name="lock-closed"></ion-icon>
-          <ion-label position="floating">Clave actual:</ion-label>
         <ion-input name="claveActual"
+                   label="Clave actual:"
+                   labelPlacement="floating"
                    [type]="showPassword?'text':'password'"
                    [(ngModel)]="cambioClave.claveActual"
                    required></ion-input>
@@ -42,8 +44,9 @@
       <ion-col size="12">
         <ion-item>
           <ion-icon slot="start" name="lock-closed"></ion-icon>
-          <ion-label position="floating">Clave nueva:</ion-label>
         <ion-input [type]="showPasswordNuevo? 'text':'password'"
+                   label="Clave nueva:"
+                   labelPlacement="floating"
                    name="claveNueva"
                    [(ngModel)]="cambioClave.claveNueva"
                    required></ion-input>
@@ -56,8 +59,10 @@
       <ion-col size="12">
         <ion-item>
           <ion-icon slot="start" name="lock-closed"></ion-icon>
-          <ion-label position="floating">Repita su clave:</ion-label>
+
         <ion-input [type]="showPasswordConfirm? 'text':'password'"
+                   label="Repita su clave:"
+                   labelPlacement="floating"
                    name="confirmacionClave"
                    [(ngModel)]="cambioClave.confirmacionClave"
                    required></ion-input>

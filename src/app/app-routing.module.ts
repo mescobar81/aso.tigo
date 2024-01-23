@@ -3,12 +3,17 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  /* {
+  {
     path: '',
-    redirectTo: 'bienvenido',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
-   */
+  
+  {
+    path: 'bienvenido',
+    loadChildren: () => import('./pages/bienvenido/bienvenido.module').then( m => m.BienvenidoPageModule)
+  },
+
   {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
@@ -112,21 +117,19 @@ const routes: Routes = [
   },
   {
     path: 'inicio/tikets-abiertos',
-    loadChildren: () => import('./pages/tikets-abiertos/tikets-abiertos.module').then( m => m.TiketsAbiertosPageModule)
+    loadChildren: () => import('./pages/tikets-abiertos/tikets-abiertos.module').then( m => m.TiketsAbiertosPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'responder-ticket',
-    loadChildren: () => import('./pages/responder-ticket/responder-ticket.module').then( m => m.ResponderTicketPageModule)
+    loadChildren: () => import('./pages/responder-ticket/responder-ticket.module').then( m => m.ResponderTicketPageModule),
+    canLoad:[AuthGuard]
   },
   {
     path: 'encuesta-ticket',
-    loadChildren: () => import('./pages/encuesta-ticket/encuesta-ticket.module').then( m => m.EncuestaTicketPageModule)
-  },
-  {
-    path: 'bienvenido',
-    loadChildren: () => import('./pages/bienvenido/bienvenido.module').then( m => m.BienvenidoPageModule)
+    loadChildren: () => import('./pages/encuesta-ticket/encuesta-ticket.module').then( m => m.EncuestaTicketPageModule),
+    canLoad:[AuthGuard]
   }
-
 
 ];
 

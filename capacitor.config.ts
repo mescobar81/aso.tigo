@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  //appId: 'py.sysasotigo.asociados', //ios
-  appId: 'py.com.sysasotigo.asociados', //android
+  appId: 'py.sysasotigo.asociados', //ios
+  //appId: 'py.com.sysasotigo.asociados', //android
   appName: 'AsoTigo Asociados',
   webDir:'www',
   bundledWebRuntime: false,

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SplashScreen } from '@capacitor/splash-screen'
 import { NotificacionService } from './services/notificacion.service';
-import { Device } from '@awesome-cordova-plugins/device/ngx';
-import { NavController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-root',
@@ -10,16 +9,23 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit{
-  constructor(private device:Device,
-              private navCtrl: NavController,
-    private notificationSrv: NotificacionService) {
+  constructor(private notificationSrv: NotificacionService) {
   }
-  ngOnInit(): void {
-    SplashScreen.hide();
-    if(this.device.platform === 'ios') {
+  async ngOnInit() {
+    await SplashScreen.hide();
+    
+    /* if(this.device.platform.toLowerCase() === 'android') {
+      console.log('Android');
+      
+      setTimeout(() => {
+        this.navCtrl.navigateRoot('bienvenido');
+      }, 1600);
+      this.navCtrl.navigateRoot('login');
+    } */
+   /*  if(this.device.platform === 'ios') {
       this.navCtrl.navigateRoot('login');
     }else{
       this.navCtrl.navigateRoot('bienvenido');
-    }
+    } */
   }
 }

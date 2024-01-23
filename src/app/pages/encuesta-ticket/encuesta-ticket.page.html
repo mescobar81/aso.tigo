@@ -16,8 +16,9 @@
   </ion-item-divider>
   <form>
     <ion-item>
-      <ion-label>Selecciones Calificación</ion-label>
-      <ion-select (ionChange)="seleccionarCalificacion($event)">
+      <ion-select (ionChange)="seleccionarCalificacion($event)"
+                  placeholder="Seleccione Calificación"
+      >
         <ion-select-option  *ngFor="let c of calificaciones" [value]="c" required>{{c.descripcion}}</ion-select-option>
       </ion-select>
     </ion-item>

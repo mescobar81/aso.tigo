@@ -4,6 +4,8 @@ import { MenuItem, Usuario } from 'src/app/interfaces/interface';
 import { MenuService } from 'src/app/services/menu.service';
 import { StorageService } from 'src/app/services/storage.service';
 
+const packageJson = require('../../../../package.json');
+
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
@@ -13,12 +15,13 @@ export class MenuComponent implements OnInit {
 
   menuOpc!:MenuItem;
   usuario!: Usuario;
+  versionApp:string = '';;
   constructor(private menuSvr:MenuService,
               private storageSrv: StorageService) {
                }
 
   async ngOnInit() {
-    
+    this.versionApp = packageJson.version;
     const usuario = await this.storageSrv.getUsuario();
     
     if (!usuario) {
