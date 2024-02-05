@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Http, HttpDownloadFileResult } from '@capacitor-community/http';
+import { Http, HttpDownloadFileOptions, HttpDownloadFileResult } from '@capacitor-community/http';
 import { Injectable } from '@angular/core';
 import { Directory } from '@capacitor/filesystem';
 
@@ -8,7 +7,7 @@ import { Directory } from '@capacitor/filesystem';
 })
 export class LeerArchivoFromURLService {
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   /**
   * convierte la representacion de cadena en formato file a partir de una url
@@ -30,24 +29,24 @@ export class LeerArchivoFromURLService {
 
   async downloadFile(url: string, nameFile: string):Promise<HttpDownloadFileResult> {
 
-    const options = {
+    const options: HttpDownloadFileOptions = {
       url: url,
       filePath: nameFile,
       fileDirectory: Directory.Documents,
-
       method: 'GET',
     };
 
-    return Http.downloadFile(options);
-   /*  return new Promise(async (resolve, reject) => {
-      try {
-        const response: HttpDownloadFileResult = await Http.downloadFile(options);
-        resolve(response);
-      } catch (error) {
-        console.log(error);
-        reject(error);
-      }
-    }); */
+    //return Http.downloadFile(options);
+
+   return new Promise((resolve, reject) => {
+         Http.downloadFile(options).then(response =>{
+          resolve(response);
+         }).catch(err =>{
+          console.log('ERROR:', err);
+          reject(err);
+         });
+
+    });
 
   }
 

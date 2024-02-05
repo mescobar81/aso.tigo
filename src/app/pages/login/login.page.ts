@@ -61,7 +61,7 @@ export class LoginPage {
     }
 
     const token = await this.storageSrv.getToken();
-
+    
     /**
      * crea un nuevo usuario en una constante para evitar modificaciones
      * en el template, detalles visuales para el usuario

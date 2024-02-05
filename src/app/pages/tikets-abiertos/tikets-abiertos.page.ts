@@ -30,10 +30,19 @@ export class TiketsAbiertosPage implements OnInit {
     private alerPresentSvr: AlertPresentService) { }
 
   async ngOnInit() {
+    const {publicStorage} = await Filesystem.checkPermissions();
 
+    if(publicStorage === 'prompt' || publicStorage === 'denied'){
+        await Filesystem.requestPermissions();//solicita permiso al usuario lectura/escritura
+    }
     const { documento } = await this.storageService.getUsuario();
-    this.tickets = (await this.ticketsAbiertoSvr.obtenerTicketsAbierto(documento)).tickets;
-
+    try {
+      this.showLoading('Aguarde. Cargando...');
+      this.tickets = (await this.ticketsAbiertoSvr.obtenerTicketsAbierto(documento)).tickets;
+      this.loadingCtrl.dismiss();
+    } catch (error) {
+      this.loadingCtrl.dismiss();
+    }
   }
 
   /**
@@ -44,47 +53,51 @@ export class TiketsAbiertosPage implements OnInit {
     this.navCtrl.navigateRoot('responder-ticket');
   }
 
-  descargarArchivo(url: string, nameFile: string) {
+  async descargarArchivo(url: string, nameFile: string) {
+
     if (!nameFile) {
       this.alerPresentSvr.presentAlert('Ticket Abierto', '', 'Sin archivo adjunto para descargar', 'Aceptar');
       return;
     }
     nameFile = nameFile.substr(nameFile.lastIndexOf('/') + 1);
-    this.showLoading('Espere. Descargando archivo...');
-    this.leerArchivoFromUrlSvr.downloadFile(url, nameFile).then(async (response) => {
-      if (response.path) {
-        this.loadingCtrl.dismiss();//desactiva el loading
-        const extensionArchivo = nameFile.substr(nameFile.lastIndexOf('.') + 1);
-        if(extensionArchivo == 'pdf'){
-          //`data:application/pdf,${read.data}`;
-          this.alerPresentSvr.presentAlert('Descarga de archivo', 'Almacenamiento interno', `Archivo descargado en la ruta: ${response.path}`, 'Aceptar');
-        }else{
-          const read = await Filesystem.readFile({
-            path: nameFile,
-            directory: Directory.Documents
-          });
-          const image = `data:image/${extensionArchivo};base64,${read.data}`;
-          this.mostrarArchivoDescargado(image, response.path);
-        }
-      } else if (response.blob) {
-        const base64 = await this.leerArchivoFromUrlSvr.convertBlobToBase64(response.blob) as string;
-        const saveFile = await Filesystem.writeFile({
+    console.log(url);
+    
+    try {
+      this.showLoading('Aguarde. Descargando...');
+      const response = await this.leerArchivoFromUrlSvr.downloadFile(url, nameFile);
+      this.loadingCtrl.dismiss();
+    if (response.path) {
+      const extensionArchivo = nameFile.substr(nameFile.lastIndexOf('.') + 1);
+      if(extensionArchivo == 'pdf'){
+        //`data:application/pdf,${read.data}`;
+        
+        this.alerPresentSvr.presentAlert('Descarga de archivo', 'Almacenamiento interno', `Archivo descargado en la carpeta Documentos`, 'Aceptar');
+      }else{
+        const read = await Filesystem.readFile({
           path: nameFile,
-          data: base64,
           directory: Directory.Documents
         });
-        
-        const path = saveFile.uri;
-        this.fileOpener.open(path, response.blob.type).then((result) => {
-          console.log('Archivo abierto: ', result);
-        });
-        this.loadingCtrl.dismiss();//desactiva el loading
+        const image = `data:image/${extensionArchivo};base64,${read.data}`;
+        this.mostrarArchivoDescargado(image, response.path);
       }
-    }).catch(error => {
-      console.log(JSON.stringify(error));
-      this.loadingCtrl.dismiss();//desactiva el loading
-      this.presentarModal(error.name, JSON.stringify(error.message), false);
-    });
+    } else if (response.blob) { //Los datos de blobs solo se admiten en la Web.
+      const base64 = await this.leerArchivoFromUrlSvr.convertBlobToBase64(response.blob) as string;
+      const saveFile = await Filesystem.writeFile({
+        path: nameFile,
+        data: base64,
+        directory: Directory.Documents
+      });
+      const path = saveFile.uri;
+      this.fileOpener.open(path, response.blob.type).then((result) => {
+        console.log('Archivo abierto: ', result);
+      });
+    }
+
+    } catch (error) {
+      this.loadingCtrl.dismiss();
+      console.log('Error descargando archivo:', error);
+      this.presentarModal('Descarga de archivo', `El archivo no existe o no tienes suficientes permisos. Favor verifique los permisos de archivos y multimedia en su teléfono`, false);
+    }
     
   }
 
@@ -135,7 +148,7 @@ export class TiketsAbiertosPage implements OnInit {
     modal.present();
     const {role} = await modal.onDidDismiss();
     if(role == 'cerrar'){
-      this.alerPresentSvr.presentAlert('Descarga de archivo', 'Almacenamiento interno', `Archivo descargado en la ruta: ${ruta}`, 'Aceptar');
+      this.alerPresentSvr.presentAlert('Descarga de archivo', 'Almacenamiento interno', `Archivo descargado en la carpeta Documentos`, 'Aceptar');
     }
   }
   

@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Camera, CameraResultType, Photo } from '@capacitor/camera';
 import { File, FileEntry } from '@awesome-cordova-plugins/file/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
-import { AlertController, ModalController, PopoverController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, PopoverController } from '@ionic/angular';
 
 import { PopoverInfoComponent } from 'src/app/components/popover-info/popover-info.component';
 import { CrearTicket, PopoverItem, TiposSolicitud } from 'src/app/interfaces/interface';
@@ -51,6 +51,7 @@ export class CreaTicketPage implements OnInit {
     comentario: ''
   };
   constructor(private ticketSrv: TicketService,
+    private loadingCtrl: LoadingController,
     private archivo: File,
     private fileOpener: FileOpener,
     private popoverCtrl: PopoverController,
@@ -58,7 +59,13 @@ export class CreaTicketPage implements OnInit {
     private alertController: AlertController,
     private modalCtrl: ModalController) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const {camera} = await Camera.checkPermissions();
+    console.log(camera);
+    
+    if(camera === 'prompt' || camera === 'denied'){
+       await Camera.requestPermissions();//solcita permisos acceso de cámara al usuario
+    }
     this.init();
   }
 
@@ -68,7 +75,6 @@ export class CreaTicketPage implements OnInit {
     if (!usuario) {
       return;
     }
-
     if (fSolicitud.value.tipoSolicitud <= 0) {
       this.presentAlert('Atención', 'Seleccione tipo de solicitud.', '');
       return;
@@ -111,8 +117,6 @@ export class CreaTicketPage implements OnInit {
         })
       });
     }
-
-    
   }
 
   /**
@@ -120,13 +124,16 @@ export class CreaTicketPage implements OnInit {
    * @param formData valores de los datos
    */
   uploadFile(formData: FormData) {
+    this.showLoading('Aguarde. Enviando ticket...');
     this.ticketSrv.enviarSolicitud(formData).then(resp => {
       if (resp.status === 'success') {
         this.presentarModal('Información', resp.mensaje, true);
       } else if (resp.status === 'failure') {
         this.presentarModal('Error', resp.mensaje, false);
       }
+      this.loadingCtrl.dismiss();
     }).catch(err => {
+      this.loadingCtrl.dismiss();
       this.presentarModal('ERROR', JSON.stringify(err), false)
       console.log(JSON.stringify(err));
     });
@@ -246,5 +253,16 @@ export class CreaTicketPage implements OnInit {
 
   async init() {
     this.tiposSolicitud = (await this.ticketSrv.listarTipoSolicitud()).tiposSolicitud;
+  }
+
+  async showLoading(mensaje: string) {
+    const loading = await this.loadingCtrl.create({
+      message: mensaje,
+      //duration: 4000,
+      spinner: 'bubbles',
+      cssClass: 'custom-loading',
+    });
+
+    loading.present();
   }
 }

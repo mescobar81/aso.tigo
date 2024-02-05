@@ -37,12 +37,7 @@ export class TicketService {
 
     return new Promise<ResponseTicketSuccess>((resolve, reject) => {
       this.http.post<ResponseTicketSuccess>(`${urlBase}/nuevoTicket`, formData).subscribe(resp =>{
-        if(resp.status === 'success'){
-          resolve(resp);
-        }else{
-          console.log(JSON.stringify(resp));
-          resolve(resp);
-        }
+        resolve(resp);
       }, (err) => {
         reject(err);
       });
@@ -54,11 +49,7 @@ export class TicketService {
     return new Promise<any>((resolve, reject) => {
       this.http.get(`${urlBase}/misTicketsAbiertos?documento=${documento}`).subscribe(
         (resp:ResponseTicketsAbierto)=>{
-          if(resp.status === 'success'){
-            resolve(resp);
-          }else{
-            resolve(resp);
-          }
+          resolve(resp);
         }, err => {
           console.log(JSON.stringify(err));
           reject(err);
