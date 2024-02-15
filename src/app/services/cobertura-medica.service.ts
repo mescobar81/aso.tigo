@@ -326,9 +326,8 @@ export class CoberturaMedicaService {
 
   listarAdherenteBySocio(nroSocio:string):Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      this.http.get(`${urlBase}/consultaAdherenteSocio?Pnrosoc=${nroSocio}`).
+      this.http.get(`${urlBase}/consultaCoberturaMedica?nroSocio=${nroSocio}`).
       subscribe((resp:any) => {
-        
         resolve(resp);
       }, (err) => {
         console.log(JSON.stringify(err));

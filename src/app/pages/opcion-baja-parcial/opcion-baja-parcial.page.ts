@@ -47,10 +47,10 @@ export class OpcionBajaParcialPage implements OnInit {
     const { codigo, codsegmento, idplan, beneficio, Popcion } = await this.storageService.getValidacionBaja();
     this.gruposFamiliar = (await this.coberturaMedicaService.getNuevoGrupoFamiliar(codigo, codsegmento, idplan, beneficio, Popcion)).NuevoGrupoFamilia;
 
-    let quitarEspacio = JSON.stringify(this.adherente);
+    //let quitarEspacio = JSON.stringify(this.adherente);
 
-    let adherenteSinEspacio: any = quitarEspacio.replace('Adherente Socio', 'AdherenteSocio');
-    this.adherente = JSON.parse(adherenteSinEspacio);
+    //let adherenteSinEspacio: any = quitarEspacio.replace('Adherente Socio', 'AdherenteSocio');
+    //this.adherente = JSON.parse(adherenteSinEspacio);
     await this.loadingCtrl.dismiss();//desactiva el loading
   }
 

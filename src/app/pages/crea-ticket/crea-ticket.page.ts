@@ -61,8 +61,7 @@ export class CreaTicketPage implements OnInit {
 
   async ngOnInit() {
     const {camera} = await Camera.checkPermissions();
-    console.log(camera);
-    
+
     if(camera === 'prompt' || camera === 'denied'){
        await Camera.requestPermissions();//solcita permisos acceso de cámara al usuario
     }

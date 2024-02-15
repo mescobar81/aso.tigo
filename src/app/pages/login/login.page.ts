@@ -82,7 +82,7 @@ export class LoginPage {
       }
     }
     this.showLoading('Aguarde. Ingresando...');
-    this.authSvr.login(nuevoUsuario).then(response => {
+    this.authSvr.login(nuevoUsuario).then((response) => {
       if (!response.usuario.valido) {
         this.alertSvr.presentAlert("Atención", "", response.usuario.mensaje, "Aceptar");
       } else {
@@ -90,11 +90,13 @@ export class LoginPage {
         this.navCtrl.navigateRoot('inicio');//llama a la pantalla incio
         this.menuCtrl.open('first');//llama al menu
       }
-      this.loadingCtrl.dismiss();
+       this.loadingCtrl.dismiss();
     }).catch(err => {
+      setTimeout(() =>{
+        this.loadingCtrl.dismiss();
+      }, 1000);
       console.log('ERROR: ', JSON.stringify(err));
       this.presentarModal('ERROR',err.message,false);
-      this.loadingCtrl.dismiss();
     });
     
   }

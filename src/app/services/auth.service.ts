@@ -24,12 +24,7 @@ export class AuthService {
 
     return new Promise<ResponseUsuario>((resolve, reject) => {
       this.http.post<ResponseUsuario>(`${urlBase}/loginPost/`, usuario, { headers }).subscribe(resp => {
-
-        if (resp.usuario.valido) {
-          resolve(resp);
-        } else {
-          resolve(resp);
-        }
+        resolve(resp);
       }, err => {
         reject(err);
       }
