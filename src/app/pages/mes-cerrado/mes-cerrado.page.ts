@@ -9,14 +9,14 @@ import { ExtractoMesService } from 'src/app/services/extracto-mes.service';
   templateUrl: './mes-cerrado.page.html',
   styleUrls: ['./mes-cerrado.page.scss'],
 })
-export class MesCerradoPage implements OnInit {
+export class MesCerradoPage {
   detalle:Detalle[] = [];
   mesCerrado!:ResponseMesCerrado;
   ciclos:Ciclo[] = [];
   constructor(private loadingCtrl:LoadingController,
               private extractoSrv:ExtractoMesService) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.extractoSrv.getCiclosCerrados().subscribe(resp =>{
       this.ciclos = resp.ciclos;
     })

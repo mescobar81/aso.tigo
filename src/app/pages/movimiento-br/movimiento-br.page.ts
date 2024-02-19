@@ -11,7 +11,7 @@ import { AlertController, LoadingController } from '@ionic/angular';
   templateUrl: './movimiento-br.page.html',
   styleUrls: ['./movimiento-br.page.scss'],
 })
-export class MovimientoBrPage implements OnInit {
+export class MovimientoBrPage {
 
   movimientoBR?: ResponseMovimientoBR;
   detalle: DetalleBR[] = [];
@@ -21,7 +21,7 @@ export class MovimientoBrPage implements OnInit {
              private ciclosSvr: ExtractoMesService,
              private alertController:AlertController) { }
 
-  async ngOnInit() {
+  async ngAfterViewInit() {
     this.ciclosSvr.getCiclosCerrados().subscribe(resp => {
       this.ciclos = resp.ciclos;
     });
@@ -33,7 +33,7 @@ export class MovimientoBrPage implements OnInit {
     const { mes, anho } = e.detail.value;
     this.showLoading('Aguarde. Cargando...');
     this.movimientoSvr.listarMovimientoBR(mes, anho).then(resp => {
-      if (resp.detalle.length > 0) {
+      if (resp.detalle?.length > 0) {
         this.movimientoBR = resp;
         this.detalle = resp.detalle;
       } else {
