@@ -60,7 +60,6 @@ export class TiketsAbiertosPage implements OnInit {
       return;
     }
     nameFile = nameFile.substr(nameFile.lastIndexOf('/') + 1);
-    console.log(url);
     
     try {
       this.showLoading('Aguarde. Descargando...');
