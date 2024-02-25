@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, ModalController, NavController } from '@ionic/angular';
-import { FileOpener } from '@awesome-cordova-plugins/file-opener';
+//import { FileOpener } from '@awesome-cordova-plugins/file-opener';
 import { Filesystem, Directory } from '@capacitor/filesystem'
 
 import { Ticket } from 'src/app/interfaces/interface';
@@ -20,7 +20,7 @@ export class TiketsAbiertosPage implements OnInit {
 
   tickets: Ticket[] = [];
   adjuntoNombre: string = '';
-  constructor(private fileOpener: FileOpener,
+  constructor(//private fileOpener: FileOpener,
     private navCtrl: NavController,
     private modalCtrl: ModalController,
     private storageService: StorageService,
@@ -31,8 +31,7 @@ export class TiketsAbiertosPage implements OnInit {
 
   async ngOnInit() {
     const {publicStorage} = await Filesystem.checkPermissions();
-
-    if(publicStorage === 'prompt' || publicStorage === 'denied'){
+    if(publicStorage === 'prompt' || publicStorage === 'denied'){      
         await Filesystem.requestPermissions();//solicita permiso al usuario lectura/escritura
     }
     const { documento } = await this.storageService.getUsuario();
@@ -80,7 +79,7 @@ export class TiketsAbiertosPage implements OnInit {
         this.mostrarArchivoDescargado(image, response.path);
       }
     } else if (response.blob) { //Los datos de blobs solo se admiten en la Web.
-      const base64 = await this.leerArchivoFromUrlSvr.convertBlobToBase64(response.blob) as string;
+      /*const base64 = await this.leerArchivoFromUrlSvr.convertBlobToBase64(response.blob) as string;
       const saveFile = await Filesystem.writeFile({
         path: nameFile,
         data: base64,
@@ -89,7 +88,7 @@ export class TiketsAbiertosPage implements OnInit {
       const path = saveFile.uri;
       this.fileOpener.open(path, response.blob.type).then((result) => {
         console.log('Archivo abierto: ', result);
-      });
+      });*/
     }
 
     } catch (error) {

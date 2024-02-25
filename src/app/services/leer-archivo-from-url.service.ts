@@ -1,6 +1,6 @@
-import { Http, HttpDownloadFileOptions, HttpDownloadFileResult } from '@capacitor-community/http';
+//import { Http, HttpDownloadFileOptions, HttpDownloadFileResult } from '@capacitor-community/http';
 import { Injectable } from '@angular/core';
-import { Directory } from '@capacitor/filesystem';
+import { Directory, DownloadFileOptions, DownloadFileResult, Filesystem } from '@capacitor/filesystem';
 
 @Injectable({
   providedIn: 'root'
@@ -27,22 +27,28 @@ export class LeerArchivoFromURLService {
     });
   }
 
-  async downloadFile(url: string, nameFile: string):Promise<HttpDownloadFileResult> {
+  async downloadFile(url: string, nameFile: string):Promise<DownloadFileResult> {
 
-    const options: HttpDownloadFileOptions = {
+    /* const options: HttpDownloadFileOptions = {
       url: url,
       filePath: nameFile,
       fileDirectory: Directory.Documents,
+      method: 'GET',
+    }; */
+
+    const options: DownloadFileOptions = {
+      url: url,
+      path: nameFile,
+      directory: Directory.Documents,
       method: 'GET',
     };
 
     //return Http.downloadFile(options);
 
    return new Promise((resolve, reject) => {
-         Http.downloadFile(options).then(response =>{
+         Filesystem.downloadFile(options).then(response =>{
           resolve(response);
          }).catch(err =>{
-          console.log('ERROR:', err);
           reject(err);
          });
 
