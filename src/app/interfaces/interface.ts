@@ -97,18 +97,18 @@ export interface ResponseMesCerrado {
 
 export interface Cabecera {
     descripcion:     string;
-    saldoPendiente:  number;
-    aporteMes:       number;
+    saldo_pendiente:  number;
+    aporte_mes:       number;
     descuento:       number;
     titulo:          string;
     programa:        string;
-    liquidacionAso:  number;
+    liquidacion_aso:  number;
     nombre:          string;
-    capitalAportado: number;
+    capital_aportado: number;
     descuentoLetras: string;
     nroSocio:        number;
     empresa:         string;
-    totalMes:        number;
+    total_mes:        number;
 }
 
 export interface Detalle {
