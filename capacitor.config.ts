@@ -15,6 +15,9 @@ const config: CapacitorConfig = {
       backgroundColor: '#ffffffff',
       launchAutoHide: false,
     }
+  },
+  server:{
+    androidScheme:'http'
   }
   
 };
