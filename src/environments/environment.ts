@@ -5,7 +5,9 @@
 export const environment = {
   production: false,
   urlBase:'http://hanadesys.com/WSAsoTigo2/webresources',
-  urlDescargaDocumento:'https://www.web.asotigo.com.py/seguromedico'
+  urlDescargaDocumento:'https://www.web.asotigo.com.py/seguromedico',
+  appVersionAndroid: 1,
+  appVersionIOS: 3
 };
 
 /*

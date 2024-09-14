@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { MenuItem, Usuario } from 'src/app/interfaces/interface';
 import { MenuService } from 'src/app/services/menu.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { environment } from 'src/environments/environment';
 
-const packageJson = require('../../../../package.json');
+const appVersionAndroid = environment.appVersionAndroid;
 
 @Component({
   selector: 'app-menu',
@@ -21,7 +22,7 @@ export class MenuComponent implements OnInit {
                }
 
   async ngOnInit() {
-    this.versionApp = packageJson.version;
+    this.versionApp = appVersionAndroid + '.0.2';
     const usuario = await this.storageSrv.getUsuario();
     
     if (!usuario) {
